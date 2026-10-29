@@ -1,0 +1,20 @@
+{
+  "dataset": "FutureCV Controlled Synthetic Dataset v1",
+  "created_date": "2026-10-22",
+  "seed": 20261022,
+  "synthetic": true,
+  "human_reviewed": false,
+  "generator_sha256": "a180e7e4156c52f702f6b0ab78012e26a3aa9edf5be0d3b59750e1fd3044676d",
+  "files": {
+    "DATASET_CARD.md": "bc9638ffcce950def5809cd2135675e7f9e305b4c4b22480727db8f200bacb4d",
+    "LABELING_GUIDE.md": "530b5a930d552fe8480ba36d9947588c3076e288bf286663a09b77483a9b82f1",
+    "metadata.jsonl": "e2cecf2c605a8cc331ae28bb57947de1739f7bdbcce7001565fd8e7c68c6181d",
+    "provenance/candidates.jsonl": "83d85ae3e9ef10c37cac7ef7c695d01ee459c66026f40f6703bd26a42d712f3d",
+    "provenance/jobs.jsonl": "27de0dfd5fca8883b3a8334bd0cbbb35f847de8ba90a858f5b864cded3e21730",
+    "sample_schema.json": "93e0fdc2466ab4a6a7bc0521b0e712e0d891f27a03a9619e5937544f76576fac",
+    "test.jsonl": "fb4f7d53a1f808e7ad5caa336803be4f37fc769bb90380f66f7df45baa114c70",
+    "train.jsonl": "a2c73477b623728707360f7794a2bbbd8be4bb5392f4dc08c06d0854ec754605",
+    "validation.jsonl": "c08c67a3d3af6afbbcdada44185a022b8e5b0eec3a8866bbe710f9c567309d12"
+  },
+  "publication_note": "Data rows and labels unchanged; documentation and file manifest curated for the CVAI E5/MLP v1 release."
+}
