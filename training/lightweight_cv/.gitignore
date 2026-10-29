@@ -1,0 +1,9 @@
+__pycache__/
+.venv/
+runs/
+artifact/encoder/
+*.zip
+*.part
+.env
+my_input*.json
+my_result*.json
