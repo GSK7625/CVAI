@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- TargetFramework, Nullable, ImplicitUsings inherited from Directory.Build.props -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\FutureCV.Application\FutureCV.Application.csproj" />
+    <ProjectReference Include="..\FutureCV.Infrastructure\FutureCV.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- versions managed centrally in Directory.Packages.props -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,256 @@
+[
+  {
+    "id": "case_01_full_technology_coverage",
+    "name": "Full Technology Coverage Across Project",
+    "projects": [
+      {
+        "name": "E-Commerce API",
+        "description": "API backend",
+        "technologies": [
+          "Python",
+          "FastAPI",
+          "PostgreSQL"
+        ]
+      }
+    ],
+    "required_skills": [
+      "Python",
+      "FastAPI"
+    ],
+    "preferred_skills": [
+      "PostgreSQL"
+    ],
+    "expected_relevant_count": 1,
+    "expected_total_count": 1,
+    "expected_score": 100.0,
+    "reason": "All 3 target skills covered by candidate project"
+  },
+  {
+    "id": "case_02_partial_technology_coverage",
+    "name": "Partial Technology Coverage Ratio",
+    "projects": [
+      {
+        "name": "Backend Service",
+        "description": "Microservice",
+        "technologies": [
+          "Python",
+          "FastAPI"
+        ]
+      }
+    ],
+    "required_skills": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "Docker"
+    ],
+    "preferred_skills": [],
+    "expected_relevant_count": 1,
+    "expected_total_count": 1,
+    "expected_score": 50.0,
+    "reason": "2 out of 4 target skills covered -> exactly 50.0%"
+  },
+  {
+    "id": "case_03_zero_technology_overlap",
+    "name": "Zero Technology Overlap",
+    "projects": [
+      {
+        "name": "PHP CMS",
+        "description": "Content management",
+        "technologies": [
+          "PHP",
+          "WordPress",
+          "MySQL"
+        ]
+      }
+    ],
+    "required_skills": [
+      "Golang",
+      "Kubernetes"
+    ],
+    "preferred_skills": [],
+    "expected_relevant_count": 0,
+    "expected_total_count": 1,
+    "expected_score": 0.0,
+    "reason": "Zero overlapping technologies across all projects"
+  },
+  {
+    "id": "case_04_no_candidate_projects",
+    "name": "Candidate with Zero Listed Projects",
+    "projects": [],
+    "required_skills": [
+      "Python",
+      "FastAPI"
+    ],
+    "preferred_skills": [],
+    "expected_relevant_count": 0,
+    "expected_total_count": 0,
+    "expected_score": 0.0,
+    "reason": "Candidate has no projects listed in CV"
+  },
+  {
+    "id": "case_05_no_job_skills_specified",
+    "name": "No Job Skills Specified Neutral Evaluation",
+    "projects": [
+      {
+        "name": "Data Analytics",
+        "description": "Analysis pipeline",
+        "technologies": [
+          "Python",
+          "Pandas"
+        ]
+      }
+    ],
+    "required_skills": [],
+    "preferred_skills": [],
+    "expected_relevant_count": 0,
+    "expected_total_count": 1,
+    "expected_score": 100.0,
+    "reason": "Job specifies no target skills -> N/A 100.0% evaluation (no penalty)"
+  },
+  {
+    "id": "case_06_alias_normalization_equivalence",
+    "name": "Alias Normalization Equivalence",
+    "projects": [
+      {
+        "name": "Cloud DevOps",
+        "description": "Infrastructure automation",
+        "technologies": [
+          "Postgres",
+          "k8s",
+          "GCP",
+          "VueJS"
+        ]
+      }
+    ],
+    "required_skills": [
+      "PostgreSQL",
+      "Kubernetes"
+    ],
+    "preferred_skills": [
+      "Google Cloud",
+      "Vue.js"
+    ],
+    "expected_relevant_count": 1,
+    "expected_total_count": 1,
+    "expected_score": 100.0,
+    "reason": "All technologies match via canonical skill aliases"
+  },
+  {
+    "id": "case_07_strict_false_positive_isolation",
+    "name": "Strict False Positive Isolation",
+    "projects": [
+      {
+        "name": "Frontend",
+        "description": "Legacy client app",
+        "technologies": [
+          "Java",
+          "C",
+          "React"
+        ]
+      }
+    ],
+    "required_skills": [
+      "JavaScript",
+      "C++"
+    ],
+    "preferred_skills": [
+      "React Native"
+    ],
+    "expected_relevant_count": 0,
+    "expected_total_count": 1,
+    "expected_score": 0.0,
+    "reason": "Java != JavaScript, C != C++, React != React Native"
+  },
+  {
+    "id": "case_08_duplicate_job_and_project_aliases",
+    "name": "Duplicate Target and Project Aliases",
+    "projects": [
+      {
+        "name": "Web UI",
+        "description": "Client SPA",
+        "technologies": [
+          "React",
+          "ReactJS",
+          "react.js"
+        ]
+      }
+    ],
+    "required_skills": [
+      "React"
+    ],
+    "preferred_skills": [
+      "ReactJS"
+    ],
+    "expected_relevant_count": 1,
+    "expected_total_count": 1,
+    "expected_score": 100.0,
+    "reason": "Duplicate target aliases produce 1 canonical target; 3 project aliases match 1 target without score inflation"
+  },
+  {
+    "id": "case_09_multiple_projects_same_target_capped",
+    "name": "Multiple Projects Demonstrating Same Target Capped",
+    "projects": [
+      {
+        "name": "Project A",
+        "description": "Scripting",
+        "technologies": [
+          "Python"
+        ]
+      },
+      {
+        "name": "Project B",
+        "description": "Automation",
+        "technologies": [
+          "Python"
+        ]
+      },
+      {
+        "name": "Project C",
+        "description": "Web service",
+        "technologies": [
+          "Python"
+        ]
+      }
+    ],
+    "required_skills": [
+      "Python"
+    ],
+    "preferred_skills": [],
+    "expected_relevant_count": 3,
+    "expected_total_count": 3,
+    "expected_score": 100.0,
+    "reason": "Multiple projects demonstrating same target capped at 100.0%"
+  },
+  {
+    "id": "case_10_multiple_projects_combined_coverage",
+    "name": "Multiple Projects Combined Coverage",
+    "projects": [
+      {
+        "name": "API Service",
+        "description": "REST API",
+        "technologies": [
+          "Python",
+          "FastAPI"
+        ]
+      },
+      {
+        "name": "DB Migration",
+        "description": "Postgres schema migration",
+        "technologies": [
+          "PostgreSQL"
+        ]
+      }
+    ],
+    "required_skills": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL"
+    ],
+    "preferred_skills": [],
+    "expected_relevant_count": 2,
+    "expected_total_count": 2,
+    "expected_score": 100.0,
+    "reason": "Cumulative coverage across multiple projects achieves 100.0% coverage"
+  }
+]

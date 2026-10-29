@@ -1,0 +1,82 @@
+[
+  {
+    "id": "case_01_c_vs_cpp_negative",
+    "name": "C vs C++ Distinctness",
+    "candidate_skills": ["C"],
+    "required_skills": ["C++"],
+    "expected_matched": false,
+    "reason": "C and C++ are distinct languages"
+  },
+  {
+    "id": "case_02_cpp_alias_positive",
+    "name": "CPP to C++ Canonical Alias",
+    "candidate_skills": ["CPP"],
+    "required_skills": ["C++"],
+    "expected_matched": true,
+    "reason": "CPP is canonical alias of C++"
+  },
+  {
+    "id": "case_03_csharp_space_alias_positive",
+    "name": "C Sharp to C# Space Alias",
+    "candidate_skills": ["C Sharp"],
+    "required_skills": ["C#"],
+    "expected_matched": true,
+    "reason": "C Sharp is canonical spaced alias of C#"
+  },
+  {
+    "id": "case_04_aws_full_name_alias_positive",
+    "name": "Amazon Web Services to AWS Alias",
+    "candidate_skills": ["Amazon Web Services"],
+    "required_skills": ["AWS"],
+    "expected_matched": true,
+    "reason": "Amazon Web Services is canonical alias of AWS"
+  },
+  {
+    "id": "case_05_gcp_full_name_alias_positive",
+    "name": "Google Cloud Platform to GCP Alias",
+    "candidate_skills": ["Google Cloud Platform"],
+    "required_skills": ["GCP"],
+    "expected_matched": true,
+    "reason": "Google Cloud Platform is canonical alias of GCP"
+  },
+  {
+    "id": "case_06_java_vs_javascript_negative",
+    "name": "Java vs JavaScript Distinctness",
+    "candidate_skills": ["Java"],
+    "required_skills": ["JavaScript"],
+    "expected_matched": false,
+    "reason": "Java and JavaScript are distinct languages with no substring containment"
+  },
+  {
+    "id": "case_07_react_vs_react_native_negative",
+    "name": "React vs React Native Distinctness",
+    "candidate_skills": ["React"],
+    "required_skills": ["React Native"],
+    "expected_matched": false,
+    "reason": "React and React Native are distinct frameworks"
+  },
+  {
+    "id": "case_08_vue_alias_positive",
+    "name": "VueJS to Vue.js Alias",
+    "candidate_skills": ["VueJS"],
+    "required_skills": ["Vue.js"],
+    "expected_matched": true,
+    "reason": "VueJS is canonical alias of Vue.js"
+  },
+  {
+    "id": "case_09_cicd_alias_positive",
+    "name": "CICD to CI/CD Alias",
+    "candidate_skills": ["CICD"],
+    "required_skills": ["CI/CD"],
+    "expected_matched": true,
+    "reason": "CICD is canonical alias of CI/CD"
+  },
+  {
+    "id": "case_10_python_vs_pytorch_negative",
+    "name": "Python vs PyTorch Distinctness",
+    "candidate_skills": ["Python"],
+    "required_skills": ["PyTorch"],
+    "expected_matched": false,
+    "reason": "Python and PyTorch are distinct technology entities"
+  }
+]

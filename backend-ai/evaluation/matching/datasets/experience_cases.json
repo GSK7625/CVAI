@@ -1,0 +1,206 @@
+[
+  {
+    "id": "case_01_exact_experience_match",
+    "name": "Exact Experience Match",
+    "work_experience": [
+      {
+        "job_title": "Backend Engineer",
+        "company": "Tech Corp",
+        "start_date": "2021-01",
+        "end_date": "2024-01",
+        "years_of_experience": 3.0
+      }
+    ],
+    "required_years": 3.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 3.0,
+    "expected_score": 100.0,
+    "reason": "Candidate meets requirement exactly (3.0 / 3.0)"
+  },
+  {
+    "id": "case_02_surplus_experience",
+    "name": "Surplus Experience Exceeding Requirement",
+    "work_experience": [
+      {
+        "job_title": "Software Engineer",
+        "company": "VNG",
+        "start_date": "2019-01",
+        "end_date": "2024-01",
+        "years_of_experience": 5.0
+      }
+    ],
+    "required_years": 3.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 5.0,
+    "expected_score": 100.0,
+    "reason": "Candidate exceeds requirement with 2.0 surplus years"
+  },
+  {
+    "id": "case_03_shortage_experience_proportional",
+    "name": "Proportional Experience Shortage",
+    "work_experience": [
+      {
+        "job_title": "Frontend Developer",
+        "company": "Agency",
+        "start_date": "2022-01",
+        "end_date": "2023-07",
+        "years_of_experience": 1.5
+      }
+    ],
+    "required_years": 3.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 1.5,
+    "expected_score": 50.0,
+    "reason": "Candidate has 1.5 of 3.0 required years (50.0% proportional score)"
+  },
+  {
+    "id": "case_04_zero_experience_required",
+    "name": "Zero Experience Requirement Neutral",
+    "work_experience": [
+      {
+        "job_title": "Intern",
+        "company": "Startup",
+        "start_date": "2023-01",
+        "end_date": "2024-01",
+        "years_of_experience": 1.0
+      }
+    ],
+    "required_years": 0.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 1.0,
+    "expected_score": 100.0,
+    "reason": "Zero requirement provides neutral 100.0 score"
+  },
+  {
+    "id": "case_05_none_experience_required",
+    "name": "None Experience Requirement Neutral",
+    "work_experience": [
+      {
+        "job_title": "Junior Dev",
+        "company": "Corp",
+        "start_date": "2023-01",
+        "end_date": "2024-01",
+        "years_of_experience": 1.0
+      }
+    ],
+    "required_years": null,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 1.0,
+    "expected_score": 100.0,
+    "reason": "Absence of requirement provides neutral 100.0 score"
+  },
+  {
+    "id": "case_06_overlapping_employment_merged",
+    "name": "Concurrent Overlapping Roles Merged",
+    "work_experience": [
+      {
+        "job_title": "Full-time Dev",
+        "company": "Company A",
+        "start_date": "2022-01",
+        "end_date": "2024-01",
+        "years_of_experience": 2.0
+      },
+      {
+        "job_title": "Freelance Lead",
+        "company": "Company B",
+        "start_date": "2023-01",
+        "end_date": "2025-01",
+        "years_of_experience": 2.0
+      }
+    ],
+    "required_years": 3.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 3.0,
+    "expected_score": 100.0,
+    "reason": "Overlapping 2022-2024 and 2023-2025 merge into 3.0 calendar years without double-counting"
+  },
+  {
+    "id": "case_07_multiple_ongoing_roles_merged",
+    "name": "Multiple Concurrent Ongoing Roles Merged",
+    "work_experience": [
+      {
+        "job_title": "CTO",
+        "company": "Company A",
+        "start_date": "2022-01",
+        "end_date": "present",
+        "years_of_experience": 3.0
+      },
+      {
+        "job_title": "Advisor",
+        "company": "Company B",
+        "start_date": "2023-01",
+        "end_date": "now",
+        "years_of_experience": 2.0
+      }
+    ],
+    "required_years": 3.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 3.0,
+    "expected_score": 100.0,
+    "reason": "Multiple ongoing roles merge to reference_date spanning 2022-01 to 2025-01 (3.0 years)"
+  },
+  {
+    "id": "case_08_career_gap_excluded",
+    "name": "Career Gap Between Roles Excluded",
+    "work_experience": [
+      {
+        "job_title": "Dev Role 1",
+        "company": "Company 1",
+        "start_date": "2018-01",
+        "end_date": "2020-01",
+        "years_of_experience": 2.0
+      },
+      {
+        "job_title": "Dev Role 2",
+        "company": "Company 2",
+        "start_date": "2022-01",
+        "end_date": "2024-01",
+        "years_of_experience": 2.0
+      }
+    ],
+    "required_years": 5.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 4.0,
+    "expected_score": 80.0,
+    "reason": "2-year career gap from 2020 to 2022 is excluded; total is 4.0 years (4/5 * 100 = 80.0)"
+  },
+  {
+    "id": "case_09_scalar_years_fallback",
+    "name": "Deduplicated Scalar Years Fallback",
+    "work_experience": [
+      {
+        "job_title": "Remote Contractor",
+        "company": "Client A",
+        "years_of_experience": 2.0
+      },
+      {
+        "job_title": "Consultant",
+        "company": "Client B",
+        "years_of_experience": 1.5
+      }
+    ],
+    "required_years": 3.5,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 3.5,
+    "expected_score": 100.0,
+    "reason": "When dates are absent, deduplicated scalar years are summed as documented fallback"
+  },
+  {
+    "id": "case_10_single_role_no_double_count",
+    "name": "Single Role Dates Precedence Zero Double Counting",
+    "work_experience": [
+      {
+        "job_title": "Fullstack Dev",
+        "company": "Corp",
+        "start_date": "2022-01",
+        "end_date": "2024-01",
+        "years_of_experience": 2.0
+      }
+    ],
+    "required_years": 4.0,
+    "reference_date": "2025-01-01",
+    "expected_candidate_years": 2.0,
+    "expected_score": 50.0,
+    "reason": "Role with dates and scalar years contributes 2.0 years, not 4.0 (50.0% of 4.0 required)"
+  }
+]

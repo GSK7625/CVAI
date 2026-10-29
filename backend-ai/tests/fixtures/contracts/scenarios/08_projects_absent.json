@@ -1,0 +1,56 @@
+{
+  "cv": {
+    "full_name": "Bùi Văn Long",
+    "email": "long.bui@example.com",
+    "phone": "0978901234",
+    "career_summary": "Kỹ sư kiểm thử phần mềm tự động (Automation QA).",
+    "skills": [
+      "Selenium",
+      "Playwright",
+      "Python",
+      "JUnit",
+      "Postman"
+    ],
+    "work_experience": [
+      {
+        "job_title": "QA Automation Engineer",
+        "company": "KMS Technology",
+        "duration": "2022 - 2024",
+        "start_date": "2022-02-01",
+        "end_date": "2024-02-01",
+        "years_of_experience": 2.0,
+        "description": "Viết kịch bản kiểm thử tự động cho hệ thống web và API."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Cử nhân",
+        "institution": "Đại học Sư phạm Kỹ thuật",
+        "field_of_study": "Kỹ thuật phần mềm",
+        "graduation_year": "2022"
+      }
+    ],
+    "certificates": [
+      "ISTQB Foundation Level"
+    ],
+    "projects": [],
+    "technologies": []
+  },
+  "job": {
+    "title": "QA Automation Engineer (Playwright/Python)",
+    "description": "Chịu trách nhiệm thiết kế và duy trì hệ thống kiểm thử tự động.",
+    "required_skills": [
+      "Playwright",
+      "Python"
+    ],
+    "preferred_skills": [
+      "Postman",
+      "Selenium"
+    ],
+    "minimum_experience_years": 1.5,
+    "education_requirement": "Đại học / Cao đẳng",
+    "location": "Đà Nẵng",
+    "salary": "20.000.000 - 28.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

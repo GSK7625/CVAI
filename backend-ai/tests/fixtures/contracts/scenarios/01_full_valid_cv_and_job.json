@@ -1,0 +1,76 @@
+{
+  "cv": {
+    "full_name": "Nguyễn Văn An",
+    "email": "nguyen.an@example.com",
+    "phone": "0912345678",
+    "career_summary": "Kỹ sư phần mềm 3 năm kinh nghiệm phát triển backend web với .NET và Python.",
+    "skills": [
+      "C#",
+      ".NET",
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "Docker"
+    ],
+    "work_experience": [
+      {
+        "job_title": "Backend Developer",
+        "company": "FPT Software",
+        "duration": "2022 - Hiện tại",
+        "start_date": "2022-01-01",
+        "end_date": null,
+        "years_of_experience": 2.5,
+        "description": "Phát triển REST APIs hiệu năng cao với C# .NET và PostgreSQL."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Kỹ sư",
+        "institution": "Đại học Bách Khoa TP.HCM",
+        "field_of_study": "Công nghệ thông tin",
+        "graduation_year": "2022"
+      }
+    ],
+    "certificates": [
+      "AWS Certified Solutions Architect - Associate"
+    ],
+    "projects": [
+      {
+        "name": "E-Commerce Microservices",
+        "description": "Hệ thống thương mại điện tử phục vụ đặt hàng trực tuyến.",
+        "technologies": [
+          ".NET",
+          "PostgreSQL",
+          "Docker",
+          "RabbitMQ"
+        ]
+      }
+    ],
+    "technologies": [
+      "C#",
+      ".NET",
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "Docker"
+    ]
+  },
+  "job": {
+    "title": "Senior .NET Backend Engineer",
+    "description": "Tuyển dụng kỹ sư backend chịu trách nhiệm thiết kế và bảo trì hệ thống Core API.",
+    "required_skills": [
+      "C#",
+      ".NET",
+      "PostgreSQL"
+    ],
+    "preferred_skills": [
+      "Docker",
+      "RabbitMQ"
+    ],
+    "minimum_experience_years": 2.0,
+    "education_requirement": "Đại học / Cử nhân",
+    "location": "Hồ Chí Minh",
+    "salary": "25.000.000 - 35.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

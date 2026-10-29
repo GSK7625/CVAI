@@ -1,0 +1,111 @@
+# ==========================================
+# .NET / C# / Backend
+# ==========================================
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+
+# IDE & Editor files
+.vs/
+.idea/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+*.workspace
+
+# VS Code settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# .NET User-specific & local settings
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.Local.json
+*.local.json
+!appsettings.Development.json.example
+
+# NuGet packages
+*.nupkg
+packages/
+
+# ==========================================
+# Node.js / React / Frontend Web
+# ==========================================
+node_modules/
+dist/
+build/
+.cache/
+.next/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ==========================================
+# React Native / Expo / Mobile
+# ==========================================
+.expo/
+.expo-shared/
+web-build/
+
+# Android
+android/app/build/
+android/.gradle/
+android/app/debug.keystore
+*.apk
+*.aab
+
+# iOS
+ios/Pods/
+ios/build/
+ios/DerivedData/
+*.ipa
+
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# ==========================================
+# General Logs & OS Files
+# ==========================================
+*.log
+[Tt]emp/
+[Ll]ogs/
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# Python / Backend AI
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Documentation / Local docs
+DOCS/

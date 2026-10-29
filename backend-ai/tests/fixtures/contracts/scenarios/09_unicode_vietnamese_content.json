@@ -1,0 +1,74 @@
+{
+  "cv": {
+    "full_name": "Ngô Hoàng Trọng Nghĩa",
+    "email": "nghia.ngo@example.vn",
+    "phone": "0989012345",
+    "career_summary": "Kỹ sư Trí tuệ Nhân tạo và Xử lý Ngôn ngữ Tự nhiên tiếng Việt với nhiều năm kinh nghiệm nghiên cứu mô hình ngôn ngữ lớn.",
+    "skills": [
+      "Xử lý ngôn ngữ tự nhiên",
+      "Mô hình ngôn ngữ lớn",
+      "Python",
+      "PyTorch",
+      "HuggingFace",
+      "Phân tích ngữ nghĩa"
+    ],
+    "work_experience": [
+      {
+        "job_title": "Kỹ sư Nghiên cứu AI",
+        "company": "Viện Nghiên cứu Dữ liệu Lớn VinBigdata",
+        "duration": "2021 - Hiện tại",
+        "start_date": "2021-09-01",
+        "end_date": null,
+        "years_of_experience": 2.8,
+        "description": "Nghiên cứu và huấn luyện mô hình sinh văn bản và trích xuất thông tin tự động từ tài liệu tiếng Việt."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Thạc sĩ Khoa học Máy tính",
+        "institution": "Đại học Quốc gia Hà Nội - Trường Đại học Công nghệ",
+        "field_of_study": "Hệ thống thông tin thông minh",
+        "graduation_year": "2021"
+      }
+    ],
+    "certificates": [
+      "Giải Nhì Nghiên cứu Khoa học Sinh viên Cấp Bộ"
+    ],
+    "projects": [
+      {
+        "name": "Hệ thống Phân loại Văn bản Tiếng Việt Đa nhãn",
+        "description": "Xây dựng mô hình phân tích ngữ cảnh và cảm xúc tiếng Việt đạt độ chính xác 94%.",
+        "technologies": [
+          "Python",
+          "PyTorch",
+          "PhoBERT",
+          "FastAPI"
+        ]
+      }
+    ],
+    "technologies": [
+      "Python",
+      "PyTorch",
+      "PhoBERT",
+      "HuggingFace"
+    ]
+  },
+  "job": {
+    "title": "Chuyên viên Cao cấp Trí tuệ Nhân tạo (NLP / LLM)",
+    "description": "Tuyển dụng chuyên gia AI chịu trách nhiệm phát triển giải pháp trợ lý ảo và trích xuất thông tin tiếng Việt.",
+    "required_skills": [
+      "Xử lý ngôn ngữ tự nhiên",
+      "Python",
+      "PyTorch"
+    ],
+    "preferred_skills": [
+      "Mô hình ngôn ngữ lớn",
+      "HuggingFace"
+    ],
+    "minimum_experience_years": 2.0,
+    "education_requirement": "Đại học / Thạc sĩ chuyên ngành Công nghệ thông tin",
+    "location": "Thành phố Hà Nội",
+    "salary": "40.000.000 - 65.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

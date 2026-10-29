@@ -1,0 +1,61 @@
+{
+  "cv": {
+    "full_name": "Lê Văn Cường",
+    "email": "cuong.le@example.com",
+    "phone": "0901234567",
+    "career_summary": "Lập trình viên tự học với 5 năm kinh nghiệm thực chiến.",
+    "skills": [
+      "JavaScript",
+      "TypeScript",
+      "Node.js",
+      "React",
+      "MongoDB"
+    ],
+    "work_experience": [
+      {
+        "job_title": "Fullstack Developer",
+        "company": "VNG Corporation",
+        "duration": "2019 - 2024",
+        "start_date": "2019-03-01",
+        "end_date": "2024-03-01",
+        "years_of_experience": 5.0,
+        "description": "Xây dựng các sản phẩm web quy mô lớn."
+      }
+    ],
+    "education": [],
+    "certificates": [],
+    "projects": [
+      {
+        "name": "Social Network Platform",
+        "description": "Nền tảng mạng xã hội chuyên ngành.",
+        "technologies": [
+          "React",
+          "Node.js",
+          "MongoDB"
+        ]
+      }
+    ],
+    "technologies": [
+      "JavaScript",
+      "TypeScript",
+      "Node.js"
+    ]
+  },
+  "job": {
+    "title": "Senior Node.js Developer",
+    "description": "Tìm kiếm kỹ sư backend Node.js không bắt buộc bằng cấp đại học.",
+    "required_skills": [
+      "Node.js",
+      "TypeScript"
+    ],
+    "preferred_skills": [
+      "React",
+      "MongoDB"
+    ],
+    "minimum_experience_years": 3.0,
+    "education_requirement": null,
+    "location": "Đà Nẵng",
+    "salary": "30.000.000 - 45.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

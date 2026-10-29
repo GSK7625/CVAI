@@ -1,0 +1,29 @@
+{
+  "match_score": 150,
+  "matched_skills": [
+    "Python",
+    "FastAPI"
+  ],
+  "missing_skills": [
+    "Docker"
+  ],
+  "experience_comparison": "Yêu cầu: 2 năm. Ứng viên có: 3 năm.",
+  "education_comparison": "Yêu cầu: Đại học. Ứng viên có: Cử nhân.",
+  "project_domain_relevance": "Dự án liên quan đến backend.",
+  "match_explanation": "Điểm vượt ngưỡng tối đa cho phép.",
+  "meta": {
+    "contract_version": "match-result-v1",
+    "algorithm_version": "matching-v0",
+    "algorithm_variant": "matching-v0",
+    "schema_version": "1.0.0",
+    "prompt_version": "v1",
+    "provider": "mock",
+    "model": "default",
+    "embedding_provider": null,
+    "embedding_model": null,
+    "llm_invoked": false,
+    "explanation_mode": "deterministic",
+    "processing_time_ms": 15.2,
+    "correlation_id": "corr-invalid-score-test"
+  }
+}

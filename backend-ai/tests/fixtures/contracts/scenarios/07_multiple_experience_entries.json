@@ -1,0 +1,98 @@
+{
+  "cv": {
+    "full_name": "Đặng Quốc Khánh",
+    "email": "khanh.dang@example.com",
+    "phone": "0967890123",
+    "career_summary": "Kỹ sư kiến trúc phần mềm với hơn 7 năm kinh nghiệm làm việc qua nhiều tổ chức.",
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "Microservices",
+      "Kafka",
+      "PostgreSQL",
+      "Redis"
+    ],
+    "work_experience": [
+      {
+        "job_title": "Lead Software Engineer",
+        "company": "MoMo",
+        "duration": "2022 - Hiện tại",
+        "start_date": "2022-01-01",
+        "end_date": null,
+        "years_of_experience": 2.5,
+        "description": "Chịu trách nhiệm kiến trúc hệ thống thanh toán cốt lõi."
+      },
+      {
+        "job_title": "Senior Java Developer",
+        "company": "ZaloPay",
+        "duration": "2020 - 2021",
+        "start_date": "2020-01-01",
+        "end_date": "2021-12-31",
+        "years_of_experience": 2.0,
+        "description": "Phát triển cổng thanh toán tích hợp với các ngân hàng."
+      },
+      {
+        "job_title": "Java Developer",
+        "company": "TMA Solutions",
+        "duration": "2017 - 2019",
+        "start_date": "2017-06-01",
+        "end_date": "2019-12-31",
+        "years_of_experience": 2.5,
+        "description": "Tham gia phát triển dự án gia công phần mềm viễn thông."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Thạc sĩ",
+        "institution": "Đại học Bách Khoa",
+        "field_of_study": "Khoa học máy tính",
+        "graduation_year": "2020"
+      },
+      {
+        "degree": "Kỹ sư",
+        "institution": "Đại học Bách Khoa",
+        "field_of_study": "Công nghệ thông tin",
+        "graduation_year": "2017"
+      }
+    ],
+    "certificates": [
+      "Oracle Certified Professional Java SE 11"
+    ],
+    "projects": [
+      {
+        "name": "High-throughput Core Payment Engine",
+        "description": "Hệ thống xử lý giao dịch thời gian thực 10.000 TPS.",
+        "technologies": [
+          "Java",
+          "Spring Boot",
+          "Kafka",
+          "PostgreSQL"
+        ]
+      }
+    ],
+    "technologies": [
+      "Java",
+      "Spring Boot",
+      "Kafka"
+    ]
+  },
+  "job": {
+    "title": "Principal Java Architect",
+    "description": "Tìm kiếm chuyên gia kiến trúc hệ thống thanh toán quy mô lớn.",
+    "required_skills": [
+      "Java",
+      "Spring Boot",
+      "Kafka"
+    ],
+    "preferred_skills": [
+      "Microservices",
+      "PostgreSQL",
+      "Redis"
+    ],
+    "minimum_experience_years": 5.0,
+    "education_requirement": "Đại học trở lên",
+    "location": "Hồ Chí Minh",
+    "salary": "60.000.000 - 90.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

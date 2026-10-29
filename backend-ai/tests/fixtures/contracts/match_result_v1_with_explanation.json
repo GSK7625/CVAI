@@ -1,0 +1,62 @@
+{
+  "match_score": 88,
+  "matched_skills": [
+    "Python",
+    "FastAPI",
+    "PostgreSQL"
+  ],
+  "missing_skills": [
+    "Docker"
+  ],
+  "experience_comparison": "Yêu cầu: 2.0 năm. Ứng viên có: 3.5 năm (đáp ứng yêu cầu).",
+  "education_comparison": "Yêu cầu: Bachelor. Ứng viên có: Bachelor of Computer Science (đáp ứng yêu cầu).",
+  "project_domain_relevance": "Có 2/3 dự án sử dụng các công nghệ yêu cầu: Python, FastAPI.",
+  "match_explanation": "Ứng viên có nền tảng vững chắc về Python và FastAPI với 3.5 năm kinh nghiệm thực tế. Điểm mạnh chính là đáp ứng tốt các yêu cầu về backend và cơ sở dữ liệu PostgreSQL. Cần bổ sung thêm kỹ năng Docker để hoàn thiện hồ sơ.",
+  "explanation_details": {
+    "summary": "Mức độ phù hợp cao theo các tiêu chí đã được hệ thống đánh giá. Vẫn cần xác minh các yêu cầu chưa có đủ bằng chứng trong CV.",
+    "strengths": [
+      {
+        "item": "Python",
+        "statement": "CV có đề cập kỹ năng Python.",
+        "evidence_source": "cv.skills",
+        "evidence_text": "Python"
+      },
+      {
+        "item": "FastAPI",
+        "statement": "CV có đề cập kỹ năng FastAPI.",
+        "evidence_source": "cv.skills",
+        "evidence_text": "FastAPI"
+      },
+      {
+        "item": "PostgreSQL",
+        "statement": "CV có đề cập kỹ năng PostgreSQL.",
+        "evidence_source": "cv.skills",
+        "evidence_text": "PostgreSQL"
+      }
+    ],
+    "gaps": [
+      {
+        "requirement": "Docker",
+        "statement": "Chưa đủ bằng chứng về kỹ năng bắt buộc Docker."
+      }
+    ],
+    "recommendations": [
+      "Bổ sung kinh nghiệm hoặc dự án thực tế sử dụng Docker."
+    ]
+  },
+  "meta": {
+    "contract_version": "match-result-v1",
+    "algorithm_version": "matching-v0",
+    "algorithm_variant": "matching-v0",
+    "schema_version": "1.0.0",
+    "prompt_version": "v1",
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "embedding_provider": null,
+    "embedding_model": null,
+    "llm_invoked": true,
+    "explanation_mode": "llm",
+    "processing_time_ms": 284.15,
+    "correlation_id": "corr-fixture-with-exp"
+  }
+}

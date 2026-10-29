@@ -1,0 +1,57 @@
+{
+  "cv": {
+    "full_name": "Phạm Văn Dũng",
+    "email": "dung.pham@example.com",
+    "phone": "0934567890",
+    "career_summary": "Kỹ sư DevOps chuyên về tự động hóa hạ tầng đám mây.",
+    "skills": [
+      "Linux",
+      "Docker",
+      "Kubernetes",
+      "Terraform",
+      "AWS"
+    ],
+    "work_experience": [
+      {
+        "job_title": "DevOps Engineer",
+        "company": "Tiki",
+        "duration": "2021 - 2024",
+        "start_date": "2021-06-01",
+        "end_date": "2024-06-01",
+        "years_of_experience": 3.0,
+        "description": "Vận hành cụm Kubernetes trên AWS."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Cử nhân",
+        "institution": "Đại học Bưu chính Viễn thông",
+        "field_of_study": "An toàn thông tin",
+        "graduation_year": "2021"
+      }
+    ],
+    "certificates": [
+      "CKA"
+    ],
+    "projects": [],
+    "technologies": [
+      "Kubernetes",
+      "AWS"
+    ]
+  },
+  "job": {
+    "title": "Cloud Infrastructure Engineer",
+    "description": "Quản trị và vận hành toàn bộ hạ tầng cloud của công ty.",
+    "required_skills": [
+      "Kubernetes",
+      "AWS",
+      "Terraform"
+    ],
+    "preferred_skills": [],
+    "minimum_experience_years": 2.0,
+    "education_requirement": "Đại học",
+    "location": "Hồ Chí Minh",
+    "salary": "35.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "case_01_identical_vectors_unit_similarity",
+    "name": "Identical Vectors Produce Unit Similarity",
+    "vec_a": [0.6, 0.8],
+    "vec_b": [0.6, 0.8],
+    "expected_sim": 1.0,
+    "expected_score": 100.0,
+    "reason": "Identical non-zero vectors yield cosine 1.0 -> 100.0% score"
+  },
+  {
+    "id": "case_02_orthogonal_vectors_zero_similarity",
+    "name": "Orthogonal Vectors Produce Zero Similarity",
+    "vec_a": [1.0, 0.0],
+    "vec_b": [0.0, 1.0],
+    "expected_sim": 0.0,
+    "expected_score": 0.0,
+    "reason": "Perpendicular vectors yield cosine 0.0 -> 0.0% score"
+  },
+  {
+    "id": "case_03_opposite_vectors_clamped_zero",
+    "name": "Opposite Vectors Clamped to Zero Score",
+    "vec_a": [1.0, 0.0],
+    "vec_b": [-1.0, 0.0],
+    "expected_sim": -1.0,
+    "expected_score": 0.0,
+    "reason": "Opposite vectors yield cosine -1.0 -> clamped to 0.0% score"
+  },
+  {
+    "id": "case_04_dimension_mismatch_safe_zero",
+    "name": "Dimension Mismatch Handled Safely",
+    "vec_a": [1.0, 2.0],
+    "vec_b": [1.0, 2.0, 3.0],
+    "expected_sim": 0.0,
+    "expected_score": 0.0,
+    "reason": "Mismatched dimensions return 0.0 safely without silent truncation"
+  },
+  {
+    "id": "case_05_empty_vector_safe_zero",
+    "name": "Empty Vectors Handled Safely",
+    "vec_a": [],
+    "vec_b": [1.0, 2.0],
+    "expected_sim": 0.0,
+    "expected_score": 0.0,
+    "reason": "Empty vector returns 0.0 safely without exception"
+  },
+  {
+    "id": "case_06_zero_magnitude_vector_safe_zero",
+    "name": "Zero Magnitude Vector Handled Safely",
+    "vec_a": [0.0, 0.0],
+    "vec_b": [1.0, 2.0],
+    "expected_sim": 0.0,
+    "expected_score": 0.0,
+    "reason": "Zero norm vector returns 0.0 safely without ZeroDivisionError"
+  },
+  {
+    "id": "case_07_nan_vector_safe_zero",
+    "name": "Vector with NaN Returns Zero",
+    "vec_a": ["NaN", 1.0],
+    "vec_b": [1.0, 1.0],
+    "expected_sim": 0.0,
+    "expected_score": 0.0,
+    "reason": "Non-finite NaN value returns 0.0 without fabricating positive similarity"
+  },
+  {
+    "id": "case_08_infinity_vector_safe_zero",
+    "name": "Vector with Infinity Returns Zero",
+    "vec_a": ["Infinity", 1.0],
+    "vec_b": [1.0, 1.0],
+    "expected_sim": 0.0,
+    "expected_score": 0.0,
+    "reason": "Non-finite +Inf value returns 0.0 without fabricating positive similarity"
+  },
+  {
+    "id": "case_09_negative_infinity_vector_safe_zero",
+    "name": "Vector with Negative Infinity Returns Zero",
+    "vec_a": ["-Infinity", 1.0],
+    "vec_b": [1.0, 1.0],
+    "expected_sim": 0.0,
+    "expected_score": 0.0,
+    "reason": "Non-finite -Inf value returns 0.0 without fabricating positive similarity"
+  },
+  {
+    "id": "case_10_positive_intermediate_similarity",
+    "name": "Positive Intermediate Similarity Scaled Linearly",
+    "vec_a": [1.0, 0.0],
+    "vec_b": [0.5, 0.8660254],
+    "expected_sim": 0.5,
+    "expected_score": 50.0,
+    "reason": "Cosine similarity of 0.5 maps linearly to 50.0% score"
+  }
+]

@@ -1,0 +1,59 @@
+{
+  "cv": {
+    "full_name": "Hoàng Thị Giang",
+    "email": "giang.hoang@example.com",
+    "phone": "0945678901",
+    "career_summary": "Data Analyst chuyên về phân tích dữ liệu kinh doanh.",
+    "skills": [
+      "SQL",
+      "sql",
+      " SQL ",
+      "Python",
+      "python",
+      "PowerBI"
+    ],
+    "work_experience": [
+      {
+        "job_title": "Data Analyst",
+        "company": "Shopee",
+        "duration": "2023 - 2024",
+        "start_date": "2023-01-01",
+        "end_date": "2024-01-01",
+        "years_of_experience": 1.0,
+        "description": "Xây dựng dashboard báo cáo doanh thu."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Cử nhân",
+        "institution": "Đại học Kinh tế TP.HCM",
+        "field_of_study": "Hệ thống thông tin quản lý",
+        "graduation_year": "2023"
+      }
+    ],
+    "certificates": [],
+    "projects": [],
+    "technologies": [
+      "SQL",
+      "Python"
+    ]
+  },
+  "job": {
+    "title": "Business Data Analyst",
+    "description": "Tìm kiếm chuyên viên phân tích dữ liệu.",
+    "required_skills": [
+      "SQL",
+      "sql",
+      "PowerBI"
+    ],
+    "preferred_skills": [
+      "Python",
+      "python "
+    ],
+    "minimum_experience_years": 1.0,
+    "education_requirement": "Cử nhân",
+    "location": "Hồ Chí Minh",
+    "salary": "18.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

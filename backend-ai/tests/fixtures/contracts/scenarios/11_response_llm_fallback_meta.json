@@ -1,0 +1,31 @@
+{
+  "match_score": 82,
+  "matched_skills": [
+    "C#",
+    ".NET",
+    "PostgreSQL"
+  ],
+  "missing_skills": [
+    "Docker",
+    "RabbitMQ"
+  ],
+  "experience_comparison": "Yêu cầu: 2.0 năm. Ứng viên có: 2.5 năm (đáp ứng yêu cầu).",
+  "education_comparison": "Yêu cầu: Đại học / Cử nhân. Ứng viên có: Kỹ sư (đáp ứng yêu cầu).",
+  "project_domain_relevance": "Dự án liên quan trực tiếp đến microservices backend.",
+  "match_explanation": "Điểm phù hợp: 82/100 (Kỹ năng: 75%, Kinh nghiệm: 100%, Học vấn: 100%). Khớp 3 kỹ năng, thiếu 2 kỹ năng yêu cầu.",
+  "meta": {
+    "contract_version": "match-result-v1",
+    "algorithm_version": "matching-v0",
+    "algorithm_variant": "matching-v0",
+    "schema_version": "1.0.0",
+    "prompt_version": "v1",
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "embedding_provider": null,
+    "embedding_model": null,
+    "llm_invoked": true,
+    "explanation_mode": "deterministic-fallback",
+    "processing_time_ms": 1542.8,
+    "correlation_id": "corr-fallback-scenario-11"
+  }
+}

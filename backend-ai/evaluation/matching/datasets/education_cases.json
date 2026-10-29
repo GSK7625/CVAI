@@ -1,0 +1,122 @@
+[
+  {
+    "id": "case_01_exact_degree_match",
+    "name": "Exact Degree Match",
+    "candidate_degrees": [
+      "Bachelor of Computer Science"
+    ],
+    "required_education": "Bachelor",
+    "expected_candidate_rank": 3,
+    "expected_required_rank": 3,
+    "expected_score": 100.0,
+    "reason": "Exact degree tier match (Bachelor == Bachelor)"
+  },
+  {
+    "id": "case_02_higher_degree_exceeds",
+    "name": "Higher Degree Exceeds Requirement",
+    "candidate_degrees": [
+      "Thạc sĩ Khoa học Máy tính"
+    ],
+    "required_education": "Cử nhân",
+    "expected_candidate_rank": 4,
+    "expected_required_rank": 3,
+    "expected_score": 100.0,
+    "reason": "Candidate degree exceeds requirement (Master > Bachelor)"
+  },
+  {
+    "id": "case_03_doctorate_exceeds_all",
+    "name": "Doctorate Exceeds Master Requirement",
+    "candidate_degrees": [
+      "Ph.D. in Artificial Intelligence"
+    ],
+    "required_education": "Master",
+    "expected_candidate_rank": 5,
+    "expected_required_rank": 4,
+    "expected_score": 100.0,
+    "reason": "Doctorate tier exceeds Master requirement (PhD > Master)"
+  },
+  {
+    "id": "case_04_one_level_below_near_match",
+    "name": "One Level Below Near Match",
+    "candidate_degrees": [
+      "BSc Software Engineering"
+    ],
+    "required_education": "Master of Science",
+    "expected_candidate_rank": 3,
+    "expected_required_rank": 4,
+    "expected_score": 75.0,
+    "reason": "Candidate degree is exactly 1 tier below requirement (Bachelor vs Master -> 75.0%)"
+  },
+  {
+    "id": "case_05_two_levels_below",
+    "name": "Two Levels Below Minimum Score",
+    "candidate_degrees": [
+      "THPT Chu Văn An"
+    ],
+    "required_education": "Đại học",
+    "expected_candidate_rank": 1,
+    "expected_required_rank": 3,
+    "expected_score": 50.0,
+    "reason": "Candidate degree is 2 tiers below requirement (High School vs Bachelor -> 50.0%)"
+  },
+  {
+    "id": "case_06_no_job_requirement_neutral",
+    "name": "No Job Requirement Neutral Score",
+    "candidate_degrees": [
+      "Cao đẳng Kỹ thuật"
+    ],
+    "required_education": null,
+    "expected_candidate_rank": 2,
+    "expected_required_rank": null,
+    "expected_score": 100.0,
+    "reason": "No required education specified by job -> 100.0% neutral score"
+  },
+  {
+    "id": "case_07_no_candidate_education",
+    "name": "No Candidate Education Conservative Score",
+    "candidate_degrees": [],
+    "required_education": "Bachelor",
+    "expected_candidate_rank": null,
+    "expected_required_rank": 3,
+    "expected_score": 50.0,
+    "reason": "Missing candidate education qualifications against required Bachelor -> 50.0%"
+  },
+  {
+    "id": "case_08_unknown_job_requirement",
+    "name": "Unrecognized Job Requirement Conservative Score",
+    "candidate_degrees": [
+      "Bachelor of Science"
+    ],
+    "required_education": "Guild Certified Craftsman",
+    "expected_candidate_rank": 3,
+    "expected_required_rank": null,
+    "expected_score": 50.0,
+    "reason": "Unrecognized job education requirement -> 50.0% conservative baseline"
+  },
+  {
+    "id": "case_09_unknown_candidate_degree",
+    "name": "Unrecognized Candidate Qualification Conservative Score",
+    "candidate_degrees": [
+      "Self-taught Coding Bootcamp Certificate"
+    ],
+    "required_education": "Bachelor",
+    "expected_candidate_rank": null,
+    "expected_required_rank": 3,
+    "expected_score": 50.0,
+    "reason": "Unrecognized candidate qualification rank against required Bachelor -> 50.0%"
+  },
+  {
+    "id": "case_10_multiple_degrees_highest_wins",
+    "name": "Multiple Degrees Highest Wins",
+    "candidate_degrees": [
+      "Associate of Science",
+      "Master of Business Administration (MBA)",
+      "High School Diploma"
+    ],
+    "required_education": "Master",
+    "expected_candidate_rank": 4,
+    "expected_required_rank": 4,
+    "expected_score": 100.0,
+    "reason": "Multiple degrees evaluated; highest qualification (Master, Rank 4) wins regardless of order"
+  }
+]

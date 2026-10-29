@@ -1,0 +1,40 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=future_cv_db;Username=YOUR_POSTGRES_USER;Password=YOUR_POSTGRES_PASSWORD"
+  },
+  "Jwt": {
+    "Key": "YOUR_SUPER_SECRET_JWT_KEY_MIN_32_CHARACTERS_LONG!",
+    "Issuer": "FutureCV",
+    "Audience": "FutureCV",
+    "AccessTokenExpiryMinutes": 15,
+    "RefreshTokenExpiryDays": 7
+  },
+  "FrontendUrl": "http://localhost:3000",
+  "SmtpSettings": {
+    "Host": "smtp.gmail.com",
+    "Port": 587,
+    "SenderEmail": "your_email@gmail.com",
+    "SenderName": "FutureCV Support",
+    "Username": "your_email@gmail.com",
+    "Password": "YOUR_GMAIL_APP_PASSWORD",
+    "EnableSsl": true
+  },
+  "GoogleAuth": {
+    "ClientId": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+  },
+  "Cloudinary": {
+      "CloudName": "YOUR_CLOUDINARY_CLOUD_NAME",
+      "ApiKey": "YOUR_CLOUDINARY_API_KEY",
+      "ApiSecret": "YOUR_CLOUDINARY_API_SECRET"
+  },
+  "SuperAdmin": {
+      "Email": "admin@example.com",
+      "Password": "YOUR_SUPERADMIN_PASSWORD"
+  },
+}

@@ -1,0 +1,57 @@
+{
+  "cv": {
+    "full_name": "Trần Thị Bình",
+    "email": "binh.tran@example.com",
+    "phone": "0987654321",
+    "career_summary": "Sinh viên mới tốt nghiệp ngành CNTT đam mê phát triển hệ thống backend.",
+    "skills": [
+      "Python",
+      "FastAPI",
+      "SQL",
+      "Git"
+    ],
+    "work_experience": [],
+    "education": [
+      {
+        "degree": "Cử nhân",
+        "institution": "Đại học Khoa học Tự nhiên",
+        "field_of_study": "Khoa học máy tính",
+        "graduation_year": "2024"
+      }
+    ],
+    "certificates": [],
+    "projects": [
+      {
+        "name": "Graduate Thesis AI Matcher",
+        "description": "Dự án tốt nghiệp ứng dụng NLP phân tích nội dung văn bản.",
+        "technologies": [
+          "Python",
+          "FastAPI",
+          "SQLite"
+        ]
+      }
+    ],
+    "technologies": [
+      "Python",
+      "FastAPI",
+      "SQL"
+    ]
+  },
+  "job": {
+    "title": "Junior Python Developer",
+    "description": "Vị trí lập trình viên Python cho fresher và junior.",
+    "required_skills": [
+      "Python",
+      "SQL"
+    ],
+    "preferred_skills": [
+      "FastAPI",
+      "Git"
+    ],
+    "minimum_experience_years": 0.0,
+    "education_requirement": "Cử nhân",
+    "location": "Hà Nội",
+    "salary": "10.000.000 - 15.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}

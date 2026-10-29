@@ -1,0 +1,67 @@
+{
+  "cv": {
+    "full_name": "Vũ Minh Hải",
+    "email": "hai.vu@example.com",
+    "phone": "0956789012",
+    "career_summary": "Frontend developer chuyển ngành từ ngành khác qua các khóa học thực tế.",
+    "skills": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Vue.js",
+      "TailwindCSS"
+    ],
+    "work_experience": [
+      {
+        "job_title": "Frontend Developer",
+        "company": "Tech Startup",
+        "duration": "2023 - 2024",
+        "start_date": "2023-03-01",
+        "end_date": "2024-03-01",
+        "years_of_experience": 1.0,
+        "description": "Phát triển giao diện ứng dụng web."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Bootcamp Intensive Certificate",
+        "institution": "CodersSchool",
+        "field_of_study": "Frontend Web Development",
+        "graduation_year": "2023"
+      }
+    ],
+    "certificates": [
+      "Chứng chỉ lập trình viên Front-End"
+    ],
+    "projects": [
+      {
+        "name": "Portfolio Web App",
+        "description": "Trang web cá nhân hiển thị các sản phẩm.",
+        "technologies": [
+          "Vue.js",
+          "TailwindCSS"
+        ]
+      }
+    ],
+    "technologies": [
+      "Vue.js",
+      "TailwindCSS"
+    ]
+  },
+  "job": {
+    "title": "Vue.js Developer",
+    "description": "Tuyển dụng lập trình viên Vue.js.",
+    "required_skills": [
+      "Vue.js",
+      "JavaScript"
+    ],
+    "preferred_skills": [
+      "TailwindCSS"
+    ],
+    "minimum_experience_years": 1.0,
+    "education_requirement": "Chứng chỉ nghề hoặc tương đương",
+    "location": "Hà Nội",
+    "salary": "15.000.000 VND",
+    "employment_type": "Toàn thời gian"
+  }
+}
