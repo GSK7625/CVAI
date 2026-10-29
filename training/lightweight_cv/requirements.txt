@@ -1,0 +1,6 @@
+# Install platform PyTorch first; Colab keeps its preinstalled torch/CUDA.
+numpy>=1.26,<3
+transformers==4.57.1
+scikit-learn==1.7.2
+fastapi==0.119.1
+uvicorn==0.38.0
