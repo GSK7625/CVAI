@@ -1,0 +1,8 @@
+Yêu cầu:
+- Bắt buộc có kinh nghiệm Python trong công việc trả lương.
+- Có kinh nghiệm SQL trong dự án độc lập.
+- Ít nhất 1 năm kinh nghiệm ở vị trí backend developer.
+Ưu tiên:
+- Biết Docker cơ bản.
+Quyền lợi:
+- Được đào tạo và hỗ trợ học tập.
