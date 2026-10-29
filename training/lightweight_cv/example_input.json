@@ -1,0 +1,10 @@
+{
+  "sample_id": "demo-new-cv",
+  "cv_text": "Profile focus: data/ML engineer.\nPaid data/ML engineer experience: 8 months.\nIndependent project: used Python to build a prediction service.\nIndependent project: used SQL to query a reporting database.\nListed skill: scikit-learn; no example of use is provided.",
+  "requirements": [
+    {"id": "r1", "text": "Evidence of Python used during paid employment.", "weight": 3},
+    {"id": "r2", "text": "Project-level experience applying scikit-learn.", "weight": 2},
+    {"id": "r3", "text": "Project-level experience applying SQL.", "weight": 2},
+    {"id": "r4", "text": "Paid experience in data/ML engineer totaling 12 months or more.", "weight": 2}
+  ]
+}
