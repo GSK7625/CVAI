@@ -1,0 +1,23 @@
+{
+  "artifact": "downloaded Colab full v1; exact committed classifier and release encoder",
+  "classifier_sha256": "268e14e927fcd94d6ffa89f9cc0524691e5d18567d7f995355eb8aa1be0e5105",
+  "dataset_hashes_match": true,
+  "n_requirements": 600,
+  "labels_match_original_predictions": true,
+  "original": {
+    "macro_f1": 0.7636268954203459,
+    "accuracy": 0.8216666666666667,
+    "score_mae": 13.269841269841269
+  },
+  "reproduced": {
+    "macro_f1": 0.7636268954203459,
+    "accuracy": 0.8216666666666667,
+    "score_mae": 13.269841269841269
+  },
+  "local_versions": {
+    "torch": "2.12.0",
+    "numpy": "2.2.6",
+    "transformers": "4.57.1"
+  },
+  "scope": "same previously inspected synthetic test; not real-world validation"
+}
