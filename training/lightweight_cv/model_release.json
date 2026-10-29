@@ -1,0 +1,9 @@
+{
+  "repository": "GSK7625/CVAI",
+  "tag": "cvai-e5-v1.0.0",
+  "asset": "cvai-e5-v1-model.zip",
+  "url": "https://github.com/GSK7625/CVAI/releases/download/cvai-e5-v1.0.0/cvai-e5-v1-model.zip",
+  "sha256": "4f84cc5af20d64b3ead91a88e390f07889ace73ecdc7244de12e025959e29ed1",
+  "size_bytes": 284431951,
+  "feature_version": "e5-top3-classifier-v1"
+}
