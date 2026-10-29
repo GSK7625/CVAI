@@ -1,0 +1,179 @@
+{
+  "$defs": {
+    "Assessment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "met",
+            "partial",
+            "not_evidenced"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Evidence"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "evidence"
+      ],
+      "title": "Assessment",
+      "type": "object"
+    },
+    "CvIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "issue": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Issue",
+          "type": "string"
+        },
+        "suggestion": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Suggestion",
+          "type": "string"
+        }
+      },
+      "required": [
+        "issue",
+        "suggestion"
+      ],
+      "title": "CvIssue",
+      "type": "object"
+    },
+    "Requirement": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "weight": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Weight",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "weight"
+      ],
+      "title": "Requirement",
+      "type": "object"
+    },
+    "Review": {
+      "additionalProperties": false,
+      "properties": {
+        "assessments": {
+          "items": {
+            "$ref": "#/$defs/Assessment"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Assessments",
+          "type": "array"
+        },
+        "summary": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "cv_issues": {
+          "items": {
+            "$ref": "#/$defs/CvIssue"
+          },
+          "maxItems": 2,
+          "title": "Cv Issues",
+          "type": "array"
+        }
+      },
+      "required": [
+        "assessments",
+        "summary",
+        "cv_issues"
+      ],
+      "title": "Review",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "sample_id": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Sample Id",
+      "type": "string"
+    },
+    "cv_text": {
+      "minLength": 1,
+      "title": "Cv Text",
+      "type": "string"
+    },
+    "requirements": {
+      "items": {
+        "$ref": "#/$defs/Requirement"
+      },
+      "maxItems": 5,
+      "minItems": 1,
+      "title": "Requirements",
+      "type": "array"
+    },
+    "cv_group": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Cv Group",
+      "type": "string"
+    },
+    "jd_group": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Jd Group",
+      "type": "string"
+    },
+    "target": {
+      "$ref": "#/$defs/Review"
+    }
+  },
+  "required": [
+    "sample_id",
+    "cv_text",
+    "requirements",
+    "cv_group",
+    "jd_group",
+    "target"
+  ],
+  "title": "Sample",
+  "type": "object"
+}
