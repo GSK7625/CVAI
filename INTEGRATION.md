@@ -51,9 +51,17 @@ Frontend dùng URL/backend và session hiện có: `cd frontend`, `npm ci`, `npm
 
 ## Phạm vi và trạng thái
 
-- PDF cần có text gốc đã trích xuất. JSON của CV builder không được giả làm
-  văn bản gốc; thiếu text/JSON/thừa 30.000 ký tự trả unavailable. Không tự OCR hoặc
-  thêm hỗ trợ Word ở thay đổi này. Cần chuẩn hóa riêng CV builder trước khi mở rộng.
+- PDF tải lên sẽ được đọc trực tiếp bởi dịch vụ CPU ở lần Phân tích đầu tiên;
+  lưu text gốc trong CVParsers để tái sử dụng. CV cũ còn Pending cũng được xử lý.
+  Không cần dịch vụ AI cũ cổng 8000 cho luồng evidence. Cập nhật dependencies bằng
+  `python -m pip install -r training/lightweight_cv/requirements.txt`, rồi restart model.
+  API nội bộ POST /extract-pdf nhận base64, xác thực cùng khóa; giới hạn 5MB,
+  50 trang, 30.000 ký tự, worker riêng timeout 15 giây. Không OCR/Word/PDF khóa.
+  JSON của CV builder không được giả làm text gốc. PDF chỉ tải từ host Cloudinary
+  được cho phép, không theo redirect và không gửi khóa model tới Cloudinary.
+  Tệp bị chặn tải công khai được backend tải qua Cloudinary DownloadPrivate với
+  chữ ký hết hạn sau 1 phút, sau khi đã kiểm tra quyền sở hữu CV; không cần mở
+  public PDF trong cấu hình Cloudinary.
 - Requirements là nguồn yêu cầu được chấm, Description là fallback; chưa hợp nhất
   các trường kinh nghiệm/học vấn bổ sung của job vào rubric. Không gọi đây là
   đánh giá đầy đủ mọi điều kiện của tin tuyển dụng.
@@ -75,3 +83,9 @@ roll-forward vì máy chưa có ASP.NET runtime 8.
 
 Mã nguồn giữ nguyên V1 và không đưa pair-classifier v2 vào lần phát hành này.
 Trọng số lớn ở Release cvai-evidence-r1; NPZ nhỏ và manifest ở Git.
+
+## Sửa lỗi nhầm CV khi phân tích lại
+
+Nút phân tích không truyền React click event làm ID CV. Mỗi yêu cầu phân tích
+nhận CV ID tường minh, không refetch query đang giữ ID cũ sau khi đổi/tải CV.
+Kết quả được kiểm tra cặp jobId/cvId và yêu cầu cũ không ghi đè yêu cầu mới.
