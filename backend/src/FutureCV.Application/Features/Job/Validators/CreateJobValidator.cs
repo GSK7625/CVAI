@@ -14,6 +14,10 @@ public class CreateJobValidator : AbstractValidator<CreateJobRequest>
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Job description is required.");
 
+        RuleFor(x => x.Deadline)
+            .Must(deadline => !deadline.HasValue || deadline.Value.Kind != DateTimeKind.Unspecified)
+            .WithMessage("Hạn nộp phải kèm múi giờ. Vui lòng cập nhật trang rồi thử lại.");
+
         RuleFor(x => x.PositionsCount)
             .GreaterThan(0).WithMessage("Positions count must be at least 1.");
 
@@ -36,7 +40,7 @@ public class CreateJobValidator : AbstractValidator<CreateJobRequest>
             .When(x => x.ExperienceYearsMin.HasValue && x.ExperienceYearsMax.HasValue);
 
         RuleFor(x => x.Deadline)
-            .Must(deadline => !deadline.HasValue || deadline.Value > DateTime.UtcNow)
+            .Must(deadline => !deadline.HasValue || deadline.Value.ToUniversalTime() > DateTime.UtcNow)
             .WithMessage("Deadline must be in the future.")
             .When(x => x.Deadline.HasValue);
     }
