@@ -18,6 +18,43 @@ namespace FutureCV.Domain.Tests.IntegrationTests;
 
 public class PreviewJobMatchAuthoritativeIntegrationTests
 {
+    private sealed class EvidenceClient : IEvidenceReviewClient
+    {
+        public bool Enabled => true;
+        public int Calls;
+        public Task<ServiceResult<JsonElement>> ReviewAsync(string cvText, string jdText, string title, CancellationToken token)
+        {
+            Calls++;
+            Assert.Equal("Paid work: used Python to parse logs.", cvText);
+            return Task.FromResult(ServiceResult.Success(JsonSerializer.SerializeToElement(new { status = "needs_review", score = (decimal?)null, assessments = Array.Empty<object>() })));
+        }
+    }
+
+    [Fact]
+    public async Task EvidencePreview_PreservesNullAndChecksCvOwnership()
+    {
+        using var db = CreateDbContext();
+        var (userId, jobId, cvId) = SeedStandardScenario(db);
+        var parser = await db.CvParsers.FirstAsync(p => p.CvId == cvId);
+        parser.RawText = "Paid work: used Python to parse logs.";
+        await db.SaveChangesAsync();
+        var evidence = new EvidenceClient();
+        var service = new ApplicationService(db, new TestIdentityService(), new TestAiMatchingClient(), evidenceClient: evidence);
+        var denied = await service.PreviewJobMatchAsync(userId, jobId, new PreviewJobMatchRequest(Guid.NewGuid()));
+        Assert.False(denied.IsSuccess);
+        Assert.Equal(0, evidence.Calls);
+        var result = await service.PreviewJobMatchAsync(userId, jobId, new PreviewJobMatchRequest(cvId));
+        Assert.True(result.IsSuccess);
+        Assert.Equal("evidence", result.Data!.MatchSource);
+        Assert.Equal(JsonValueKind.Null, result.Data.EvidenceReview!.Value.GetProperty("score").ValueKind);
+        Assert.Equal(1, evidence.Calls);
+        parser.RawText = "{\"skills\": [\"Python\"]}";
+        await db.SaveChangesAsync();
+        var invalid = await service.PreviewJobMatchAsync(userId, jobId, new PreviewJobMatchRequest(cvId));
+        Assert.Equal("unavailable", invalid.Data!.EvidenceReview!.Value.GetProperty("status").GetString());
+        Assert.Equal(1, evidence.Calls);
+    }
+
     private sealed class TestAiMatchingClient : IAiMatchingClient
     {
         public int CallCount { get; private set; }
