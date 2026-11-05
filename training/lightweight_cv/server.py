@@ -1,5 +1,10 @@
 """Internal CPU-only API. One process; invoke from the application backend."""
 import asyncio
+import base64
+import binascii
+import subprocess
+import sys
+from pathlib import Path
 import hmac
 import os
 from contextlib import asynccontextmanager
@@ -91,6 +96,50 @@ async def review(body: Request, x_internal_api_key: str = Header(default="")):
             raise
     except JDPreparationError as error:
         raise HTTPException(status_code=422, detail={"message": str(error), "jd_profile": error.profile}) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    finally:
+        app.state.busy = False
+
+
+class PDFTextRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    pdf_base64: str = Field(min_length=8, max_length=6990508)
+
+
+def run_pdf_worker(data):
+    flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+    try:
+        result = subprocess.run([sys.executable, str(Path(__file__).with_name("pdf_text.py"))],
+                                input=data, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                                timeout=15, creationflags=flags)
+    except subprocess.TimeoutExpired as error:
+        raise ValueError("PDF processing timed out") from error
+    if result.returncode != 0:
+        raise ValueError("PDF has no usable text, is locked, invalid or exceeds processing limits")
+    return result.stdout.decode("utf-8")
+
+
+@app.post("/extract-pdf")
+async def extract_pdf(body: PDFTextRequest, x_internal_api_key: str = Header(default="")):
+    authenticate(x_internal_api_key)
+    if app.state.busy:
+        raise HTTPException(status_code=429, detail="Dịch vụ đang bận; hãy thử lại sau")
+    try:
+        data = base64.b64decode(body.pdf_base64, validate=True)
+    except binascii.Error as error:
+        raise HTTPException(status_code=422, detail="Invalid base64 PDF") from error
+    if len(data) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=422, detail="PDF exceeds 5 MB")
+    app.state.busy = True
+    task = asyncio.create_task(asyncio.to_thread(run_pdf_worker, data))
+    try:
+        try:
+            text = await asyncio.shield(task)
+        except asyncio.CancelledError:
+            await task
+            raise
+        return {"text": text}
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     finally:
