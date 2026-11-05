@@ -60,8 +60,6 @@ export function ApplyFormView({ jobId }: ApplyFormViewProps) {
   const [alreadyAppliedModal, setAlreadyAppliedModal] = useState(false);
   const [isUploadingInline, setIsUploadingInline] = useState(false);
   const [hasAnalyzed, setHasAnalyzed] = useState(false);
-  const [analyzedCvId, setAnalyzedCvId] = useState<string | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Tự động chọn CV chính hoặc CV đầu tiên khi load danh sách
   useEffect(() => {
@@ -71,38 +69,19 @@ export function ApplyFormView({ jobId }: ApplyFormViewProps) {
     }
   }, [cvs, selectedCvId]);
 
-  // On-demand AI Match Preview Query (Option A)
-  const {
-    data: matchPreview,
-    isLoading: isMatchQueryLoading,
-    refetch: refetchMatch,
-  } = usePreviewJobMatch(
-    jobId,
-    selectedCvId || undefined,
-    hasAnalyzed,
-  );
+  const { data: matchPreview, isPending: isAnalyzing, mutateAsync: analyzeMatch } = usePreviewJobMatch(jobId);
 
-  // Kích hoạt phân tích độ phù hợp với hiệu ứng quét thời gian thực
   const handleAnalyze = async (targetCvId?: string) => {
-    const cvToAnalyze = targetCvId || selectedCvId;
+    const cvToAnalyze = targetCvId ?? selectedCvId;
     if (!cvToAnalyze) {
       showToast("Vui lòng chọn hoặc tải lên một bản CV trước khi phân tích.", "error");
       return;
     }
-
-    setIsAnalyzing(true);
     setHasAnalyzed(true);
-    setAnalyzedCvId(cvToAnalyze);
-
     try {
-      await Promise.all([
-        refetchMatch(),
-        new Promise((resolve) => setTimeout(resolve, 500)),
-      ]);
-    } catch {
-      // Error được phản hồi trong query/preview
-    } finally {
-      setIsAnalyzing(false);
+      await analyzeMatch(cvToAnalyze);
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Không thể phân tích CV. Vui lòng thử lại.", "error");
     }
   };
 
@@ -117,7 +96,7 @@ export function ApplyFormView({ jobId }: ApplyFormViewProps) {
 
   const selectedCv = cvs.find((c) => c.id === selectedCvId);
   const isCvChangedAfterAnalysis =
-    hasAnalyzed && analyzedCvId !== null && analyzedCvId !== selectedCvId;
+    !!matchPreview && (matchPreview.cvId !== selectedCvId || matchPreview.jobId !== jobId);
 
   // Xử lý upload file CV trực tiếp ngay tại trang apply
   const handleInlineFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -318,9 +297,9 @@ export function ApplyFormView({ jobId }: ApplyFormViewProps) {
           {selectedCvId && (
             <MatchPreviewSection
               preview={matchPreview}
-              isLoading={isAnalyzing || isMatchQueryLoading}
+              isLoading={isAnalyzing}
               hasAnalyzed={hasAnalyzed}
-              onAnalyze={handleAnalyze}
+              onAnalyze={() => { void handleAnalyze(); }}
               selectedCvTitle={selectedCv?.title}
               isCvChangedAfterAnalysis={isCvChangedAfterAnalysis}
             />
