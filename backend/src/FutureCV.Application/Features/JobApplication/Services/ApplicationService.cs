@@ -24,14 +24,17 @@ public class ApplicationService : IApplicationService
     private readonly IAiMatchingClient _aiMatchingClient;
     private readonly AiMatchingFeatureOptions _aiOptions;
     private readonly ILogger<ApplicationService> _logger;
+    private readonly IEvidenceReviewClient? _evidenceClient;
 
     public ApplicationService(
         IApplicationDbContext context,
         IIdentityService identityService,
         IAiMatchingClient aiMatchingClient,
         IOptions<AiMatchingFeatureOptions>? aiOptions = null,
-        ILogger<ApplicationService>? logger = null)
+        ILogger<ApplicationService>? logger = null,
+        IEvidenceReviewClient? evidenceClient = null)
     {
+        _evidenceClient = evidenceClient;
         _context = context;
         _identityService = identityService;
         _aiMatchingClient = aiMatchingClient;
@@ -507,6 +510,26 @@ public class ApplicationService : IApplicationService
         // 3. Both false: Legacy only.
         // If both are true, PreviewAiEnabled takes precedence.
         // ---------------------------------------------------------------------
+        if (_evidenceClient?.Enabled == true)
+        {
+            var parser = await _context.CvParsers.AsNoTracking()
+                .FirstOrDefaultAsync(p => p.CvId == selectedCv.Id, cancellationToken);
+            var raw = parser?.RawText;
+            JsonElement review;
+            if (string.IsNullOrWhiteSpace(raw) || raw.TrimStart().StartsWith("{") || raw.TrimStart().StartsWith("[") || raw.Length > 30000)
+                review = JsonSerializer.SerializeToElement(new { status = "unavailable", score = (decimal?)null,
+                    summary = "CV chưa có văn bản gốc hợp lệ. Hãy tải PDF có lớp văn bản và phân tích CV trước.", assessments = Array.Empty<object>() });
+            else
+            {
+                // Include every requirement clause; never silently drop constraints to obtain a score.
+                var jd = string.IsNullOrWhiteSpace(job.Requirements) ? job.Description : job.Requirements;
+                var response = await _evidenceClient.ReviewAsync(raw, jd ?? "", job.Title, cancellationToken);
+                review = response.IsSuccess ? response.Data : JsonSerializer.SerializeToElement(new {
+                    status = "unavailable", score = (decimal?)null, summary = response.ErrorMessage, assessments = Array.Empty<object>() });
+            }
+            return ServiceResult.Success(legacyResponse with { MatchSource = "evidence", EvidenceReview = review });
+        }
+
         if (_aiOptions.PreviewAiEnabled)
         {
             var authoritativeResponse = await ExecuteAuthoritativeAiMatchingAsync(selectedCv.Id, job, legacyResponse, cancellationToken);
