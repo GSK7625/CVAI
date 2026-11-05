@@ -60,7 +60,7 @@ public class JobService : IJobService
             SalaryCurrency     = string.IsNullOrWhiteSpace(request.SalaryCurrency) ? "VND" : request.SalaryCurrency.ToUpperInvariant(),
             ExperienceYearsMin = request.ExperienceYearsMin,
             ExperienceYearsMax = request.ExperienceYearsMax,
-            Deadline           = request.Deadline,
+            Deadline           = request.Deadline?.ToUniversalTime(),
             PositionsCount     = request.PositionsCount <= 0 ? 1 : request.PositionsCount,
             ApprovalStatus     = initialApprovalStatus,
             IsActive           = true,
@@ -117,7 +117,7 @@ public class JobService : IJobService
         job.SalaryCurrency      = string.IsNullOrWhiteSpace(request.SalaryCurrency) ? "VND" : request.SalaryCurrency.ToUpperInvariant();
         job.ExperienceYearsMin  = request.ExperienceYearsMin;
         job.ExperienceYearsMax  = request.ExperienceYearsMax;
-        job.Deadline            = request.Deadline;
+        job.Deadline            = request.Deadline?.ToUniversalTime();
         job.PositionsCount      = request.PositionsCount <= 0 ? 1 : request.PositionsCount;
 
         // 3. Refresh job skills
