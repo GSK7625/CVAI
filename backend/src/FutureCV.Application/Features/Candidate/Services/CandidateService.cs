@@ -898,6 +898,9 @@ public class CandidateService : ICandidateService
         var (cv, error) = await FindCvWithOwnershipAsync(userId, cvId, cancellationToken);
         if (error is not null) return ServiceResult.Failure<CvAnalysisResponse>(error.ErrorMessage ?? "CV not found.", error.ErrorType);
 
+        if (await NeedsVerifiedPdfDataAsync(cv!, cancellationToken))
+            return ServiceResult.Failure<CvAnalysisResponse>("Chưa có dữ liệu cấu trúc đã xác minh để chấm chất lượng PDF. Hãy chọn một việc làm để đối chiếu CV với yêu cầu tuyển dụng.");
+
         var evaluation = await _context.CvEvaluations
             .FirstOrDefaultAsync(e => e.CvId == cvId, cancellationToken);
 
@@ -931,6 +934,9 @@ public class CandidateService : ICandidateService
     {
         var (cv, error) = await FindCvWithOwnershipAsync(userId, cvId, cancellationToken);
         if (error is not null) return ServiceResult.Failure<CvAnalysisResponse>(error.ErrorMessage ?? "CV not found.", error.ErrorType);
+
+        if (await NeedsVerifiedPdfDataAsync(cv!, cancellationToken))
+            return ServiceResult.Failure<CvAnalysisResponse>("Chưa có dữ liệu cấu trúc đã xác minh để chấm chất lượng PDF. Hãy chọn một việc làm để đối chiếu CV với yêu cầu tuyển dụng.");
 
         // Load structured data
         var structuredDataResult = await GetStructuredCvDataAsync(userId, cvId, cancellationToken);
@@ -1104,6 +1110,14 @@ public class CandidateService : ICandidateService
     // -------------------------------------------------------------------------
     // Private helpers — reusable across all methods
     // -------------------------------------------------------------------------
+
+    private async Task<bool> NeedsVerifiedPdfDataAsync(CandidateCv cv, CancellationToken cancellationToken)
+    {
+        if (_evidenceClient?.Enabled != true || cv.Source != "Upload") return false;
+        return !await _context.CvParsers.AnyAsync(
+            p => p.CvId == cv.Id && p.ParsedDataJson != null &&
+                 (p.IsVerifiedByUser || p.ModelVersion == "AI-v1"), cancellationToken);
+    }
 
     // Single point for candidate lookup — reused by every operation
     private async Task<Candidate?> FindByUserIdAsync(Guid userId, CancellationToken ct)
