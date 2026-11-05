@@ -54,6 +54,9 @@ public interface ICandidateService
     Task<ServiceResult<CvResponse>> GetCvByIdAsync(
         Guid userId, Guid cvId, CancellationToken cancellationToken = default);
 
+    Task<ServiceResult<string>> GetCvPreviewUrlAsync(
+        Guid userId, Guid cvId, CancellationToken cancellationToken = default);
+
     Task<ServiceResult<CvResponse>> UpdateCvTitleAsync(
         Guid userId, Guid cvId, string title, CancellationToken cancellationToken = default);
 

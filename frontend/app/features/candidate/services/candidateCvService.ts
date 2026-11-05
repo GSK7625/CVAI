@@ -33,6 +33,10 @@ export const candidateCvService = {
     });
   },
 
+  async getPreviewUrl(id: string): Promise<string> {
+    return fetcher<string>(`/api/candidate/cvs/${id}/preview-url`, { auth: true, cache: "no-store" });
+  },
+
   // ── Upload ──────────────────────────────────────────────────────────────────
 
   /**

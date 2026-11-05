@@ -13,6 +13,7 @@ import {
 } from "@tabler/icons-react";
 import type { CvResponse } from "../../types";
 import { Skeleton } from "~/components/ui";
+import { CvPreviewButton } from "../cv-management/CvPreviewButton";
 
 interface CvPickerSectionProps {
   cvs: CvResponse[];
@@ -145,15 +146,10 @@ export function CvPickerSection({
 
                     <div className="flex items-center gap-3">
                       {cv.fileUrl && (
-                        <a
-                          href={cv.fileUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-xs text-navy underline hover:text-navy-secondary hidden sm:inline"
-                        >
-                          Xem trước
-                        </a>
+                        <CvPreviewButton cvId={cv.id}
+                          className="text-xs text-navy underline hover:text-navy-secondary">
+                          Xem trước CV
+                        </CvPreviewButton>
                       )}
                       <div
                         className={`w-6 h-6 rounded-full border flex items-center justify-center transition-all ${

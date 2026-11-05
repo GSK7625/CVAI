@@ -6,6 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 import hmac
+import importlib.util
 import os
 from contextlib import asynccontextmanager
 
@@ -13,7 +14,9 @@ from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from pipeline import Reviewer
-from jd_parser import JDPreparationError, prepare_jd
+from jd_parser import JDPreparationError
+from jd_parser_v2 import prepare_jd
+from jd_review import review_with_diagnostics
 
 
 class Requirement(BaseModel):
@@ -52,6 +55,8 @@ async def lifespan(app):
     key = os.environ.get("INTERNAL_API_KEY", "")
     if len(key) < 32:
         raise RuntimeError("Đặt INTERNAL_API_KEY ngẫu nhiên, ít nhất 32 ký tự")
+    if importlib.util.find_spec("pypdf") is None:
+        raise RuntimeError("PDF reader dependency missing; install training/lightweight_cv/requirements.txt in this Python environment")
     app.state.key = key
     app.state.reviewer = Reviewer(os.environ["CVAI_ARTIFACT_DIR"], threads=int(os.environ.get("CVAI_THREADS", "2")))
     app.state.busy = False
@@ -87,7 +92,7 @@ async def review(body: Request, x_internal_api_key: str = Header(default="")):
         raise HTTPException(status_code=429, detail="Đang xử lý CV khác; hãy thử lại sau")
     app.state.busy = True
     try:
-        task = asyncio.create_task(asyncio.to_thread(app.state.reviewer.review, body.model_dump(exclude_none=True)))
+        task = asyncio.create_task(asyncio.to_thread(review_with_diagnostics, app.state.reviewer, body.model_dump(exclude_none=True)))
         try:
             return await asyncio.shield(task)
         except asyncio.CancelledError:
@@ -113,10 +118,13 @@ def run_pdf_worker(data):
         result = subprocess.run([sys.executable, str(Path(__file__).with_name("pdf_text.py"))],
                                 input=data, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                                 timeout=15, creationflags=flags)
-    except subprocess.TimeoutExpired as error:
-        raise ValueError("PDF processing timed out") from error
-    if result.returncode != 0:
+    except (subprocess.TimeoutExpired, OSError) as error:
+        raise RuntimeError("PDF reader unavailable or processing timed out") from error
+    # The worker reserves code 2 for unreadable/invalid input; crashes are service failures.
+    if result.returncode == 2:
         raise ValueError("PDF has no usable text, is locked, invalid or exceeds processing limits")
+    if result.returncode != 0:
+        raise RuntimeError("PDF reader failed; verify its Python dependencies")
     return result.stdout.decode("utf-8")
 
 
@@ -140,6 +148,8 @@ async def extract_pdf(body: PDFTextRequest, x_internal_api_key: str = Header(def
             await task
             raise
         return {"text": text}
+    except RuntimeError as error:
+        raise HTTPException(status_code=503, detail="PDF reader service unavailable; please retry later") from error
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     finally:

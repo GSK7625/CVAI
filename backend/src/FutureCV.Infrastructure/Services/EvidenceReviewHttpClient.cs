@@ -88,8 +88,18 @@ public sealed class EvidenceReviewHttpClient(HttpClient http, IConfiguration con
             request.Content = JsonContent.Create(new { cv_text = cvText, jd_text = jdText, job_title = jobTitle });
             using var response = await http.SendAsync(request, cancellationToken);
             if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
-                return ServiceResult.Success(JsonSerializer.SerializeToElement(new { status = "needs_review", score = (decimal?)null,
-                    summary = "Yêu cầu tuyển dụng có điều kiện chưa được hỗ trợ. Cần kiểm tra thủ công.", assessments = Array.Empty<object>() }));
+            {
+                using var errorDocument = await JsonDocument.ParseAsync(
+                    await response.Content.ReadAsStreamAsync(cancellationToken), cancellationToken: cancellationToken);
+                // Older model servers return parser diagnostics in a 422; other 422s are input errors.
+                if (errorDocument.RootElement.TryGetProperty("detail", out var detail) && detail.ValueKind == JsonValueKind.Object &&
+                    detail.TryGetProperty("jd_profile", out var profile) && profile.ValueKind == JsonValueKind.Object &&
+                    profile.TryGetProperty("unresolved", out var unresolved) && unresolved.ValueKind == JsonValueKind.Array)
+                    return ServiceResult.Success(JsonSerializer.SerializeToElement(new { status = "needs_review", score = (decimal?)null,
+                        summary = "Bộ đọc JD chưa xử lý được một số yêu cầu bên dưới. Đây chưa phải kết luận về độ phù hợp của CV.",
+                        jd_profile = profile.Clone(), assessments = Array.Empty<object>() }));
+                return ServiceResult.Failure<JsonElement>("Dữ liệu CV/JD không hợp lệ hoặc vượt giới hạn xử lý. Vui lòng kiểm tra nội dung và thử lại.");
+            }
             if (!response.IsSuccessStatusCode)
                 return ServiceResult.InfrastructureError<JsonElement>("Dịch vụ đánh giá đang bận hoặc chưa sẵn sàng. Vui lòng thử lại.");
             using var document = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(cancellationToken), cancellationToken: cancellationToken);

@@ -108,6 +108,14 @@ public class CandidateProfileController : ApiControllerBase
         return ToHttpResult(result);
     }
 
+    [HttpGet("cvs/{id:guid}/preview-url")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public async Task<IActionResult> GetCvPreviewUrl(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _candidateService.GetCvPreviewUrlAsync(GetCurrentUserId(), id, cancellationToken);
+        return ToHttpResult(result);
+    }
+
     [HttpPatch("cvs/{id:guid}/title")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CvResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

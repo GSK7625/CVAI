@@ -3,7 +3,7 @@ from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parent
-FILES = ("pipeline.py", "jd_parser.py", "prepare_jd.py", "predict.py", "server.py", "requirements.txt",
+FILES = ("pipeline.py", "evidence_features.py", "pdf_text.py", "jd_parser.py", "jd_parser_v2.py", "jd_review.py", "prepare_jd.py", "predict.py", "server.py", "requirements.txt",
          "train.py", "evaluate.py", "example_input.json", "example_raw_input.json", "example_raw_jd.txt",
          "README.md", "END_TO_END.md", "THIRD_PARTY.md", "train_e5_classifier.ipynb")
 

@@ -281,13 +281,20 @@ export interface MatchExplanationDetails {
 }
 
 export interface EvidenceReview {
+  jd_profile?: {
+    unresolved: Array<{ code: string; text?: string; message: string }>;
+    ignored?: Array<{ text: string; reason: string }>;
+  };
+  skill_mentions?: Array<{ skill: string; contexts: Array<{ text: string }> }>;
   status: "ready" | "needs_review" | "unavailable";
   score: number | null;
   summary: string;
   assessments: Array<{
     id: string;
     requirement_text: string;
-    status: "met" | "partial" | "not_evidenced";
+    status: "met" | "partial" | "not_evidenced" | "needs_review";
+    priority?: "mandatory" | "standard" | "preferred";
+    jd_sources?: Array<{ text: string }>;
     weight: number;
     comment: string;
     evidence_signals?: { contexts: Array<{ text: string }>; review_reasons: string[] };

@@ -47,4 +47,7 @@ public interface IFileStorage
     /// Deletes a raw document file by its provider-specific public ID.
     /// </summary>
     Task DeleteDocumentAsync(string publicId, CancellationToken cancellationToken = default);
+
+    /// <summary>Creates a short-lived inline PDF URL after the caller checks ownership.</summary>
+    string GetDocumentPreviewUrl(string publicId);
 }

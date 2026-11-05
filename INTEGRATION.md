@@ -110,3 +110,41 @@ Nếu đang chạy các lệnh cũ, dừng bằng Ctrl+C rồi dùng script tư�
 Điểm chất lượng CV ở trang quản lý CV là luồng cũ, tách biệt với E5/MLP so khớp
 JD. Khi PDF chỉ có text, chưa có dữ liệu cấu trúc được xác minh, luồng quality
 sẽ báo chưa đủ dữ liệu thay vì chấm thiếu kỹ năng/học vấn trên hồ sơ trống.
+
+## Xem CV PDF và đọc JD
+
+- Preview CV gọi endpoint có xác thực `/api/candidate/cvs/{id}/preview-url`.
+  Backend kiểm tra quyền sở hữu và cấp URL tải PDF inline có hạn 2 phút; không mở
+  trực tiếp URL Cloudinary public đang bị ACL chặn.
+- `/jobs/prepare`, `/review`, `prepare_jd.py` và `predict.py` dùng `jd_parser_v2.py`.
+  Bộ trích đặc trưng `jd_parser.py`/`evidence_features.py` và checksum artifact
+  vẫn giữ nguyên; benchmark huấn luyện tiếp tục dùng parser đã đóng băng.
+- V2 đọc câu EN/VI, HTML, tiêu đề mục, mức ưu tiên, phủ định, nhóm AND/OR,
+  kỹ năng, khoảng thời gian, bằng cấp, ngoại ngữ và chứng chỉ. Gộp yêu cầu lặp,
+  giữ nguyên nguồn trong `criteria[].sources`; offsets tham chiếu `source_text`
+  (văn bản đã bỏ HTML). Profile có hash phiên bản, được tính lại để chống chỉnh sửa.
+- Parser `status=ready` nghĩa là đã tách được điều kiện, chưa có nghĩa model
+  hỗ trợ chấm mọi điều kiện. Model chỉ nhận các tiêu chí nguyên tử thuộc phạm vi
+  đã huấn luyện. Nhóm OR lấy mức cao nhất; AND lấy mức thấp nhất. Kỹ năng ngoài
+  model, chứng chỉ/ngoại ngữ/bằng cấp, mức nâng cao, kinh nghiệm riêng kỹ năng,
+  thời gian xấp xỉ/khoảng/tối đa được giữ rõ để đối chiếu, không tự đổi thành tối thiểu.
+- `score_scope=recognized_skills_and_experience`: điểm phản ánh kỹ năng/mức kinh
+  nghiệm nhận diện được, không xác minh toàn bộ nhiệm vụ nghiệp vụ. Điều kiện JD
+  chưa hiểu nằm trong `jd_profile.unresolved`. Bằng chứng chưa rõ hoặc điều kiện
+  chưa chấm được có assessment `status=needs_review`; tổng `score=null`.
+  Không chấm tổng trên một phần JD và không bỏ các tiêu chí vượt giới hạn 20.
+- Với JD Machine Learning hiện tại: 5 tiêu chí (pandas, Spark, SQL chuyên nghiệp;
+  scikit-learn thực hành/dự án; khoảng 4 tháng Data/ML), Airflow không bắt buộc.
+  CV thiếu bối cảnh hoặc mốc xấp xỉ chưa rõ vẫn cần đối chiếu, không phải lỗi đọc JD.
+- HTTP 422 do input sai được phân biệt với 422 chứa `jd_profile` từ server cũ.
+  `requirements` và profile V1 giữ hợp đồng kiểm tra cũ. V2 không thêm LLM hoặc
+  gửi CV ra dịch vụ bên ngoài. Bộ đọc là quy tắc IT EN/VI có giới hạn; câu chưa
+  nhận diện được được giữ lại để xem, không coi đây là NLP cho mọi JD.
+
+### Mốc kinh nghiệm xấp xỉ
+
+`review_policy_version=jd-evidence-v2.1`: với JD "khoảng N tháng", bằng chứng
+thời gian rõ ràng, đúng vai trò, được trả lương và đúng N tháng được đánh giá đáp
+ứng bằng quy tắc `exact_duration_evidence`; giữ đoạn CV nguyên văn để đối chiếu.
+Không tự đặt biên dung sai. Tổng thời gian khác N, xấp xỉ, mâu thuẫn hoặc thiếu
+bằng chứng vẫn cần kiểm tra. Các kết quả kỹ năng tiếp tục do model đánh giá.

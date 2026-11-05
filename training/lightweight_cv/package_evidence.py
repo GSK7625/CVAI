@@ -23,7 +23,7 @@ def main():
     manifest["deployment_status"] = "synthetic_pilot_only"
     manifest["evaluation_results_sha256"] = file_hash(RUN / "evaluation/results.json")
     manifest["deployment_coverage_sha256"] = file_hash(RUN / "evaluation/deployment_coverage.json")
-    runtime = ("pipeline.py", "evidence_features.py", "jd_parser.py", "predict.py", "server.py",
+    runtime = ("pipeline.py", "evidence_features.py", "jd_parser.py", "jd_parser_v2.py", "jd_review.py", "prepare_jd.py", "pdf_text.py", "predict.py", "server.py",
                "requirements.txt", "THIRD_PARTY.md", "example_raw_input.json", "example_input.json")
     quickstart = """# CVAI evidence-r1 — CPU pilot
 

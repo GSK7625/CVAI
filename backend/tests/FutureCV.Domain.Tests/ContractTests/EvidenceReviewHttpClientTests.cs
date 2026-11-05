@@ -62,6 +62,31 @@ public class EvidenceReviewHttpClientTests
         Assert.Equal(2, handler.Calls);
     }
 
+    [Fact]
+    public async Task Parser422_PreservesSpecificClauseAndReason()
+    {
+        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string,string?> {
+            ["EvidenceAi:ApiKey"]=new string('k',32) }).Build();
+        const string body = """{"detail":{"jd_profile":{"unresolved":[{"text":"Python or Java required.","code":"alternative_or_group","message":"Needs review"}]}}}""";
+        using var http = new HttpClient(new Handler(body, HttpStatusCode.UnprocessableEntity)) { BaseAddress = new Uri("http://localhost:8001/") };
+        var result = await new EvidenceReviewHttpClient(http, config).ReviewAsync("CV", "JD", "Title", default);
+        Assert.True(result.IsSuccess);
+        Assert.Equal(System.Text.Json.JsonValueKind.Null, result.Data.GetProperty("score").ValueKind);
+        Assert.Equal("Python or Java required.", result.Data.GetProperty("jd_profile").GetProperty("unresolved")[0].GetProperty("text").GetString());
+    }
+
+    [Fact]
+    public async Task Validation422_DoesNotClaimTheJobIsUnsupportedOrEchoPrivateInput()
+    {
+        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string,string?> {
+            ["EvidenceAi:ApiKey"]=new string('k',32) }).Build();
+        const string body = """{"detail":[{"loc":["body","cv_text"],"input":"private CV content"}]}""";
+        using var http = new HttpClient(new Handler(body, HttpStatusCode.UnprocessableEntity)) { BaseAddress = new Uri("http://localhost:8001/") };
+        var result = await new EvidenceReviewHttpClient(http, config).ReviewAsync("CV", "JD", "Title", default);
+        Assert.False(result.IsSuccess);
+        Assert.DoesNotContain("private CV content", result.ErrorMessage);
+    }
+
     [Theory]
     [InlineData("ready", "87.5", true)]
     [InlineData("needs_review", "null", true)]

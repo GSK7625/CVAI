@@ -22,6 +22,7 @@ import {
 } from "@tabler/icons-react";
 import { useSelectPrimaryCv } from "../../hooks/useCandidateCvs";
 import { CvAnalysisPanel } from "./CvAnalysisPanel";
+import { CvPreviewButton } from "./CvPreviewButton";
 import { RenameInput } from "./RenameInput";
 import { DeleteConfirmBanner } from "./DeleteConfirmBanner";
 import type { CvResponse } from "../../types";
@@ -181,15 +182,10 @@ export function CvCard({
           {/* Quick tool icons */}
           <div className="shrink-0 flex items-center gap-1">
             {cv.fileUrl && (
-              <a
-                href={cv.fileUrl}
-                target="_blank"
-                rel="noreferrer"
-                title="Tải về file PDF gốc"
-                className="p-2 rounded-xl text-ink-muted hover:text-navy hover:bg-surface-low transition-colors"
-              >
+              <CvPreviewButton cvId={cv.id}
+                className="p-2 rounded-xl text-ink-muted hover:text-navy hover:bg-surface-low transition-colors">
                 <IconCloudDownload size={18} />
-              </a>
+              </CvPreviewButton>
             )}
             <button
               type="button"

@@ -190,26 +190,60 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         saved = self.server.Request.model_validate({"cv_text": "Python", "job_profile": profile})
         self.assertEqual(saved.job_profile["profile_id"], profile["profile_id"])
 
-    async def test_prepare_endpoint_protected_and_returns_unresolved(self):
+    async def test_prepare_endpoint_protected_and_preserves_alternatives(self):
         body = self.server.JDRequest(jd_text="Python or Java required.")
         with self.assertRaises(self.server.HTTPException) as caught:
             await self.server.prepare_job(body, "wrong")
         self.assertEqual(caught.exception.status_code, 401)
         profile = await self.server.prepare_job(body, "x" * 32)
-        self.assertEqual(profile["status"], "needs_review")
+        self.assertEqual(profile["status"], "ready")
+        self.assertEqual(profile["criteria"][0]["logic"]["op"], "any")
 
     async def test_unsupported_jd_returns_profile_without_score(self):
-        from jd_parser import JDPreparationError, prepare_jd
         class UnresolvedReviewer:
             def review(self, sample):
-                raise JDPreparationError(prepare_jd(sample["jd_text"]))
+                raise AssertionError("Unknown conditions must not be sent to the model")
         self.server.app.state.reviewer = UnresolvedReviewer()
-        body = self.server.Request(cv_text="Python", jd_text="Python or Java required.")
-        with self.assertRaises(self.server.HTTPException) as caught:
-            await self.server.review(body, "x" * 32)
+        body = self.server.Request(cv_text="Python", jd_text="Elixir required.")
+        result = await self.server.review(body, "x" * 32)
+        self.assertEqual(result["status"], "needs_review")
+        self.assertEqual(result["jd_profile"]["status"], "needs_review")
+        self.assertIsNone(result["score"])
+        self.assertFalse(self.server.app.state.busy)
+
+    def test_pdf_worker_separates_input_errors_from_service_failures(self):
+        import subprocess
+        for exit_code, expected in [(2, ValueError), (1, RuntimeError)]:
+            with self.subTest(exit_code=exit_code), patch.object(self.server.subprocess, "run", return_value=
+                    subprocess.CompletedProcess([], exit_code, stdout=b"")):
+                with self.assertRaises(expected):
+                    self.server.run_pdf_worker(b"%PDF-test")
+        with patch.object(self.server.subprocess, "run", side_effect=subprocess.TimeoutExpired("reader", 15)):
+            with self.assertRaises(RuntimeError):
+                self.server.run_pdf_worker(b"%PDF-test")
+
+    async def test_pdf_worker_crash_returns_503_without_blaming_input(self):
+        import base64
+        body = self.server.PDFTextRequest(pdf_base64=base64.b64encode(b"%PDF-test").decode())
+        with patch.object(self.server, "run_pdf_worker", side_effect=RuntimeError("missing dependency")):
+            with self.assertRaises(self.server.HTTPException) as caught:
+                await self.server.extract_pdf(body, "x" * 32)
+        self.assertEqual(caught.exception.status_code, 503)
+        self.assertFalse(self.server.app.state.busy)
+
+    async def test_pdf_invalid_input_still_returns_422(self):
+        import base64
+        body = self.server.PDFTextRequest(pdf_base64=base64.b64encode(b"not-a-pdf").decode())
+        with patch.object(self.server, "run_pdf_worker", side_effect=ValueError("invalid PDF")):
+            with self.assertRaises(self.server.HTTPException) as caught:
+                await self.server.extract_pdf(body, "x" * 32)
         self.assertEqual(caught.exception.status_code, 422)
-        self.assertEqual(caught.exception.detail["jd_profile"]["status"], "needs_review")
-        self.assertNotIn("score", caught.exception.detail)
+        self.assertFalse(self.server.app.state.busy)
+
+    def test_pdf_worker_extracts_text_in_actual_serving_python(self):
+        from test_pdf_text import pdf_bytes
+        text = self.server.run_pdf_worker(pdf_bytes("Professional work with SQL: query records."))
+        self.assertIn("Professional work with SQL: query records.", text)
 
     async def test_cancelled_request_keeps_slot_until_cpu_work_finishes(self):
         import threading

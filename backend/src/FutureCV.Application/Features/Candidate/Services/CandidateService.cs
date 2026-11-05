@@ -475,6 +475,17 @@ public class CandidateService : ICandidateService
         return ServiceResult.Success(MapToCvResponse(cv!));
     }
 
+    public async Task<ServiceResult<string>> GetCvPreviewUrlAsync(
+        Guid userId, Guid cvId, CancellationToken cancellationToken = default)
+    {
+        var (cv, error) = await FindCvWithOwnershipAsync(userId, cvId, cancellationToken);
+        if (error is not null) return ServiceResult.Failure<string>(error.ErrorMessage!, error.ErrorType);
+        if (string.IsNullOrWhiteSpace(cv!.PublicId))
+            return ServiceResult.Failure<string>("CV chưa có tệp PDF để xem trước.");
+
+        return ServiceResult.Success(_fileStorage.GetDocumentPreviewUrl(cv.PublicId));
+    }
+
     public async Task<ServiceResult<CvResponse>> UpdateCvTitleAsync(
         Guid userId, Guid cvId, string title, CancellationToken cancellationToken = default)
     {

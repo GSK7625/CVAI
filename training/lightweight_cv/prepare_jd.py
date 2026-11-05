@@ -3,7 +3,7 @@ import argparse
 import json
 from pathlib import Path
 
-from jd_parser import prepare_jd
+from jd_parser_v2 import prepare_jd
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

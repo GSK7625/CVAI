@@ -15,6 +15,12 @@ public class CvPdfScannerIntegrationTests
 {
     private sealed class TestFileStorage : IFileStorage
     {
+        public int PreviewCalls { get; private set; }
+        public string GetDocumentPreviewUrl(string publicId)
+        {
+            PreviewCalls++;
+            return "https://api.cloudinary.com/fixture/preview.pdf";
+        }
         public Task<(string PublicUrl, string PublicId)> UploadAsync(
             Stream fileStream, string fileName, string folder, CancellationToken cancellationToken = default)
             => Task.FromResult(("https://res.cloudinary.com/dummy/cv.pdf", "cv-public-id-123"));
@@ -145,6 +151,31 @@ public class CvPdfScannerIntegrationTests
         public bool Enabled => true;
         public Task<ServiceResult<JsonElement>> ReviewAsync(string cv, string jd, string title, CancellationToken token)
             => throw new InvalidOperationException("Quality scoring must not call JD matching.");
+    }
+
+    [Fact]
+    public async Task PreviewUrl_RequiresOwnerAndActivePdfBeforeSigning()
+    {
+        using var db = CreateDbContext();
+        var owner = new Candidate { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), FullName = "Owner" };
+        var other = new Candidate { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), FullName = "Other" };
+        var cv = new CandidateCv { Id = Guid.NewGuid(), CandidateId = owner.Id, PublicId = "cvs/candidates/test.pdf" };
+        db.Candidates.AddRange(owner, other); db.CandidateCvs.Add(cv);
+        await db.SaveChangesAsync();
+        var storage = new TestFileStorage();
+        var service = new CandidateService(db, storage, new TestIdentityService());
+        Assert.Equal(ServiceErrorType.Forbidden, (await service.GetCvPreviewUrlAsync(other.UserId, cv.Id)).ErrorType);
+        Assert.Equal(0, storage.PreviewCalls);
+        Assert.True((await service.GetCvPreviewUrlAsync(owner.UserId, cv.Id)).IsSuccess);
+        Assert.Equal(1, storage.PreviewCalls);
+        cv.IsDeleted = true;
+        await db.SaveChangesAsync();
+        Assert.Equal(ServiceErrorType.NotFound, (await service.GetCvPreviewUrlAsync(owner.UserId, cv.Id)).ErrorType);
+        Assert.Equal(1, storage.PreviewCalls);
+        cv.IsDeleted = false; cv.PublicId = null;
+        await db.SaveChangesAsync();
+        Assert.False((await service.GetCvPreviewUrlAsync(owner.UserId, cv.Id)).IsSuccess);
+        Assert.Equal(1, storage.PreviewCalls);
     }
 
     [Fact]

@@ -81,6 +81,17 @@ public class CloudinaryFileStorage : IFileStorage
         return (result.SecureUrl.ToString(), result.PublicId);
     }
 
+    public string GetDocumentPreviewUrl(string publicId)
+    {
+        if (string.IsNullOrWhiteSpace(publicId) ||
+            !publicId.StartsWith("cvs/candidates/", StringComparison.Ordinal) ||
+            !publicId.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            throw new ArgumentException("Invalid CV storage identifier.", nameof(publicId));
+
+        return _cloudinary.DownloadPrivate(publicId, type: "upload", resourceType: "raw",
+            attachment: false, expiresAt: DateTimeOffset.UtcNow.AddMinutes(2).ToUnixTimeSeconds());
+    }
+
     /// <inheritdoc />
     public async Task DeleteAsync(string publicId, CancellationToken cancellationToken = default)
     {
