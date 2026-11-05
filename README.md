@@ -1,3 +1,10 @@
+## Evidence AI đã nối vào ứng tuyển
+
+Xem [hướng dẫn chạy backend + frontend + model CPU](INTEGRATION.md).
+Bản thử nghiệm evidence-r1 có [báo cáo](evaluation/evidence-r1/README.md) và
+[trọng số Release](https://github.com/GSK7625/CVAI/releases/tag/cvai-evidence-r1).
+Bật EvidenceAi:Enabled sau khi cài artifact và cấu hình khóa dịch vụ nội bộ.
+
 # CVAI
 
 Ứng dụng CV/tuyển dụng với ASP.NET Core, React và Python AI service.
