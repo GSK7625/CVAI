@@ -1,0 +1,23 @@
+{
+  "classifier_sha256": "20ca1be8c3ff8a3ac93a7403a05f335fdf9cd453d87b9ec95b5f0e91b38a527c",
+  "feature_parser_sha256": "8ce6de43a823f2e54a6d687791417d1c19edd181025838a8529a9b2da42109a5",
+  "serving_pipeline_sha256": "28a952bffab0d5a7f2e029c9283cd726ce2d4ed751552d23e092741543502f09",
+  "cold_load_seconds": 7.053352799999857,
+  "request_seconds": [
+    0.11073480000004565,
+    0.07873160000008284,
+    0.08031210000012834,
+    0.08031899999991765,
+    0.08238400000004731,
+    0.09033710000016981
+  ],
+  "warm_p50_seconds": 0.08031899999991765,
+  "warm_p95_seconds": 0.08874648000014532,
+  "current_process_rss_mib": 708.20703125,
+  "cpu_threads": 2,
+  "environment": "local Windows CPU, not the target VPS",
+  "raw_jd_demo_score": 87.5,
+  "unknown_context_score_withheld": true,
+  "validation_numeric_reload_matches": true,
+  "baseline_classifier_sha256": "268e14e927fcd94d6ffa89f9cc0524691e5d18567d7f995355eb8aa1be0e5105"
+}
