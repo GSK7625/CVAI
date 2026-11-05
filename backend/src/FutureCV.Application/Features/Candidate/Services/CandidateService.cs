@@ -20,6 +20,7 @@ public class CandidateService : ICandidateService
     private readonly IFileStorage _fileStorage;
     private readonly IIdentityService _identityService;
     private readonly IAiCvClient? _aiCvClient;
+    private readonly IEvidenceReviewClient? _evidenceClient;
     private readonly ILogger<CandidateService>? _logger;
 
     public CandidateService(
@@ -27,8 +28,10 @@ public class CandidateService : ICandidateService
         IFileStorage fileStorage,
         IIdentityService identityService,
         IAiCvClient? aiCvClient = null,
-        ILogger<CandidateService>? logger = null)
+        ILogger<CandidateService>? logger = null,
+        IEvidenceReviewClient? evidenceClient = null)
     {
+        _evidenceClient = evidenceClient;
         _context = context;
         _fileStorage = fileStorage;
         _identityService = identityService;
@@ -385,8 +388,8 @@ public class CandidateService : ICandidateService
                 $"Failed to save CV record: {ex.Message}", ServiceErrorType.Infrastructure);
         }
 
-        // Automatically trigger AI scanning & extraction if client is available
-        if (_aiCvClient != null)
+        // Evidence mode extracts original PDF text on the first match preview.
+        if (_aiCvClient != null && _evidenceClient?.Enabled != true)
         {
             try
             {
