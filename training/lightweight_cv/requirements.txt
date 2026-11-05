@@ -4,3 +4,4 @@ transformers==4.57.1
 scikit-learn==1.7.2
 fastapi==0.119.1
 uvicorn==0.38.0
+pypdf>=6,<7
