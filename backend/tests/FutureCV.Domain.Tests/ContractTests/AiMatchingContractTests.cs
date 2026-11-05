@@ -13,25 +13,7 @@ public class AiMatchingContractTests
 
     private static string GetScenarioPath(string fileName)
     {
-        // Search relative to test output or source tree
-        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        var relativeCandidates = new[]
-        {
-            Path.Combine(baseDir, "..", "..", "..", "..", "..", "backend-ai", "tests", "fixtures", "contracts", "scenarios", fileName),
-            Path.Combine(baseDir, "..", "..", "..", "..", "backend-ai", "tests", "fixtures", "contracts", "scenarios", fileName),
-            Path.GetFullPath(Path.Combine(baseDir, "../../../../../backend-ai/tests/fixtures/contracts/scenarios", fileName))
-        };
-
-        foreach (var path in relativeCandidates)
-        {
-            if (File.Exists(path)) return Path.GetFullPath(path);
-        }
-
-        // Direct fallback
-        var direct = Path.GetFullPath(@"D:\My Project\CDTH\FutureCV\backend-ai\tests\fixtures\contracts\scenarios\" + fileName);
-        if (File.Exists(direct)) return direct;
-
-        throw new FileNotFoundException($"Scenario fixture not found: {fileName}");
+        return Path.Combine(AppContext.BaseDirectory, "Fixtures", "Contracts", "scenarios", fileName);
     }
 
     private static string LoadScenarioJson(string fileName)
@@ -195,7 +177,7 @@ public class AiMatchingContractTests
     public void CanonicalFixture_WithExplanation_DeserializesAccurately()
     {
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        var direct = Path.GetFullPath(@"D:\My Project\CDTH\FutureCV\backend-ai\tests\fixtures\contracts\match_result_v1_with_explanation.json");
+        var direct = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Contracts", "match_result_v1_with_explanation.json");
         var json = File.ReadAllText(direct);
         var res = JsonSerializer.Deserialize<AiMatchResultDto>(json, JsonOptions);
 
@@ -211,7 +193,7 @@ public class AiMatchingContractTests
     [Fact]
     public void CanonicalFixture_NoExplanation_DeserializesAccurately()
     {
-        var direct = Path.GetFullPath(@"D:\My Project\CDTH\FutureCV\backend-ai\tests\fixtures\contracts\match_result_v1_no_explanation.json");
+        var direct = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Contracts", "match_result_v1_no_explanation.json");
         var json = File.ReadAllText(direct);
         var res = JsonSerializer.Deserialize<AiMatchResultDto>(json, JsonOptions);
 
