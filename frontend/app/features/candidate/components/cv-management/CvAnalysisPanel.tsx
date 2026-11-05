@@ -135,7 +135,7 @@ function SectionBlock({
 }
 
 export function CvAnalysisPanel({ cvId }: CvAnalysisPanelProps) {
-  const { data: analysis, isLoading, isError } = useCvAnalysis(cvId);
+  const { data: analysis, isLoading, isError, error } = useCvAnalysis(cvId);
   const analyzeMutation = useAnalyzeCv(cvId);
 
   if (isLoading) return <AnalysisSkeleton />;
@@ -144,13 +144,14 @@ export function CvAnalysisPanel({ cvId }: CvAnalysisPanelProps) {
     return (
       <div className="flex flex-col items-center gap-3 py-8 text-center">
         <IconAlertTriangle size={32} className="text-danger opacity-60" />
-        <p className="text-sm text-ink-variant">Không thể tải dữ liệu phân tích.</p>
+        <p className="text-sm text-ink-variant">{error?.message || "Không thể tải dữ liệu phân tích."}</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-5">
+      <p className="text-sm text-ink-variant">Điểm kiểm tra độ đầy đủ thông tin hồ sơ. Để so khớp với một việc làm, chọn JD và phân tích ở trang ứng tuyển.</p>
       {/* Score summary */}
       <div className="flex items-center gap-5 pb-4 border-b border-border-subtle">
         <ScoreRing score={analysis.cvScore} />
