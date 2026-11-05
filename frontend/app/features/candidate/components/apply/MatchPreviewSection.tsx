@@ -1,3 +1,4 @@
+import { EvidenceReviewPanel } from "./EvidenceReviewPanel";
 import {
   IconSparkles,
   IconLoader2,
@@ -27,6 +28,8 @@ export function MatchPreviewSection({
   selectedCvTitle,
   isCvChangedAfterAnalysis,
 }: MatchPreviewSectionProps) {
+  if (preview?.evidenceReview) return <EvidenceReviewPanel review={preview.evidenceReview}
+    busy={isLoading} stale={isCvChangedAfterAnalysis} onRetry={onAnalyze} />;
   // Determine badge color and rating label based on match score
   const getScoreMeta = (score: number) => {
     if (score >= 80) {
