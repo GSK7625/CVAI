@@ -89,3 +89,24 @@ Trọng số lớn ở Release cvai-evidence-r1; NPZ nhỏ và manifest ở Git.
 Nút phân tích không truyền React click event làm ID CV. Mỗi yêu cầu phân tích
 nhận CV ID tường minh, không refetch query đang giữ ID cũ sau khi đổi/tải CV.
 Kết quả được kiểm tra cặp jobId/cvId và yêu cầu cũ không ghi đè yêu cầu mới.
+
+## Khởi động lại local với cùng khóa
+
+Lưu EvidenceAi.Enabled=true, BaseUrl=http://127.0.0.1:8001 và ApiKey ngẫu nhiên
+ít nhất 32 ký tự trong appsettings.Development.json (file được Git bỏ qua).
+Ba terminal tại thư mục repo:
+
+```powershell
+# Terminal model: kích hoạt venv đã cài dependencies trước
+./scripts/start-local.ps1 model
+# Terminal backend
+./scripts/start-local.ps1 backend
+# Terminal frontend
+./scripts/start-local.ps1 frontend
+```
+
+Hai dịch vụ đọc cùng khóa từ file local; không in khóa hoặc đưa vào frontend.
+Nếu đang chạy các lệnh cũ, dừng bằng Ctrl+C rồi dùng script tương ứng.
+Điểm chất lượng CV ở trang quản lý CV là luồng cũ, tách biệt với E5/MLP so khớp
+JD. Khi PDF chỉ có text, chưa có dữ liệu cấu trúc được xác minh, luồng quality
+sẽ báo chưa đủ dữ liệu thay vì chấm thiếu kỹ năng/học vấn trên hồ sơ trống.
