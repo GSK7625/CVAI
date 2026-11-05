@@ -249,5 +249,6 @@ public sealed record JobMatchPreviewResponse(
     string? ProjectDomainRelevance = null,
     bool IsAiPreview = false,
     string? MatchSource = null,
-    AiMatchExplanationDto? ExplanationDetails = null);
+    AiMatchExplanationDto? ExplanationDetails = null,
+    System.Text.Json.JsonElement? EvidenceReview = null);
 
