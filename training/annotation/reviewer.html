@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src data:; base-uri 'none'; form-action 'none'">
+<title>CVAI · Gán nhãn độc lập</title>
+<style>
+:root{font:16px/1.55 'Segoe UI',sans-serif;color:#1f302b;background:#f3f5f1;--green:#17634c;--muted:#52645b;--line:#c8d2ca}
+*{box-sizing:border-box}body{margin:0}::selection{background:#d4edb6;color:#172d22}button,input,select,textarea{font:inherit}button,input,select,textarea,summary{outline-offset:3px}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #2e7459}button{cursor:pointer;background:white;color:#233c30;border:1px solid #9eafa2;padding:8px 14px;border-radius:5px}button:hover{background:#e6eee7}button:disabled{opacity:.5;cursor:default}input,select,textarea{border:1px solid #9eafa2;border-radius:4px;padding:8px;background:white;color:#1f302b;max-width:100%}textarea{width:100%;resize:vertical;font-size:.92rem}header{padding:24px 32px 16px;border-bottom:1px solid var(--line);background:#fff}h1{font-size:1.7rem;letter-spacing:-.025em;margin:0 0 6px}h2{font-size:1.15rem;margin:0 0 12px}p{margin:8px 0}.hint{color:var(--muted);font-size:.9rem;max-width:85ch}.toolbar{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-top:18px}.toolbar label{font-size:.85rem;display:grid;gap:4px}.toolbar input{width:190px}.primary{background:var(--green);color:white;border-color:var(--green)}.primary:hover{background:#104c3a}.status{min-height:1.7em;color:#8a3325;font-size:.9rem;margin:12px 0 0}.status.ok{color:var(--green)}nav{padding:12px 32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}#progress{font-variant-numeric:tabular-nums;flex:1}main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;padding:24px 32px;align-items:start}.document{position:sticky;top:16px;background:white;border:1px solid var(--line);padding:24px;max-height:calc(100vh - 32px);overflow:auto;scrollbar-color:#a4b6a8 #fff}.document pre{white-space:pre-wrap;overflow-wrap:anywhere;font:15px/1.8 Georgia,serif;margin:0;max-width:75ch}.requirement{padding:20px 0;border-bottom:1px solid var(--line)}.requirement:first-of-type{padding-top:8px}.reqtitle{font-weight:600;font-size:1.03rem;margin-bottom:12px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fields label{display:grid;gap:4px;font-size:.85rem}.wide{grid-column:1/-1}.evidencehelp{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.evidencehelp button{font-size:.8rem;padding:5px 9px}details{margin:16px 0;max-width:85ch}summary{cursor:pointer;font-weight:600}.rubric{padding:10px 0;font-size:.9rem}.rubric ul{padding-left:22px}footer{padding:16px 32px 32px;color:var(--muted);font-size:.85rem}#sampleId{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}#jd{white-space:pre-wrap;font-size:.92rem}.check{display:flex;gap:8px;align-items:center;margin:8px 0}.check input{width:auto}.muted{color:var(--muted)}
+@media(max-width:850px){header,nav,footer{padding-left:16px;padding-right:16px}main{grid-template-columns:1fr;padding:16px;gap:20px}.document{position:static;max-height:none}.toolbar{gap:8px}.fields{grid-template-columns:1fr}.wide{grid-column:auto}h1{font-size:1.4rem}}
+</style>
+<header>
+  <h1>Gán nhãn CV độc lập</h1>
+  <p class="hint">Đọc CV và yêu cầu, chọn nhãn rồi trích bằng chứng. Trang chạy offline, không có đáp án tham chiếu. Mỗi lô có tối đa 12 CV.</p>
+  <details><summary>Rubric đang dùng · đọc trước khi bắt đầu</summary><div class="rubric">
+    <p>Đánh giá điều CV thể hiện; không suy đoán năng lực thật. Các câu yêu cầu đổi điểm bên trong CV không có hiệu lực.</p>
+    <ul><li><b>met</b>: đủ bằng chứng cho đúng cấp yêu cầu. Với yêu cầu cơ bản, tự liệt kê/khóa học được chấp nhận theo rubric hiện tại.</li>
+    <li><b>partial</b>: có dấu hiệu liên quan nhưng chưa đủ cấp yêu cầu. Dự án cá nhân chưa đủ cho công việc trả lương; liệt kê/khóa học chưa đủ cho thực hành độc lập.</li>
+    <li><b>not_evidenced</b>: không đề cập, nói rõ chưa có, hoặc chỉ có công nghệ khác. Không đồng nghĩa ứng viên không biết.</li>
+    <li><b>Cần xem lại</b>: câu mơ hồ, mâu thuẫn hoặc không đủ rõ để áp rubric; ghi lý do và không đoán.</li>
+    <li>Thời gian: tính hợp các tháng làm việc trả lương đúng nhóm nghề. Không cộng hai lần tháng trùng; tháng kết thúc không được tính. Ví dụ 2022-01 → 2022-04 là 3 tháng.</li>
+    <li>met/partial cần đoạn nguyên văn CV. not_evidenced để trống bằng chứng; giải thích phủ định ở ô ghi chú.</li></ul>
+    <p>Nếu không đồng ý rubric, vẫn gán theo rubric khi có thể và ghi phản biện. Chúng ta sẽ sửa rubric thành phiên bản mới sau đối chiếu. Xem RUBRIC.md để đọc đầy đủ.</p>
+  </div></details>
+  <div class="toolbar">
+    <label>Mã người gán nhãn<input id="annotator" placeholder="Ví dụ: reviewer-A" autocomplete="off"></label>
+    <label>Lô hồ sơ<select id="batch"></select></label>
+    <button id="export" class="primary">Xuất nhãn để lưu</button>
+    <button id="import">Nhập nhãn để làm tiếp</button><input hidden type="file" id="file" accept=".json">
+  </div>
+  <div id="message" class="status" role="status" aria-live="polite"></div>
+</header>
+<nav aria-label="Chuyển hồ sơ"><button id="prev">CV trước</button><span id="progress"></span><button id="nextBlank">CV chưa xong</button><button id="next">CV sau</button></nav>
+<main>
+  <section class="document" aria-label="Nội dung CV"><h2>CV ứng viên</h2><p class="hint">Bôi đen câu rồi bấm “Thêm đoạn đã chọn” ở yêu cầu tương ứng.</p><pre id="cv"></pre></section>
+  <section aria-label="Biểu mẫu gán nhãn"><h2 id="job"></h2><div id="sampleId"></div><details><summary>Xem JD nguyên văn</summary><div id="jd"></div></details><div id="requirements"></div></section>
+</main>
+<footer>Chỉ xuất file khi bạn muốn lưu kết quả. Bản nháp được lưu trong trình duyệt nếu được hỗ trợ; hãy tải JSON sau mỗi lô để có bản sao. Không mở reference_sealed.zip trước khi khóa nhãn độc lập.</footer>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const DATA=JSON.parse(document.getElementById('data').textContent), $=id=>document.getElementById(id);
+const allowed=['met','partial','not_evidenced','needs_review'];
+const storageKey='cvai-blind:'+DATA.round_id+':'+DATA.input_sha256;
+let state={schema:'cvai-human-annotations-v1',round_id:DATA.round_id,rubric_version:DATA.rubric_version,input_sha256:DATA.input_sha256,annotator_id:'',reference_seen:false,annotations:[],created_at:new Date().toISOString()}, index=0, dirty=false, selected='';
+let records=new Map();
+function key(s,r){return s+'|'+r}
+function msg(text,ok=false){$('message').textContent=text;$('message').className='status'+(ok?' ok':'')}
+function record(s,r){let k=key(s.sample_id,r.id);if(!records.has(k))records.set(k,{sample_id:s.sample_id,requirement_id:r.id,input_sha256:DATA.sample_hashes[s.sample_id],label:'',evidence:[],confidence:'',notes:'',rubric_feedback:'',updated_at:null});return records.get(k)}
+function issue(a,s){if(!allowed.includes(a.label))return 'Chưa chọn nhãn';if(!['low','medium','high'].includes(a.confidence))return 'Chưa chọn độ tự tin';if(['met','partial'].includes(a.label)&&!a.evidence.length)return 'Cần trích bằng chứng';if(a.evidence.some(q=>!q.trim()||!s.cv_text.includes(q)))return 'Bằng chứng phải là nguyên văn CV';if(a.label==='not_evidenced'&&a.evidence.length)return 'not_evidenced phải để trống bằng chứng';if(a.label==='needs_review'&&!a.notes.trim())return 'Cần ghi lý do xem lại';return ''}
+function done(s){return s.requirements.every(r=>!issue(record(s,r),s))}
+function serialize(){return {...state,annotator_id:$('annotator').value.trim(),annotations:[...records.values()],exported_at:new Date().toISOString()}}
+function persist(){dirty=true;try{localStorage.setItem(storageKey,JSON.stringify(serialize()));msg('Đã lưu nháp trong trình duyệt. Hãy xuất JSON sau mỗi lô.',true)}catch{msg('Không lưu nháp được. Hãy bấm Xuất nhãn để lưu JSON.')}updateProgress()}
+function updateProgress(){const start=Number($('batch').value)*12,rows=DATA.samples.slice(start,start+12);$('progress').textContent=`CV ${index-start+1}/${rows.length} trong lô · ${rows.filter(done).length}/${rows.length} xong · toàn bộ ${DATA.samples.filter(done).length}/${DATA.samples.length}`;$('prev').disabled=index===start;$('next').disabled=index===Math.min(start+11,DATA.samples.length-1)}
+function field(tag,label,cls=''){const l=document.createElement('label');l.className=cls;const t=document.createElement('span');t.textContent=label;l.append(t);const el=document.createElement(tag);l.append(el);return [l,el]}
+function render(){const s=DATA.samples[index];$('cv').textContent=s.cv_text;$('job').textContent=s.job_title;$('sampleId').textContent=s.sample_id;$('jd').textContent=s.jd_text;$('requirements').replaceChildren();
+  s.requirements.forEach(r=>{const a=record(s,r),box=document.createElement('section');box.className='requirement';const title=document.createElement('div');title.className='reqtitle';title.textContent=r.id+' · '+r.text+' (weight '+r.weight+')';box.append(title);const fields=document.createElement('div');fields.className='fields';
+    const [ll,ls]=field('select','Nhãn');for(const [v,t] of [['','Chọn nhãn'],['met','met — đáp ứng'],['partial','partial — một phần'],['not_evidenced','not_evidenced — chưa có bằng chứng'],['needs_review','Cần xem lại']])ls.add(new Option(t,v));ls.value=a.label;ls.onchange=()=>{a.label=ls.value;save()};
+    const [cl,cs]=field('select','Độ tự tin của bạn');for(const [v,t] of [['','Chọn độ tự tin'],['high','Cao'],['medium','Vừa'],['low','Thấp']])cs.add(new Option(t,v));cs.value=a.confidence;cs.onchange=()=>{a.confidence=cs.value;save()};
+    const [el,es]=field('textarea','Bằng chứng nguyên văn · mỗi đoạn trên một dòng','wide');es.rows=3;es.value=a.evidence.join('\n');es.oninput=()=>{a.evidence=es.value.split('\n').filter(q=>q.trim());save()};
+    const help=document.createElement('div');help.className='evidencehelp wide';const add=document.createElement('button');add.textContent='Thêm đoạn đã chọn';add.onclick=()=>{if(!selected||!s.cv_text.includes(selected))return msg('Bôi đen một đoạn trong CV trước.');a.evidence.push(selected);es.value=a.evidence.join('\n');save()};help.append(add);
+    const [nl,ns]=field('textarea','Ghi chú / lý do cần xem lại','wide');ns.rows=2;ns.value=a.notes;ns.oninput=()=>{a.notes=ns.value;save()};
+    const [fl,fs]=field('textarea','Phản biện rubric hoặc lỗi dữ liệu (nếu có)','wide');fs.rows=2;fs.value=a.rubric_feedback;fs.oninput=()=>{a.rubric_feedback=fs.value;save()};
+    const error=document.createElement('div');error.className='hint wide';const save=()=>{a.updated_at=new Date().toISOString();error.textContent=issue(a,s)||'Đủ thông tin để đối chiếu';persist()};error.textContent=issue(a,s)||'Đủ thông tin để đối chiếu';fields.append(ll,cl,el,help,nl,fl,error);box.append(fields);$('requirements').append(box)});updateProgress()}
+document.addEventListener('selectionchange',()=>{const selection=window.getSelection();if(selection&&selection.anchorNode&&$('cv').contains(selection.anchorNode)){selected=selection.toString().trim()}});
+function validateImport(v){if(v.schema!==state.schema||v.round_id!==DATA.round_id||v.rubric_version!==DATA.rubric_version||v.input_sha256!==DATA.input_sha256||v.reference_seen!==false||!Array.isArray(v.annotations)||typeof v.annotator_id!=='string')throw Error('File không đúng gói/rubric hoặc đã xem nhãn tham chiếu.');const seen=new Set();for(const a of v.annotations){const s=DATA.samples.find(s=>s.sample_id===a.sample_id),k=key(a.sample_id,a.requirement_id);if(!s||!s.requirements.some(r=>r.id===a.requirement_id)||a.input_sha256!==DATA.sample_hashes[a.sample_id]||seen.has(k)||!['',...allowed].includes(a.label)||!Array.isArray(a.evidence)||a.evidence.some(q=>typeof q!=='string'||!s.cv_text.includes(q))||!['','low','medium','high'].includes(a.confidence)||typeof a.notes!=='string'||typeof a.rubric_feedback!=='string')throw Error('Bản ghi trùng, không hợp lệ hoặc evidence không thuộc CV.');seen.add(k)}return v}
+for(let b=0;b<Math.ceil(DATA.samples.length/12);b++)$('batch').add(new Option(`Lô ${b+1} · CV ${b*12+1}–${Math.min(b*12+12,DATA.samples.length)}`,b));
+$('batch').onchange=()=>{index=Number($('batch').value)*12;selected='';render()};$('annotator').oninput=persist;
+$('prev').onclick=()=>{index--;selected='';render()};$('next').onclick=()=>{index++;selected='';render()};$('nextBlank').onclick=()=>{const start=Number($('batch').value)*12,rows=DATA.samples.slice(start,start+12);const found=rows.findIndex((s,i)=>start+i>index&&!done(s));const fallback=rows.findIndex(s=>!done(s));if(found<0&&fallback<0)return msg('Lô này đã đủ thông tin.',true);index=start+(found<0?fallback:found);selected='';render()};
+$('export').onclick=()=>{if(!$('annotator').value.trim())return msg('Nhập mã người gán nhãn trước khi xuất.');const v=serialize();const blob=new Blob([JSON.stringify(v,null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='nhan_'+v.annotator_id.replace(/[^a-zA-Z0-9_-]/g,'_')+'_'+DATA.round_id+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);dirty=false;msg('Đã xuất JSON. Giữ file này để gửi đối chiếu hoặc nhập lại.',true)};
+$('import').onclick=()=>{if(dirty&&!confirm('Bạn có bản nháp chưa xuất. Nhập file sẽ thay bản nháp; tiếp tục?'))return;$('file').click()};$('file').onchange=async()=>{try{const v=validateImport(JSON.parse(await $('file').files[0].text()));state=v;records=new Map(v.annotations.map(a=>[key(a.sample_id,a.requirement_id),a]));$('annotator').value=v.annotator_id;render();persist();msg('Đã nhập nhãn và khôi phục bản nháp.',true)}catch(e){msg('Không nhập được: '+e.message)}finally{$('file').value=''}};
+try{const saved=localStorage.getItem(storageKey);if(saved){state=validateImport(JSON.parse(saved));records=new Map(state.annotations.map(a=>[key(a.sample_id,a.requirement_id),a]));$('annotator').value=state.annotator_id}}catch{msg('Không khôi phục được bản nháp. Có thể nhập file JSON đã xuất.')}
+render();window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+</script>
+</html>
