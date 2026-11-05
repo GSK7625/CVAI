@@ -231,14 +231,19 @@ def render_review(sample, statuses, records):
             if sample["cv_text"][context["start"]:context["end"]] != context["text"]:
                 raise ValueError("Đoạn truy xuất không khớp vị trí trong CV")
         assessments.append({"id": req["id"], "requirement_text": req["text"], "status": status, "weight": req["weight"],
+                            "classifier_context_truncated": by_id[req["id"]].get("classifier_context_truncated", False),
                             "contribution_points": round(100 * req["weight"] * VALUES[status] / sum(r["weight"] for r in sample["requirements"]), 4),
                             "comment": wording[status], "retrieved_context": contexts})
-    return {"schema": FEATURE_VERSION, "sample_id": sample.get("sample_id", "new-cv"),
+    result = {"schema": FEATURE_VERSION, "sample_id": sample.get("sample_id", "new-cv"),
             "score": round(score, 4), "assessments": assessments,
             "summary": f"Dự đoán: {counts['met']}/{len(statuses)} yêu cầu đáp ứng; {counts['partial']} đáp ứng một phần; {counts['not_evidenced']} chưa có bằng chứng đáp ứng.",
             "suggestions": (["Với các yêu cầu chưa đáp ứng đầy đủ, bổ sung bối cảnh sử dụng, vai trò và thời gian nếu đúng thực tế."]
                             if counts["partial"] + counts["not_evidenced"] else []),
             "notice": "Điểm theo rubric từ dự đoán máy. Đoạn tương đồng là ngữ cảnh để kiểm tra, không phải bằng chứng đã được xác minh."}
+    if any("evidence_signals" in r for r in records):
+        from evidence_features import annotate_review
+        annotate_review(result, [by_id[r["id"]]["evidence_signals"] for r in sample["requirements"]])
+    return result
 
 
 def metrics(samples, predicted):
@@ -309,16 +314,31 @@ class Reviewer:
     def __init__(self, artifact_dir, device="cpu", batch_size=8, threads=2):
         directory = Path(artifact_dir)
         self.manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
-        if self.manifest["feature_version"] != FEATURE_VERSION or self.manifest["mode"] != "full":
+        if self.manifest["feature_version"] not in (FEATURE_VERSION, "e5-evidence-mlp-r1") or self.manifest["mode"] != "full":
             raise ValueError("Chỉ dùng artifact full đúng phiên bản pipeline")
-        if file_hash(directory / "classifier.npz") != self.manifest["classifier_sha256"]:
+        classifier_path = directory / "classifier.npz"
+        if file_hash(classifier_path) != self.manifest["classifier_sha256"]:
             raise ValueError("Classifier không khớp manifest")
         for name, digest in self.manifest["encoder_file_hashes"].items():
             if Path(name).name != name or file_hash(directory / "encoder" / name) != digest:
                 raise ValueError("Encoder không khớp manifest")
         self.head = ClassifierHead(directory / "classifier.npz")
+        if self.manifest["feature_version"] == "e5-evidence-mlp-r1":
+            # A new feature parser cannot silently change an exported model.
+            for name, digest in self.manifest["feature_code_hashes"].items():
+                if Path(name).name != name or file_hash(Path(__file__).with_name(name)) != digest:
+                    raise ValueError("Evidence feature code does not match artifact")
         self.encoder = E5Encoder(directory / "encoder", revision=self.manifest["encoder_revision"],
                                  device=device, batch_size=batch_size, threads=threads)
+
+    def predict_labels(self, samples, features, records):
+        if self.manifest["feature_version"] == "e5-evidence-mlp-r1":
+            from evidence_features import combine_features, structured_features
+            structured, analyses = structured_features(samples)
+            for record, analysis in zip(records, analyses):
+                record["evidence_signals"] = analysis
+            return self.head.predict(combine_features(features, structured, self.manifest["feature_mode"]))
+        return self.head.predict(features)
 
     def review(self, sample):
         from jd_parser import resolve_input
@@ -327,10 +347,13 @@ class Reviewer:
         sample, profile = resolve_input(sample)
         validate_input(sample)
         features, records = features_for_samples([sample], self.encoder)
-        statuses = dict(zip([r["id"] for r in sample["requirements"]], self.head.predict(features)))
+        statuses = dict(zip([r["id"] for r in sample["requirements"]], self.predict_labels([sample], features, records)))
         result = render_review(sample, statuses, records)
+        result["schema"] = self.manifest["feature_version"]
         result["model_profile"] = {key: self.manifest[key] for key in
                                    ("feature_version", "encoder", "encoder_revision", "classifier_sha256")}
+        if "classifier_config_sha256" in self.manifest:
+            result["model_profile"]["classifier_config_sha256"] = self.manifest["classifier_config_sha256"]
         if profile:
             result["jd_profile"] = profile
             result["score_scope"] = "all_prepared_requirements"
