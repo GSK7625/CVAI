@@ -1,0 +1,178 @@
+{
+  "selected": {
+    "name": "structured-mlp32",
+    "mode": "structured",
+    "alpha": 0.1,
+    "minimal_pairs": false,
+    "dimension": 61,
+    "n_train_requirements": 3362,
+    "fit": {
+      "iterations": 70,
+      "loss": 0.0137441976341257,
+      "warnings": []
+    },
+    "old_validation": {
+      "n_samples": 100,
+      "n_requirements": 400,
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "score_mae": 0.0,
+      "classification_report": {
+        "met": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 103.0
+        },
+        "partial": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 82.0
+        },
+        "not_evidenced": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 215.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 400.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 400.0
+        }
+      },
+      "confusion_labels": [
+        "met",
+        "partial",
+        "not_evidenced"
+      ],
+      "confusion_matrix": [
+        [
+          103,
+          0,
+          0
+        ],
+        [
+          0,
+          82,
+          0
+        ],
+        [
+          0,
+          0,
+          215
+        ]
+      ],
+      "by_kind": {
+        "basic": {
+          "support": 111,
+          "accuracy": 1.0
+        },
+        "practical": {
+          "support": 88,
+          "accuracy": 1.0
+        },
+        "professional": {
+          "support": 125,
+          "accuracy": 1.0
+        },
+        "experience": {
+          "support": 76,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "new_validation": {
+      "n_samples": 48,
+      "n_requirements": 187,
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "score_mae": 0.0,
+      "classification_report": {
+        "met": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 77.0
+        },
+        "partial": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 68.0
+        },
+        "not_evidenced": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 42.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 187.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 187.0
+        }
+      },
+      "confusion_labels": [
+        "met",
+        "partial",
+        "not_evidenced"
+      ],
+      "confusion_matrix": [
+        [
+          77,
+          0,
+          0
+        ],
+        [
+          0,
+          68,
+          0
+        ],
+        [
+          0,
+          0,
+          42
+        ]
+      ],
+      "by_kind": {
+        "basic": {
+          "support": 48,
+          "accuracy": 1.0
+        },
+        "practical": {
+          "support": 48,
+          "accuracy": 1.0
+        },
+        "professional": {
+          "support": 43,
+          "accuracy": 1.0
+        },
+        "experience": {
+          "support": 48,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "eligible": true
+  },
+  "protocol_sha256": "89e6003031a96fc797e9a7692aec13150680b38d1f007222edfd90bf0faf37e3",
+  "holdout_opened": false
+}
