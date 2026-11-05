@@ -116,6 +116,11 @@ public static class DependencyInjection
             client.Timeout = TimeSpan.FromSeconds(timeoutSec);
         });
 
+        services.AddHttpClient<IEvidenceReviewClient, EvidenceReviewHttpClient>(client =>
+        {
+            client.BaseAddress = new Uri((configuration["EvidenceAi:BaseUrl"] ?? "http://127.0.0.1:8001").TrimEnd('/') + "/");
+            client.Timeout = TimeSpan.FromSeconds(60);
+        });
         return services;
     }
 }
