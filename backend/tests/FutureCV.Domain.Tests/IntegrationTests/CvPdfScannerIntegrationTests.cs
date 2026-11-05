@@ -140,6 +140,32 @@ public class CvPdfScannerIntegrationTests
         return new ApplicationDbContext(options);
     }
 
+    private sealed class EvidenceMode : IEvidenceReviewClient
+    {
+        public bool Enabled => true;
+        public Task<ServiceResult<JsonElement>> ReviewAsync(string cv, string jd, string title, CancellationToken token)
+            => throw new InvalidOperationException("Quality scoring must not call JD matching.");
+    }
+
+    [Fact]
+    public async Task UploadedPdf_WithoutVerifiedStructuredData_DoesNotReturnOldRuleScore()
+    {
+        using var db = CreateDbContext();
+        var userId = Guid.NewGuid();
+        var candidate = new Candidate { Id = Guid.NewGuid(), UserId = userId, FullName = "Fixture" };
+        var cv = new CandidateCv { Id = Guid.NewGuid(), CandidateId = candidate.Id, Source = "Upload", Title = "CV", ParseStatus = "TextExtracted" };
+        db.Candidates.Add(candidate); db.CandidateCvs.Add(cv);
+        db.CvParsers.Add(new CvParser { CvId = cv.Id, RawText = "Original PDF text", ParsedDataJson = "{}", ModelVersion = "pdf-text-v1" });
+        db.CvEvaluations.Add(new CvEvaluation { CvId = cv.Id, CvScore = 10, ModelVersion = "1.0" });
+        await db.SaveChangesAsync();
+        var service = new CandidateService(db, new TestFileStorage(), new TestIdentityService(), evidenceClient: new EvidenceMode());
+        var saved = await service.GetCvAnalysisAsync(userId, cv.Id);
+        var retry = await service.AnalyzeCvAsync(userId, cv.Id);
+        Assert.False(saved.IsSuccess); Assert.False(retry.IsSuccess);
+        Assert.Contains("cấu trúc", saved.ErrorMessage);
+        Assert.Equal("Original PDF text", (await db.CvParsers.SingleAsync()).RawText);
+    }
+
     [Fact]
     public async Task UploadCvAsync_WhenAiClientSucceeds_AutomaticallyScansAndSetsParsedStatus()
     {
