@@ -6,6 +6,7 @@ import {
   toSafeDocumentUrl,
   toStatusUpdateRequest,
   toJobRequest,
+  deadlineToDateInput,
   validateCompanyProfile,
   validateEmployerProfile,
   validateJobForm,
@@ -56,7 +57,7 @@ test("rejects invalid salary range, experience range, deadline, and positions", 
       deadline: "2026-09-07",
       positionsCount: "0",
     },
-    new Date("2026-09-08T00:00:00Z"),
+    new Date("2026-09-08T00:00:00"),
   );
 
   assert.equal(errors.salaryMax, "Mức lương tối đa phải lớn hơn hoặc bằng mức tối thiểu.");
@@ -80,7 +81,7 @@ test("maps optional numeric and identifier fields to the backend DTO", () => {
     salaryCurrency: "VND",
     experienceYearsMin: 1,
     experienceYearsMax: 3,
-    deadline: "2026-10-01T23:59:59",
+    deadline: new Date("2026-10-01T23:59:59").toISOString(),
     positionsCount: 2,
     skills: [{ skillId: "skill-1", isRequired: true }],
   });
@@ -141,4 +142,13 @@ test("allows only http URLs and application-relative CV paths", () => {
   assert.equal(toSafeDocumentUrl("https://files.futurecv.vn/cv.pdf"), "https://files.futurecv.vn/cv.pdf");
   assert.equal(toSafeDocumentUrl("javascript:alert(1)"), null);
   assert.equal(toSafeDocumentUrl("//evil.example/cv.pdf"), null);
+});
+
+
+test("deadline is UTC for PostgreSQL and round-trips to the local calendar date", () => {
+  const wire = toJobRequest({ ...validJob, deadline: "2026-11-10" }).deadline;
+  assert.ok(wire?.endsWith("Z"));
+  assert.equal(wire, new Date("2026-11-10T23:59:59").toISOString());
+  assert.equal(deadlineToDateInput(wire), "2026-11-10");
+  assert.equal(deadlineToDateInput(null), "");
 });
