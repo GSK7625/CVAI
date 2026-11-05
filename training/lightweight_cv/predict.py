@@ -1,6 +1,7 @@
 """python predict.py --artifact-dir runs/e5-v1/full --input example_input.json"""
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from pipeline import Reviewer
@@ -8,6 +9,7 @@ from jd_parser import JDPreparationError, resolve_input
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser()
     parser.add_argument("--artifact-dir", type=Path, required=True)
     parser.add_argument("--input", type=Path, required=True)
