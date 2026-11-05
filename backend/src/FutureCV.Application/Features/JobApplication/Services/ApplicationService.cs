@@ -512,13 +512,34 @@ public class ApplicationService : IApplicationService
         // ---------------------------------------------------------------------
         if (_evidenceClient?.Enabled == true)
         {
-            var parser = await _context.CvParsers.AsNoTracking()
+            var parser = await _context.CvParsers
                 .FirstOrDefaultAsync(p => p.CvId == selectedCv.Id, cancellationToken);
             var raw = parser?.RawText;
+            string? extractionError = null;
+            if (string.IsNullOrWhiteSpace(raw) && selectedCv.Source == "Upload" && !string.IsNullOrWhiteSpace(selectedCv.FileUrl))
+            {
+                var extracted = await _evidenceClient.ExtractPdfFromUrlAsync(selectedCv.FileUrl, cancellationToken, selectedCv.PublicId);
+                if (extracted.IsSuccess && !string.IsNullOrWhiteSpace(extracted.Data))
+                {
+                    raw = extracted.Data;
+                    if (parser is null)
+                    {
+                        parser = new CvParser { CvId = selectedCv.Id };
+                        _context.CvParsers.Add(parser);
+                    }
+                    parser.RawText = raw;
+                    parser.ModelVersion = "pdf-text-v1";
+                    parser.ParsedAt = DateTime.UtcNow;
+                    selectedCv.ParseStatus = "TextExtracted";
+                    selectedCv.ParsedAt = parser.ParsedAt;
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+                else extractionError = extracted.ErrorMessage;
+            }
             JsonElement review;
             if (string.IsNullOrWhiteSpace(raw) || raw.TrimStart().StartsWith("{") || raw.TrimStart().StartsWith("[") || raw.Length > 30000)
                 review = JsonSerializer.SerializeToElement(new { status = "unavailable", score = (decimal?)null,
-                    summary = "CV chưa có văn bản gốc hợp lệ. Hãy tải PDF có lớp văn bản và phân tích CV trước.", assessments = Array.Empty<object>() });
+                    summary = extractionError ?? "CV chưa có văn bản gốc hợp lệ. Hãy tải PDF có lớp văn bản và phân tích CV trước.", assessments = Array.Empty<object>() });
             else
             {
                 // Include every requirement clause; never silently drop constraints to obtain a score.
