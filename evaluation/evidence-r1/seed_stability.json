@@ -1,0 +1,340 @@
+[
+  {
+    "seed": 43,
+    "fit": {
+      "iterations": 68,
+      "loss": 0.01270143030739493,
+      "warnings": []
+    },
+    "old_validation": {
+      "n_samples": 100,
+      "n_requirements": 400,
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "score_mae": 0.0,
+      "classification_report": {
+        "met": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 103.0
+        },
+        "partial": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 82.0
+        },
+        "not_evidenced": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 215.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 400.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 400.0
+        }
+      },
+      "confusion_labels": [
+        "met",
+        "partial",
+        "not_evidenced"
+      ],
+      "confusion_matrix": [
+        [
+          103,
+          0,
+          0
+        ],
+        [
+          0,
+          82,
+          0
+        ],
+        [
+          0,
+          0,
+          215
+        ]
+      ],
+      "by_kind": {
+        "basic": {
+          "support": 111,
+          "accuracy": 1.0
+        },
+        "practical": {
+          "support": 88,
+          "accuracy": 1.0
+        },
+        "professional": {
+          "support": 125,
+          "accuracy": 1.0
+        },
+        "experience": {
+          "support": 76,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "new_validation": {
+      "n_samples": 48,
+      "n_requirements": 187,
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "score_mae": 0.0,
+      "classification_report": {
+        "met": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 77.0
+        },
+        "partial": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 68.0
+        },
+        "not_evidenced": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 42.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 187.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 187.0
+        }
+      },
+      "confusion_labels": [
+        "met",
+        "partial",
+        "not_evidenced"
+      ],
+      "confusion_matrix": [
+        [
+          77,
+          0,
+          0
+        ],
+        [
+          0,
+          68,
+          0
+        ],
+        [
+          0,
+          0,
+          42
+        ]
+      ],
+      "by_kind": {
+        "basic": {
+          "support": 48,
+          "accuracy": 1.0
+        },
+        "practical": {
+          "support": 48,
+          "accuracy": 1.0
+        },
+        "professional": {
+          "support": 43,
+          "accuracy": 1.0
+        },
+        "experience": {
+          "support": 48,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "eligible": true
+  },
+  {
+    "seed": 44,
+    "fit": {
+      "iterations": 72,
+      "loss": 0.0138813427496655,
+      "warnings": []
+    },
+    "old_validation": {
+      "n_samples": 100,
+      "n_requirements": 400,
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "score_mae": 0.0,
+      "classification_report": {
+        "met": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 103.0
+        },
+        "partial": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 82.0
+        },
+        "not_evidenced": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 215.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 400.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 400.0
+        }
+      },
+      "confusion_labels": [
+        "met",
+        "partial",
+        "not_evidenced"
+      ],
+      "confusion_matrix": [
+        [
+          103,
+          0,
+          0
+        ],
+        [
+          0,
+          82,
+          0
+        ],
+        [
+          0,
+          0,
+          215
+        ]
+      ],
+      "by_kind": {
+        "basic": {
+          "support": 111,
+          "accuracy": 1.0
+        },
+        "practical": {
+          "support": 88,
+          "accuracy": 1.0
+        },
+        "professional": {
+          "support": 125,
+          "accuracy": 1.0
+        },
+        "experience": {
+          "support": 76,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "new_validation": {
+      "n_samples": 48,
+      "n_requirements": 187,
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "score_mae": 0.0,
+      "classification_report": {
+        "met": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 77.0
+        },
+        "partial": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 68.0
+        },
+        "not_evidenced": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 42.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 187.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 187.0
+        }
+      },
+      "confusion_labels": [
+        "met",
+        "partial",
+        "not_evidenced"
+      ],
+      "confusion_matrix": [
+        [
+          77,
+          0,
+          0
+        ],
+        [
+          0,
+          68,
+          0
+        ],
+        [
+          0,
+          0,
+          42
+        ]
+      ],
+      "by_kind": {
+        "basic": {
+          "support": 48,
+          "accuracy": 1.0
+        },
+        "practical": {
+          "support": 48,
+          "accuracy": 1.0
+        },
+        "professional": {
+          "support": 43,
+          "accuracy": 1.0
+        },
+        "experience": {
+          "support": 48,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "eligible": true
+  }
+]
