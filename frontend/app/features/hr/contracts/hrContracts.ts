@@ -62,6 +62,13 @@ function optionalText(value: string): string | null {
   return normalized === "" ? null : normalized;
 }
 
+export function deadlineToDateInput(value: string | null | undefined): string {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
 export function toJobRequest(values: JobFormValues): JobRequest {
   return {
     title: values.title.trim(),
@@ -77,7 +84,7 @@ export function toJobRequest(values: JobFormValues): JobRequest {
     salaryCurrency: values.salaryCurrency.trim() || "VND",
     experienceYearsMin: optionalNumber(values.experienceYearsMin),
     experienceYearsMax: optionalNumber(values.experienceYearsMax),
-    deadline: values.deadline ? `${values.deadline}T23:59:59` : null,
+    deadline: values.deadline ? new Date(`${values.deadline}T23:59:59`).toISOString() : null,
     positionsCount: Number(values.positionsCount),
     skills: values.skills,
   };
