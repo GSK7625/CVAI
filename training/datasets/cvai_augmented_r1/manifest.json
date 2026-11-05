@@ -1,0 +1,43 @@
+{
+  "dataset": "cvai-augmented-r1",
+  "splits": {
+    "train": {
+      "pairs": 844,
+      "requirements": 3362,
+      "new_pairs": 144
+    },
+    "validation": {
+      "pairs": 148,
+      "requirements": 587,
+      "new_pairs": 48
+    },
+    "test": {
+      "pairs": 150,
+      "requirements": 600,
+      "new_pairs": 0
+    }
+  },
+  "data_hashes": {
+    "train": "9131edfd06bb2e57d3d167d02a4da2ec74d3b320553068be7c2899d8b456657c",
+    "validation": "6cfa8f06511e98fc6beeab4791a9cc84779c4c3232e5aa774f4a6a663c320f11",
+    "test": "fb4f7d53a1f808e7ad5caa336803be4f37fc769bb90380f66f7df45baa114c70"
+  },
+  "old_data_hashes": {
+    "train": "a2c73477b623728707360f7794a2bbbd8be4bb5392f4dc08c06d0854ec754605",
+    "validation": "c08c67a3d3af6afbbcdada44185a022b8e5b0eec3a8866bbe710f9c567309d12",
+    "test": "fb4f7d53a1f808e7ad5caa336803be4f37fc769bb90380f66f7df45baa114c70"
+  },
+  "human_export_sha256": "121e88b06f0ad99439cc461d779826656b8816c305305162824682518cdd3530",
+  "new_label_sources": {
+    "human_first_pass_agrees_rule": 47,
+    "synthetic_rule_unreviewed": 702
+  },
+  "excluded_unresolved_requirements": 19,
+  "holdout_used": false,
+  "holdout_zip_sha256": "d1569e1c9401845b3f8ce4dce0ca0469a5327ac163cce7caf315bdf24bf01efa",
+  "old_test_byte_identical": true,
+  "source_kind": "controlled_synthetic; partially reviewed by one human",
+  "all_labels_human_reviewed": false,
+  "preparation_script_sha256": "5345a086a081ab20b9bb5993e39d6946f0da227d8e3b44905e2ab6d004e372db",
+  "limits": "Old test previously observed; report historical benchmark only. New scores omit unresolved requirements; evidence span hull is not a verified single semantic quote."
+}
