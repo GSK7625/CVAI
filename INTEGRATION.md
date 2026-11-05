@@ -17,7 +17,7 @@ Tại thư mục gốc repo, tạo Python venv và cài dependencies:
 ```powershell
 python -m venv .venv
 .venv/Scripts/Activate.ps1
-python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
 python -m pip install -r training/lightweight_cv/requirements.txt
 python training/lightweight_cv/fetch_evidence_model.py
 $env:CVAI_ARTIFACT_DIR = (Resolve-Path models/evidence-r1).Path
