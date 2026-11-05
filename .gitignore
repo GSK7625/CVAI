@@ -109,3 +109,6 @@ htmlcov/
 
 # Documentation / Local docs
 DOCS/
+
+# Downloaded CPU inference models
+/models/
