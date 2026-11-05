@@ -22,6 +22,13 @@ public class PreviewJobMatchAuthoritativeIntegrationTests
     {
         public bool Enabled => true;
         public int Calls;
+        public int ExtractCalls;
+        public Task<ServiceResult<string>> ExtractPdfFromUrlAsync(string url, CancellationToken token, string? publicId = null)
+        {
+            ExtractCalls++;
+            Assert.StartsWith("https://res.cloudinary.com/", url);
+            return Task.FromResult(ServiceResult.Success("Paid work: used Python to parse logs."));
+        }
         public Task<ServiceResult<JsonElement>> ReviewAsync(string cvText, string jdText, string title, CancellationToken token)
         {
             Calls++;
@@ -53,6 +60,27 @@ public class PreviewJobMatchAuthoritativeIntegrationTests
         var invalid = await service.PreviewJobMatchAsync(userId, jobId, new PreviewJobMatchRequest(cvId));
         Assert.Equal("unavailable", invalid.Data!.EvidenceReview!.Value.GetProperty("status").GetString());
         Assert.Equal(1, evidence.Calls);
+    }
+
+    [Fact]
+    public async Task EvidencePreview_ExtractsPreviouslyUploadedPdfOnceAndCachesOriginalText()
+    {
+        using var db = CreateDbContext();
+        var (userId, jobId, cvId) = SeedStandardScenario(db);
+        var parser = await db.CvParsers.FirstAsync(p => p.CvId == cvId);
+        parser.RawText = null;
+        var cv = await db.CandidateCvs.FirstAsync(c => c.Id == cvId);
+        cv.Source = "Upload";
+        cv.FileUrl = "https://res.cloudinary.com/test/raw/upload/cv.pdf";
+        await db.SaveChangesAsync();
+        var client = new EvidenceClient();
+        var service = new ApplicationService(db, new TestIdentityService(), new TestAiMatchingClient(), evidenceClient: client);
+        Assert.True((await service.PreviewJobMatchAsync(userId, jobId, new PreviewJobMatchRequest(cvId))).IsSuccess);
+        Assert.True((await service.PreviewJobMatchAsync(userId, jobId, new PreviewJobMatchRequest(cvId))).IsSuccess);
+        Assert.Equal(1, client.ExtractCalls);
+        Assert.Equal(2, client.Calls);
+        Assert.Equal("TextExtracted", cv.ParseStatus);
+        Assert.Equal("Paid work: used Python to parse logs.", parser.RawText);
     }
 
     private sealed class TestAiMatchingClient : IAiMatchingClient
