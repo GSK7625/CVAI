@@ -1,0 +1,11 @@
+{
+  "backend_tests_passed": 79,
+  "backend_runtime": "NET 10.0.5 roll-forward for net8 tests",
+  "frontend_tests_passed": 21,
+  "typescript": "passed",
+  "frontend_build": "passed",
+  "python_evidence_tests_passed": 11,
+  "model_zip_checksum": "verified",
+  "production_database_e2e": false,
+  "vps_deployed": false
+}
