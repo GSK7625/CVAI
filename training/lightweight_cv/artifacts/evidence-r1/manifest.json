@@ -1,0 +1,55 @@
+{
+  "feature_version": "e5-evidence-mlp-r1",
+  "mode": "full",
+  "encoder": "intfloat/multilingual-e5-small",
+  "encoder_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+  "encoder_frozen": true,
+  "training_method": "Frozen E5 + train-only scaler + explicit evidence MLP; no output rule override",
+  "selected_classifier": "structured-mlp32",
+  "data_hashes": {
+    "train": "9131edfd06bb2e57d3d167d02a4da2ec74d3b320553068be7c2899d8b456657c",
+    "validation": "6cfa8f06511e98fc6beeab4791a9cc84779c4c3232e5aa774f4a6a663c320f11",
+    "test": "fb4f7d53a1f808e7ad5caa336803be4f37fc769bb90380f66f7df45baa114c70"
+  },
+  "labels": [
+    "met",
+    "partial",
+    "not_evidenced"
+  ],
+  "n_train_requirements": 3362,
+  "n_validation_requirements": 587,
+  "feature_dimension": 61,
+  "classifier_sha256": "20ca1be8c3ff8a3ac93a7403a05f335fdf9cd453d87b9ec95b5f0e91b38a527c",
+  "encoder_file_hashes": {
+    "config.json": "42e5927686be03af239b7829a4ac143d7167107a16b98e2f8a453e8bb3183e01",
+    "model.safetensors": "7a77d5da5ee721c7c740e4082447d3026b6521d3eac5edb93edb6aa88f03b7d7",
+    "tokenizer_config.json": "dbdcd9767f0481fd8fd8cd6bce3e73dae7f5c44ce22ae1fde00a66498e71b454",
+    "special_tokens_map.json": "38d989b0fdad0fec0c67c14b1f3c8b68184022cf6d4adc5444526ced8653f738",
+    "sentencepiece.bpe.model": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+    "tokenizer.json": "6879d3648d0329c894b1cbb0c89096430e24d3c7cf5d359d4ccc87ce585c4ae4",
+    "UPSTREAM_MODEL_CARD.md": "0038de97aee16258cecbad7ffda4b4febd6953e747a00e0ddbc8e6ed241e9c1c"
+  },
+  "baseline_thresholds": [
+    0.8221654891967773,
+    0.8723447024822235
+  ],
+  "versions": {
+    "torch": "2.12.0",
+    "transformers": "4.57.1",
+    "numpy": "2.2.6",
+    "scikit-learn": "1.7.2"
+  },
+  "elapsed_seconds": 78.19744379999997,
+  "limitations": "Synthetic rubric benchmark. Explicit English context only; unresolved inputs require review. No real CV validation.",
+  "feature_mode": "structured",
+  "feature_code_hashes": {
+    "evidence_features.py": "8ce6de43a823f2e54a6d687791417d1c19edd181025838a8529a9b2da42109a5",
+    "jd_parser.py": "9b502943a596dca09901f114549598a4ccb5672377b9ba88b500a489b87c3c47"
+  },
+  "minimal_pairs_sha256": "1408f0da9a163c3f2fdc1a4061db6b32e6bcb52da3a3c7eb2a1bcfee9dd5e6fc",
+  "experiment": "evidence-r1",
+  "deployment_status": "synthetic_pilot_only",
+  "all_labels_human_reviewed": false,
+  "evaluation_results_sha256": "39a011f7077530da8abf62c335d5be7548c162d725e04ab25875173f0a609aa8",
+  "deployment_coverage_sha256": "97c7a1b622ff8a8ff3954add9a51382781f13c7d10d3412cd72777e0caf9ff48"
+}
