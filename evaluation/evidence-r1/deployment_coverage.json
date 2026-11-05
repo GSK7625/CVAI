@@ -1,0 +1,61 @@
+{
+  "raw_pairs": 48,
+  "raw_requirements": 192,
+  "eligible_requirements": 187,
+  "eligible_but_requires_review": 7,
+  "unresolved_gold_requirements": 5,
+  "score_ready_pairs": 36,
+  "score_withheld_pairs": 12,
+  "details": [
+    {
+      "pair_id": "review-94141d02646d5c8e",
+      "id": "r3",
+      "reasons": [
+        "unresolved_skill_context"
+      ]
+    },
+    {
+      "pair_id": "review-dc30e5c724be7855",
+      "id": "r3",
+      "reasons": [
+        "unresolved_skill_context"
+      ]
+    },
+    {
+      "pair_id": "review-99d2a47bbaee2bb6",
+      "id": "r3",
+      "reasons": [
+        "unresolved_skill_context"
+      ]
+    },
+    {
+      "pair_id": "review-37a19bf021528306",
+      "id": "r3",
+      "reasons": [
+        "unresolved_skill_context"
+      ]
+    },
+    {
+      "pair_id": "review-51cccc805f1b49ab",
+      "id": "r3",
+      "reasons": [
+        "unresolved_skill_context"
+      ]
+    },
+    {
+      "pair_id": "review-e55f3b3c51af2dcf",
+      "id": "r3",
+      "reasons": [
+        "unresolved_skill_context"
+      ]
+    },
+    {
+      "pair_id": "review-104fbba72eb81454",
+      "id": "r3",
+      "reasons": [
+        "unresolved_skill_context"
+      ]
+    }
+  ],
+  "all_raw_classifier_predictions_correct_is_not_full_coverage": true
+}
