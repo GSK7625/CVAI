@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { Button, Field, Input, Modal } from "~/components/ui";
 import { useUIStore } from "~/stores/useUIStore";
-import { toJobRequest, validateJobForm, type FieldErrors } from "../contracts/hrContracts";
+import { toJobRequest, validateJobForm, deadlineToDateInput, type FieldErrors } from "../contracts/hrContracts";
 import { useCreateEmployerJob, useHrMasterData, useUpdateEmployerJob } from "../hooks/useEmployerJobs";
 import type { JobDetail, JobFormValues, JobSkillInput } from "../types";
 
@@ -41,7 +41,7 @@ function valuesFromJob(job?: JobDetail | null): JobFormValues {
     salaryCurrency: job.salaryCurrency || "VND",
     experienceYearsMin: job.experienceYearsMin?.toString() ?? "",
     experienceYearsMax: job.experienceYearsMax?.toString() ?? "",
-    deadline: job.deadline?.slice(0, 10) ?? "",
+    deadline: deadlineToDateInput(job.deadline),
     positionsCount: job.positionsCount?.toString() || "1",
     skills: job.skills.map(({ skillId, isRequired }) => ({ skillId, isRequired })),
   };
@@ -91,7 +91,10 @@ export function JobFormModal({ open, onClose, job }: { open: boolean; onClose: (
     const nextErrors = validateJobForm(values);
     setErrors(nextErrors);
     if (nextErrors.description) setContentTab("description");
-    if (Object.keys(nextErrors).length) return;
+    if (Object.keys(nextErrors).length) {
+      showToast(Object.values(nextErrors).filter(Boolean).join(" "), "error");
+      return;
+    }
     try {
       const input = toJobRequest(values);
       if (job) await updateJob.mutateAsync({ id: job.id, input });
