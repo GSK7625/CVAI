@@ -1,0 +1,139 @@
+{
+  "experiment": "evidence-r1",
+  "candidates": [
+    {
+      "name": "structured-mlp32",
+      "mode": "structured",
+      "alpha": 0.1,
+      "minimal_pairs": false
+    },
+    {
+      "name": "compact-mlp32",
+      "mode": "compact",
+      "alpha": 0.1,
+      "minimal_pairs": false
+    },
+    {
+      "name": "full-mlp64-a0.1",
+      "mode": "full",
+      "alpha": 0.1,
+      "minimal_pairs": false
+    },
+    {
+      "name": "full-mlp64-a1",
+      "mode": "full",
+      "alpha": 1.0,
+      "minimal_pairs": false
+    },
+    {
+      "name": "compact-mlp32-minimal",
+      "mode": "compact",
+      "alpha": 0.1,
+      "minimal_pairs": true
+    },
+    {
+      "name": "full-mlp64-minimal",
+      "mode": "full",
+      "alpha": 0.1,
+      "minimal_pairs": true
+    }
+  ],
+  "seed": 42,
+  "stability_seeds_after_selection": [
+    43,
+    44
+  ],
+  "encoder_frozen": true,
+  "features": [
+    "kind_basic",
+    "kind_practical",
+    "kind_professional",
+    "kind_experience",
+    "kind_unknown",
+    "evidence_paid",
+    "evidence_project",
+    "evidence_course",
+    "evidence_listed",
+    "evidence_negated",
+    "evidence_absent",
+    "evidence_unknown",
+    "evidence_conflict",
+    "basic_x_paid",
+    "basic_x_project",
+    "basic_x_course",
+    "basic_x_listed",
+    "basic_x_negated",
+    "basic_x_absent",
+    "basic_x_unknown",
+    "basic_x_conflict",
+    "practical_x_paid",
+    "practical_x_project",
+    "practical_x_course",
+    "practical_x_listed",
+    "practical_x_negated",
+    "practical_x_absent",
+    "practical_x_unknown",
+    "practical_x_conflict",
+    "professional_x_paid",
+    "professional_x_project",
+    "professional_x_course",
+    "professional_x_listed",
+    "professional_x_negated",
+    "professional_x_absent",
+    "professional_x_unknown",
+    "professional_x_conflict",
+    "experience_x_paid",
+    "experience_x_project",
+    "experience_x_course",
+    "experience_x_listed",
+    "experience_x_negated",
+    "experience_x_absent",
+    "experience_x_unknown",
+    "experience_x_conflict",
+    "unknown_x_paid",
+    "unknown_x_project",
+    "unknown_x_course",
+    "unknown_x_listed",
+    "unknown_x_negated",
+    "unknown_x_absent",
+    "unknown_x_unknown",
+    "unknown_x_conflict",
+    "months_scaled",
+    "required_scaled",
+    "duration_ratio",
+    "duration_enough",
+    "duration_zero",
+    "duration_known",
+    "duration_dated",
+    "duration_ambiguous"
+  ],
+  "base_dimension": 1923,
+  "data_hashes": {
+    "train": "9131edfd06bb2e57d3d167d02a4da2ec74d3b320553068be7c2899d8b456657c",
+    "validation": "6cfa8f06511e98fc6beeab4791a9cc84779c4c3232e5aa774f4a6a663c320f11",
+    "test": "fb4f7d53a1f808e7ad5caa336803be4f37fc769bb90380f66f7df45baa114c70"
+  },
+  "training_selection_never_opens_holdout": true,
+  "historical_test_previously_observed": true,
+  "selection": "mean of old/new validation macro-F1; ties prefer fewer features, then no minimal pairs",
+  "gates": "on BOTH validations: macro-F1 >= max(v1,aug-r1)-0.005; every kind accuracy >= max(v1,aug-r1)-0.01",
+  "holdout_gate": "paired JD-cluster 95% lower delta-F1 bound > 0 vs v1; paid accuracy and MAE not worse; synthetic pilot only",
+  "minimal_pair_max_groups": 160,
+  "minimal_pair_source": "train only; no new independent CVs",
+  "source_hashes": {
+    "evidence_features.py": "8ce6de43a823f2e54a6d687791417d1c19edd181025838a8529a9b2da42109a5",
+    "jd_parser.py": "9b502943a596dca09901f114549598a4ccb5672377b9ba88b500a489b87c3c47",
+    "pipeline.py": "206acd6982a4785a0241c4aa9693e70fe51c6a8ea0c54bbb1fcd4cb0c8421d36",
+    "optimize_evidence.py": "9ae48193524ce34d0cf8e4ff54b6e824ab03e58e87ddc1bdf73ae73c4720b36b",
+    "evaluate_evidence.py": "c8e1eb2a17eac1b141e2dabc5c4edc78204baf7b636897f80cbe905681334ad3"
+  },
+  "baseline_classifier_sha256": "268e14e927fcd94d6ffa89f9cc0524691e5d18567d7f995355eb8aa1be0e5105",
+  "previous_classifier_sha256": "d37a617064a68f267e85b8e171519058e5d2eb1a7a78367d7a6632fa6ea6704c",
+  "holdout_zip_sha256": "d1569e1c9401845b3f8ce4dce0ca0469a5327ac163cce7caf315bdf24bf01efa",
+  "versions": {
+    "torch": "2.12.0",
+    "transformers": "4.57.1",
+    "numpy": "2.2.6",
+    "scikit-learn": "1.7.2"
+  }
+}
