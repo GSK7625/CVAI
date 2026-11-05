@@ -1,0 +1,15 @@
+{
+  "reason": "Report smoke check passed both jd_text and requirements; project standardized input only.",
+  "started_at_unix": 1793856667.8666217,
+  "source_predictions": {
+    "historical_test_predictions.csv": "3bef3b22d1c2e8253c0795e3c5f2bbab75964e3bfd24ee0a3bd9d43e053e2627",
+    "historical_test_context.jsonl": "51da44b3a9ed245675a96f600622931035ff48548fde2837164f9ad117e19b92",
+    "holdout_predictions.csv": "b1f4de5998c5606ca1122d23b5c42c057ee2c368126036176e51f35ac184e461",
+    "holdout_context.jsonl": "d1f3cc21c2843e2778478f3948586ae44a3fcbcf9824a4235b9705ae041563a9"
+  },
+  "original_evaluation_script_sha256": "c8e1eb2a17eac1b141e2dabc5c4edc78204baf7b636897f80cbe905681334ad3",
+  "recovery_evaluation_script_sha256": "49303721d3ff5c125eccc83d7e316b664e67bf27779ef13010ac6d7d2bfe21e6",
+  "classifier_unchanged": "20ca1be8c3ff8a3ac93a7403a05f335fdf9cd453d87b9ec95b5f0e91b38a527c",
+  "candidate_selection_repeated": false,
+  "scored_holdout_predictions_repeated": false
+}
