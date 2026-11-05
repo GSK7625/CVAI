@@ -280,7 +280,22 @@ export interface MatchExplanationDetails {
   recommendations?: string[];
 }
 
+export interface EvidenceReview {
+  status: "ready" | "needs_review" | "unavailable";
+  score: number | null;
+  summary: string;
+  assessments: Array<{
+    id: string;
+    requirement_text: string;
+    status: "met" | "partial" | "not_evidenced";
+    weight: number;
+    comment: string;
+    evidence_signals?: { contexts: Array<{ text: string }>; review_reasons: string[] };
+  }>;
+}
+
 export interface JobMatchPreviewResponse {
+  evidenceReview?: EvidenceReview | null;
   jobId: string;
   jobTitle: string;
   cvId: string;
