@@ -30,10 +30,11 @@ def main():
     for index, sample in enumerate(splits["test"]):
         started = time.perf_counter()
         features, retrieved = features_for_samples([sample], reviewer.encoder)
-        labels = reviewer.head.predict(features)
+        labels = reviewer.predict_labels([sample], features, retrieved)
         latency.append(time.perf_counter() - started)
         predicted.extend(labels.tolist())
-        baseline.extend(threshold_predict(features[:, -3], *reviewer.manifest["baseline_thresholds"]).tolist())
+        if "baseline_thresholds" in reviewer.manifest:
+            baseline.extend(threshold_predict(features[:, -3], *reviewer.manifest["baseline_thresholds"]).tolist())
         records.extend(retrieved)
         statuses = dict(zip([r["id"] for r in sample["requirements"]], labels))
         reviews.append(render_review(sample, statuses, retrieved))
@@ -48,7 +49,8 @@ def main():
                   warm_latency_p95_seconds=float(np.percentile(latency[1:] or latency, 95)),
                   retrieval_gold_excerpt_recall_at_3=hits / len(supports) if supports else None,
                   retrieval_support=len(supports), human_reviewed=False, external_real_world_validation=False)
-    result["cosine_baseline"] = metrics(splits["test"], baseline)
+    if baseline:
+        result["cosine_baseline"] = metrics(splits["test"], baseline)
     result["model_profile"] = {key: reviewer.manifest[key] for key in
                                ("feature_version", "encoder_revision", "classifier_sha256")}
     result["data_hashes"] = hashes
