@@ -1,0 +1,625 @@
+{
+  "source": "synthetic_authored",
+  "split": "pdf_diagnostic",
+  "language": "en",
+  "samples": [
+    {
+      "sample_id": "jake_pdf_followup-01",
+      "pdf": "resume-01.pdf",
+      "pdf_sha256": "6a87d5a260a41a382079c0f60c623270e738f9112ada06093898d85f19c62bb8",
+      "cv_text": "Jamie Finn\nTest Engineer  |  jamie.finn@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nTest Engineer\nJan 2024 - Jun 2025\nCopper Ferry\n- Automated reservation checks in Playwright for our ticketing service.\n- The ticketing team does not use pytest.\nProjects\nTrip Replay\n- Built a Selenium harness to replay bookings on a miniature travel site.\nTechnical Skills\nAdditional tools: Postman.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Professional experience applying Playwright.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Commercial experience using Selenium.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Hands-on project experience with Selenium.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Foundational knowledge of Postman.",
+          "weight": 1
+        },
+        {
+          "id": "r5",
+          "text": "Use Postman in paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r6",
+          "text": "Hands-on experience applying pytest in a project.",
+          "weight": 2
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "Automated reservation checks in Playwright for our ticketing service.",
+            "span": {
+              "start": 181,
+              "end": 250,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "Built a Selenium harness to replay bookings on a miniature travel site.",
+            "span": {
+              "start": 316,
+              "end": 387,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "Built a Selenium harness to replay bookings on a miniature travel site.",
+            "span": {
+              "start": 316,
+              "end": 387,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "met",
+            "evidence": "Additional tools: Postman.",
+            "span": {
+              "start": 405,
+              "end": 431,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "partial",
+            "evidence": "Additional tools: Postman.",
+            "span": {
+              "start": 405,
+              "end": 431,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r6",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake_pdf_followup-02",
+      "pdf": "resume-02.pdf",
+      "pdf_sha256": "d9724fa63e76fc9ab96a0adcc96ae89938fcf101caa14ca7133dfe97470ff0ef",
+      "cv_text": "Drew Page\nAnalytics Engineer  |  drew.page@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nAnalytics Engineer\nJan 2024 - Jun 2025\nFallow Foods\n- Reduced stock discrepancies by merging supplier exports with pandas.\n- Tracked lot numbers during two supplier recalls.\nProjects\nPantry Counts\n- Wrote SQL views to reconcile community pantry orders.\nTechnical Skills\nAdditional tools: Airflow.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Professional experience applying pandas.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Commercial experience using SQL.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Hands-on project experience with SQL.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Foundational knowledge of Airflow.",
+          "weight": 1
+        },
+        {
+          "id": "r5",
+          "text": "Use Airflow in paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r6",
+          "text": "Hands-on experience applying Redis in a project.",
+          "weight": 2
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "Reduced stock discrepancies by merging supplier exports with pandas.",
+            "span": {
+              "start": 189,
+              "end": 257,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "Wrote SQL views to reconcile community pantry orders.",
+            "span": {
+              "start": 334,
+              "end": 387,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "Wrote SQL views to reconcile community pantry orders.",
+            "span": {
+              "start": 334,
+              "end": 387,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "met",
+            "evidence": "Additional tools: Airflow.",
+            "span": {
+              "start": 405,
+              "end": 431,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "partial",
+            "evidence": "Additional tools: Airflow.",
+            "span": {
+              "start": 405,
+              "end": 431,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r6",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake_pdf_followup-03",
+      "pdf": "resume-03.pdf",
+      "pdf_sha256": "85f35c33b03ca2e101b97431efafe62a256d94da07c6a073c1ed7a22b2440807",
+      "cv_text": "Taylor North\nInfrastructure Engineer  |  taylor.north@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nInfrastructure Engineer\nJan 2024 - Jun 2025\nMeridian Weather\n- Maintained Linux hosts that archive storm observations.\n- Coordinated instrument maintenance with the field team.\nProjects\nRain Tiles\n- Deployed a Kubernetes cluster for a personal rainfall map.\nTechnical Skills\nAdditional tools: Python.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Professional experience applying Linux.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Commercial experience using Kubernetes.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Hands-on project experience with Kubernetes.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Foundational knowledge of Python.",
+          "weight": 1
+        },
+        {
+          "id": "r5",
+          "text": "Use Python in paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r6",
+          "text": "Hands-on experience applying AWS in a project.",
+          "weight": 2
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "Maintained Linux hosts that archive storm observations.",
+            "span": {
+              "start": 209,
+              "end": 264,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "Deployed a Kubernetes cluster for a personal rainfall map.",
+            "span": {
+              "start": 345,
+              "end": 403,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "Deployed a Kubernetes cluster for a personal rainfall map.",
+            "span": {
+              "start": 345,
+              "end": 403,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "met",
+            "evidence": "Additional tools: Python.",
+            "span": {
+              "start": 421,
+              "end": 446,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "partial",
+            "evidence": "Additional tools: Python.",
+            "span": {
+              "start": 421,
+              "end": 446,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r6",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake_pdf_followup-04",
+      "pdf": "resume-04.pdf",
+      "pdf_sha256": "bae228ba56e721c24724e3db26d869e44b874319db36baa3bb061a681f214a86",
+      "cv_text": "Riley Shaw\nApplication Developer  |  riley.shaw@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nApplication Developer\nJan 2024 - Jun 2025\nGraywing Audio\n- Rebuilt the playback queue in Kotlin for the audiobook app.\n- Implemented bookmarks after collecting feedback from narrators.\nProjects\nMeter Box\n- Created JavaScript controls for a browser-based metronome.\nTechnical Skills\nAdditional tools: Swift.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Professional experience applying Kotlin.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Commercial experience using JavaScript.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Hands-on project experience with JavaScript.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Foundational knowledge of Swift.",
+          "weight": 1
+        },
+        {
+          "id": "r5",
+          "text": "Use Swift in paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r6",
+          "text": "Hands-on experience applying Java in a project.",
+          "weight": 2
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "Rebuilt the playback queue in Kotlin for the audiobook app.",
+            "span": {
+              "start": 199,
+              "end": 258,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "Created JavaScript controls for a browser-based metronome.",
+            "span": {
+              "start": 346,
+              "end": 404,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "Created JavaScript controls for a browser-based metronome.",
+            "span": {
+              "start": 346,
+              "end": 404,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "met",
+            "evidence": "Additional tools: Swift.",
+            "span": {
+              "start": 422,
+              "end": 446,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "partial",
+            "evidence": "Additional tools: Swift.",
+            "span": {
+              "start": 422,
+              "end": 446,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r6",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake_pdf_followup-05",
+      "pdf": "resume-05.pdf",
+      "pdf_sha256": "6e76735d71853e2da8abc8ec7ff276277349129cbad60de8cba59227853b32ec",
+      "cv_text": "Hayden Cole\nRelease Engineer  |  hayden.cole@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nRelease Engineer\nJan 2024 - Jun 2025\nRedwood Print\n- Packaged the print scheduler in Docker and tested restart behavior.\n- Documented the release checklist for late-night maintenance.\nProjects\nLetterpress Lab\n- Provisioned a small typesetting service with Terraform.\nTechnical Skills\nAdditional tools: GitHub Actions.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Professional experience applying Docker.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Commercial experience using Terraform.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Hands-on project experience with Terraform.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Foundational knowledge of GitHub Actions.",
+          "weight": 1
+        },
+        {
+          "id": "r5",
+          "text": "Use GitHub Actions in paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r6",
+          "text": "Hands-on experience applying Jenkins in a project.",
+          "weight": 2
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "Packaged the print scheduler in Docker and tested restart behavior.",
+            "span": {
+              "start": 190,
+              "end": 257,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "Provisioned a small typesetting service with Terraform.",
+            "span": {
+              "start": 348,
+              "end": 403,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "Provisioned a small typesetting service with Terraform.",
+            "span": {
+              "start": 348,
+              "end": 403,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "met",
+            "evidence": "Additional tools: GitHub Actions.",
+            "span": {
+              "start": 421,
+              "end": 454,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "partial",
+            "evidence": "Additional tools: GitHub Actions.",
+            "span": {
+              "start": 421,
+              "end": 454,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r6",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake_pdf_followup-06",
+      "pdf": "resume-06.pdf",
+      "pdf_sha256": "895a90946635d2444d17a5c5321c49c708154a4c7402224793b9f53af7623b91",
+      "cv_text": "Quinn Bell\nDatabase Developer  |  quinn.bell@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nDatabase Developer\nJan 2024 - Jun 2025\nCanal Freight\n- Optimized a PostgreSQL shipment lookup that operators use at dispatch.\n- Reconciled manifest totals after schedule changes.\nProjects\nTimetable Desk\n- Implemented a Redis cache for an open timetable viewer.\nTechnical Skills\nAdditional tools: Git.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Professional experience applying PostgreSQL.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Commercial experience using Redis.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Hands-on project experience with Redis.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Foundational knowledge of Git.",
+          "weight": 1
+        },
+        {
+          "id": "r5",
+          "text": "Use Git in paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r6",
+          "text": "Hands-on experience applying SQL in a project.",
+          "weight": 2
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "Optimized a PostgreSQL shipment lookup that operators use at dispatch.",
+            "span": {
+              "start": 192,
+              "end": 262,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "Implemented a Redis cache for an open timetable viewer.",
+            "span": {
+              "start": 342,
+              "end": 397,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "Implemented a Redis cache for an open timetable viewer.",
+            "span": {
+              "start": 342,
+              "end": 397,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "met",
+            "evidence": "Additional tools: Git.",
+            "span": {
+              "start": 415,
+              "end": 437,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "partial",
+            "evidence": "Additional tools: Git.",
+            "span": {
+              "start": 415,
+              "end": 437,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r6",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    }
+  ]
+}
