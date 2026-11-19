@@ -135,3 +135,19 @@ public sealed record ApproveJobRequest(
 public sealed record CreateJobReportRequest(
     string Reason,
     string? Details = null);
+
+public sealed record FeaturedCompanyHighlight(
+    Guid Id,
+    string Name,
+    string? LogoUrl,
+    string? Industry,
+    int OpenJobsCount);
+
+public sealed record TopCategoryHighlight(
+    Guid Id,
+    string Name,
+    int OpenJobsCount);
+
+public sealed record HomeHighlightsResponse(
+    IReadOnlyList<FeaturedCompanyHighlight> FeaturedCompanies,
+    IReadOnlyList<TopCategoryHighlight> TopCategories);

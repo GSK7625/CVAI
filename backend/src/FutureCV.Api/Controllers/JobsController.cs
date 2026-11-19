@@ -29,6 +29,14 @@ public class JobsController : ApiControllerBase
         return ToHttpResult(result);
     }
 
+    [HttpGet("home-highlights")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HomeHighlightsResponse))]
+    public async Task<IActionResult> GetHomeHighlights(CancellationToken cancellationToken)
+    {
+        var result = await _jobService.GetHomeHighlightsAsync(cancellationToken);
+        return ToHttpResult(result);
+    }
+
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobDetailResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

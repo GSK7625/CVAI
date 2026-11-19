@@ -28,6 +28,7 @@ public static class DatabaseSeeder
             if (isDevelopment)
             {
                 await DemoDataSeeder.SeedAsync(serviceProvider);
+                await SampleJobsSeeder.SeedAsync(serviceProvider, targetTotalJobs: 500);
             }
 
             logger?.LogInformation("Database seeding pipeline completed successfully.");

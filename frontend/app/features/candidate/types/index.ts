@@ -13,6 +13,25 @@ export interface ApiPaged<T> {
   hasNextPage: boolean;
 }
 
+export interface FeaturedCompanyHighlight {
+  id: string;
+  name: string;
+  logoUrl?: string | null;
+  industry?: string | null;
+  openJobsCount: number;
+}
+
+export interface TopCategoryHighlight {
+  id: string;
+  name: string;
+  openJobsCount: number;
+}
+
+export interface HomeHighlightsResponse {
+  featuredCompanies: FeaturedCompanyHighlight[];
+  topCategories: TopCategoryHighlight[];
+}
+
 export interface ApiJobListItem {
   id: string;
   companyId: string;

@@ -1,0 +1,61 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1280 >>
+stream
+BT
+/F1 10 Tf
+45 755 Td
+14 TL
+(Tran Thi B - Junior Software Developer) Tj
+T* (Email: tranthib@example.com | Phone: 0923456789 | Hanoi, Vietnam) Tj
+T* () Tj
+T* (SUMMARY) Tj
+T* (Recent Computer Science graduate with 8 months of internship experience in web) Tj
+T* (development using Python, Flask, and React. Seeking a Junior Backend role.) Tj
+T* () Tj
+T* (WORK EXPERIENCE) Tj
+T* (Software Engineering Intern - VietSoft Labs \(01/2026 - 08/2026, 8 months\)) Tj
+T* (- Assisted senior developers with Python scripts for data cleaning and CSV exports.) Tj
+T* (- Implemented basic CRUD endpoints in Flask and tested APIs with Postman.) Tj
+T* (- Used Git for branching and submitting pull requests.) Tj
+T* () Tj
+T* (PROJECTS) Tj
+T* (Student Task Tracker \(University Capstone Project\)) Tj
+T* (- Built a web app with React frontend and PostgreSQL database schema.) Tj
+T* (- Wrote basic SQL queries to filter tasks and generate weekly summaries.) Tj
+T* (- Note: Docker containerization was only briefly explored in class.) Tj
+T* () Tj
+T* (EDUCATION) Tj
+T* (B.Sc. in Information Technology - University of Engineering and Technology \(2022 - 2026\)) Tj
+T* (GPA: 3.35 / 4.0) Tj
+T* () Tj
+T* (SKILLS) Tj
+T* (Python \(basic\), SQL / PostgreSQL \(academic project\), Git, React, HTML/CSS) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1642
+%%EOF

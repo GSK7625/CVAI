@@ -565,7 +565,8 @@ public class ApplicationService : IApplicationService
                 .FirstOrDefaultAsync(p => p.CvId == selectedCv.Id, cancellationToken);
             var raw = parser?.RawText;
             string? extractionError = null;
-            if (string.IsNullOrWhiteSpace(raw) && selectedCv.Source == "Upload" && !string.IsNullOrWhiteSpace(selectedCv.FileUrl))
+            var needsPdfTextExtraction = string.IsNullOrWhiteSpace(raw) || raw.TrimStart().StartsWith('{') || raw.TrimStart().StartsWith('[');
+            if (needsPdfTextExtraction && selectedCv.Source == "Upload" && !string.IsNullOrWhiteSpace(selectedCv.FileUrl))
             {
                 var extracted = await _evidenceClient.ExtractPdfFromUrlAsync(selectedCv.FileUrl, cancellationToken, selectedCv.PublicId);
                 if (extracted.IsSuccess && !string.IsNullOrWhiteSpace(extracted.Data))

@@ -46,11 +46,11 @@ public static class DemoDataSeeder
                 Name = "FPT Software",
                 TaxCode = "0101778162",
                 LogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/FPT_logo_2010.svg/1200px-FPT_logo_2010.svg.png",
-                Scale = "10000+ nhân viên",
-                Industry = "Công nghệ thông tin / Phần mềm",
+                Scale = "10,000+ employees",
+                Industry = "Information Technology / Software",
                 WebsiteUrl = "https://fptsoftware.com",
-                Address = "Tòa nhà FPT, Phố Duy Tân, Phường Dịch Vọng Hậu, Quận Cầu Giấy, Hà Nội",
-                Description = "FPT Software là công ty thành viên thuộc Tập đoàn FPT, nhà cung cấp dịch vụ công nghệ thông tin và chuyển đổi số hàng đầu tại khu vực Châu Á.",
+                Address = "FPT Building, Duy Tan Street, Dich Vong Hau Ward, Cau Giay District, Hanoi",
+                Description = "FPT Software is a subsidiary of FPT Corporation and a leading IT services and digital transformation provider in Asia.",
                 VerifiedStatus = CompanyVerificationStatus.Verified,
                 VerifiedAt = DateTimeOffset.UtcNow
             };
@@ -60,11 +60,11 @@ public static class DemoDataSeeder
                 Name = "VNG Corporation",
                 TaxCode = "0303538435",
                 LogoUrl = "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/VNG_Corporation_logo.svg/1200px-VNG_Corporation_logo.svg.png",
-                Scale = "1000 - 5000 nhân viên",
-                Industry = "Công nghệ thông tin / Game & Internet",
+                Scale = "1,000 - 5,000 employees",
+                Industry = "Information Technology / Gaming & Internet",
                 WebsiteUrl = "https://vng.com.vn",
-                Address = "Z06 Đường số 13, Phường Tân Thuận Đông, Quận 7, TP. Hồ Chí Minh",
-                Description = "VNG là doanh nghiệp công nghệ hàng đầu Việt Nam với hệ sinh thái sản phẩm phong phú: Zalo, ZaloPay, VNG Games...",
+                Address = "Z06 Street No. 13, Tan Thuan Dong Ward, District 7, Ho Chi Minh City",
+                Description = "VNG is a leading technology company in Vietnam with a diverse product ecosystem including Zalo, ZaloPay, and VNG Games.",
                 VerifiedStatus = CompanyVerificationStatus.Verified,
                 VerifiedAt = DateTimeOffset.UtcNow
             };
@@ -277,9 +277,9 @@ public static class DemoDataSeeder
                 CompanyId = fptCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Senior .NET Backend Developer",
-                Description = "FPT Software đang tìm kiếm các kỹ sư Senior .NET Backend tài năng gia nhập đội ngũ phát triển các giải pháp phần mềm chuyển đổi số quy mô lớn cho khách hàng toàn cầu.\n\nTrách nhiệm chính:\n- Tham gia thiết kế, phát triển và bảo trì các hệ thống backend microservices sử dụng .NET 8 / C#.\n- Thiết kế kiến trúc cơ sở dữ liệu quan hệ (PostgreSQL) và tối ưu hóa truy vấn hiệu năng cao.\n- Tích hợp các hệ thống message broker (RabbitMQ/Kafka) và bộ nhớ đệm (Redis).\n- Triển khai ứng dụng containerized qua Docker và phối hợp CI/CD với đội ngũ DevOps.",
-                Requirements = "- Tối thiểu 3 - 5 năm kinh nghiệm phát triển phần mềm với .NET Core / .NET 8 và C#.\n- Thành thạo Entity Framework Core, LINQ, và thiết kế RESTful Web API chuẩn RFC.\n- Kinh nghiệm vững chắc với PostgreSQL hoặc các RDBMS khác, hiểu sâu về Indexing và Transaction.\n- Có kinh nghiệm làm việc với Docker và Git.\n- Ưu tiên ứng viên có hiểu biết về Cloud (AWS/Azure) hoặc kiến trúc Microservices.",
-                Benefits = "- Thu nhập cạnh tranh từ 25 - 42 triệu/tháng + tháng lương 13 và thưởng dự án.\n- Chế độ bảo hiểm sức khỏe toàn diện FPT Care cho bản thân và gia đình.\n- Môi trường làm việc năng động, hybrid linh hoạt và cơ hội onsite nước ngoài.",
+                Description = "FPT Software is seeking talented Senior .NET Backend Engineers to join our team building large-scale digital transformation software solutions for global enterprise clients.\n\nKey Responsibilities:\n- Design, develop, and maintain microservices backend systems using .NET 8 / C#.\n- Design relational database schemas (PostgreSQL) and optimize high-performance queries.\n- Integrate message brokers (RabbitMQ/Kafka) and distributed caching (Redis).\n- Containerize applications with Docker and collaborate with DevOps on CI/CD pipelines.",
+                Requirements = "- At least 3 - 5 years of software development experience with .NET Core / .NET 8 and C#.\n- Proficiency in Entity Framework Core, LINQ, and standards-compliant RESTful Web API design.\n- Solid experience with PostgreSQL or other RDBMS, with deep understanding of Indexing and Transactions.\n- Hands-on experience with Docker and Git.\n- Familiarity with Cloud platforms (AWS/Azure) or Microservices architecture is a plus.",
+                Benefits = "- Competitive compensation from 25 - 42 million VND/month + 13th-month salary and project bonuses.\n- Comprehensive FPT Care health insurance for employees and family members.\n- Dynamic environment, flexible hybrid working model, and international onsite opportunities.",
                 CategoryId = backendCategory?.Id,
                 LevelId = seniorLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,
@@ -303,9 +303,9 @@ public static class DemoDataSeeder
                 CompanyId = vngCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Frontend React / TypeScript Engineer",
-                Description = "VNG Corporation tìm kiếm Frontend Engineer tài năng xây dựng giao diện ứng dụng web trải nghiệm mượt mà, phục vụ hàng triệu người dùng.\n\nTrách nhiệm chính:\n- Xây dựng giao diện Single Page Application hiện đại với React, TypeScript và Tailwind CSS.\n- Tối ưu hóa hiệu năng render, Web Vitals và trải nghiệm người dùng responsive.",
-                Requirements = "- Tối thiểu 2 năm kinh nghiệm với React, TypeScript và HTML5/CSS3.\n- Sử dụng thành thạo Git và làm việc với RESTful API.",
-                Benefits = "- Mức lương 18 - 30 triệu/tháng + thưởng hiệu quả kinh doanh.\n- Ăn trưa miễn phí tại công ty, phòng gym và khu vui chơi giải trí.",
+                Description = "VNG Corporation is looking for a talented Frontend Engineer to craft smooth web application interfaces serving millions of users.\n\nKey Responsibilities:\n- Build modern Single Page Applications with React, TypeScript, and Tailwind CSS.\n- Optimize rendering performance, Web Vitals, and responsive user experiences.",
+                Requirements = "- At least 2 years of experience with React, TypeScript, and HTML5/CSS3.\n- Proficient with Git and integrating RESTful APIs.",
+                Benefits = "- Salary 18 - 30 million VND/month + business performance bonus.\n- Free lunch at the office, on-site gym, and recreational lounge.",
                 CategoryId = frontendCategory?.Id,
                 LevelId = middleLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,
@@ -328,10 +328,10 @@ public static class DemoDataSeeder
             {
                 CompanyId = fptCompany.Id,
                 PostedById = recruiterUser.Id,
-                Title = "Thực tập sinh Lập trình AI / Machine Learning",
-                Description = "Chương trình thực tập sinh tài năng về AI/ML tại FPT Software, cơ hội tiếp cận các dự án GenAI, LLM thực tế.",
-                Requirements = "- Sinh viên năm cuối hoặc mới tốt nghiệp chuyên ngành CNTT, Toán tin, Trí tuệ nhân tạo.\n- Có nền tảng Python, hiểu biết về Machine Learning và Deep Learning.",
-                Benefits = "- Trợ cấp thực tập hấp dẫn 6 - 8 triệu/tháng.\n- Cơ hội trở thành nhân viên chính thức sau 3 tháng.",
+                Title = "AI / Machine Learning Engineering Intern",
+                Description = "AI/ML talent internship program at FPT Software with hands-on exposure to real-world GenAI and LLM projects.",
+                Requirements = "- Final-year student or recent graduate majoring in IT, Applied Mathematics, or Artificial Intelligence.\n- Solid Python foundation with knowledge of Machine Learning and Deep Learning.",
+                Benefits = "- Attractive internship allowance of 6 - 8 million VND/month.\n- Opportunity to convert to a full-time role after 3 months.",
                 CategoryId = aiCategory?.Id,
                 LevelId = internLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,
@@ -349,15 +349,15 @@ public static class DemoDataSeeder
                 ViewCount = 12
             };
 
-            // Job 4: Fullstack Developer (FPT Software - Đà Nẵng)
+            // Job 4: Fullstack Developer (FPT Software - Da Nang)
             var job4 = new Job
             {
                 CompanyId = fptCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Fullstack Developer (.NET 8 & React)",
-                Description = "Phát triển toàn diện giải pháp Enterprise từ Backend API đến Frontend UI cho đối tác quốc tế tại chi nhánh FPT Đà Nẵng.\n\nTrách nhiệm:\n- Xây dựng Web API bằng C# .NET 8 và giao diện tương tác bằng React.\n- Tối ưu hóa truy vấn dữ liệu và tích hợp hệ thống bên thứ ba.",
-                Requirements = "- 2+ năm kinh nghiệm Fullstack với C#, .NET Web API và React/TypeScript.\n- Hiểu biết về cơ sở dữ liệu SQL Server hoặc PostgreSQL.",
-                Benefits = "- Lương 20 - 32 triệu/tháng, phụ cấp ngoại ngữ.\n- Môi trường làm việc ven biển Đà Nẵng hiện đại, văn hóa cởi mở.",
+                Description = "Deliver end-to-end enterprise solutions from Backend APIs to Frontend UI for international partners at FPT Da Nang.\n\nResponsibilities:\n- Build Web APIs in C# .NET 8 and interactive UIs in React.\n- Optimize data queries and integrate third-party systems.",
+                Requirements = "- 2+ years of Fullstack experience with C#, .NET Web API, and React/TypeScript.\n- Familiarity with SQL Server or PostgreSQL.",
+                Benefits = "- Salary 20 - 32 million VND/month plus foreign language allowance.\n- Modern coastal campus in Da Nang with an open engineering culture.",
                 CategoryId = fullstackCategory?.Id,
                 LevelId = middleLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,
@@ -375,15 +375,15 @@ public static class DemoDataSeeder
                 ViewCount = 65
             };
 
-            // Job 5: Senior Cloud & DevOps Engineer (VNG Corporation - TP. Hồ Chí Minh)
+            // Job 5: Senior Cloud & DevOps Engineer (VNG Corporation - Ho Chi Minh City)
             var job5 = new Job
             {
                 CompanyId = vngCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Senior Cloud & DevOps Engineer (AWS / K8s)",
-                Description = "Chịu trách nhiệm thiết kế, triển khai và tự động hóa hạ tầng Cloud quy mô lớn phục vụ hàng chục triệu người dùng của hệ sinh thái VNG.\n\nTrách nhiệm:\n- Vận hành cụm Kubernetes trên AWS Cloud.\n- Xây dựng CI/CD pipeline tự động hóa với GitLab CI/GitHub Actions.",
-                Requirements = "- 4+ năm kinh nghiệm vận hành hệ thống với Docker, Kubernetes (K8s) và AWS Cloud.\n- Thành thạo xây dựng CI/CD pipeline tự động hóa và Linux Administration.",
-                Benefits = "- Lương 35 - 55 triệu/tháng, ESOP cổ phần công ty.\n- Chế độ làm việc Hybrid linh hoạt, phụ cấp thiết bị làm việc cao cấp.",
+                Description = "Design, deploy, and automate large-scale cloud infrastructure serving tens of millions of users across the VNG ecosystem.\n\nResponsibilities:\n- Operate Kubernetes clusters on AWS Cloud.\n- Build automated CI/CD pipelines using GitLab CI and GitHub Actions.",
+                Requirements = "- 4+ years of infrastructure operations experience with Docker, Kubernetes (K8s), and AWS Cloud.\n- Proficient in building automated CI/CD pipelines and Linux Administration.",
+                Benefits = "- Salary 35 - 55 million VND/month plus company ESOP stock options.\n- Flexible Hybrid work policy and high-end workstation allowance.",
                 CategoryId = devopsCategory?.Id,
                 LevelId = seniorLevel?.Id,
                 EmploymentTypeId = hybrid?.Id,
@@ -401,15 +401,15 @@ public static class DemoDataSeeder
                 ViewCount = 110
             };
 
-            // Job 6: Mobile App Developer (FPT Software - Hà Nội)
+            // Job 6: Mobile App Developer (FPT Software - Hanoi)
             var job6 = new Job
             {
                 CompanyId = fptCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Mobile App Developer (Flutter / React Native)",
-                Description = "Tham gia phát triển các ứng dụng di động đa nền tảng hiện đại cho các dự án Fintech và E-Commerce quốc tế.\n\nTrách nhiệm:\n- Xây dựng ứng dụng di động mượt mà cho iOS & Android.\n- Tích hợp RESTful API và tối ưu hóa trải nghiệm người dùng.",
-                Requirements = "- 2+ năm kinh nghiệm phát triển ứng dụng di động với Flutter hoặc React Native.\n- Có kiến thức tốt về quản lý State, RESTful API và tối ưu hóa hiệu năng ứng dụng.",
-                Benefits = "- Thu nhập 16 - 26 triệu/tháng + thưởng dự án.\n- Được tài trợ học và thi các chứng chỉ chuyên môn quốc tế.",
+                Description = "Develop modern cross-platform mobile applications for international Fintech and E-Commerce projects.\n\nResponsibilities:\n- Build smooth mobile apps for both iOS and Android.\n- Integrate RESTful APIs and optimize overall user experience.",
+                Requirements = "- 2+ years of mobile app development experience with Flutter or React Native.\n- Strong understanding of State Management, RESTful APIs, and mobile performance optimization.",
+                Benefits = "- Compensation 16 - 26 million VND/month + project bonuses.\n- Sponsored training and international professional certifications.",
                 CategoryId = mobileCategory?.Id,
                 LevelId = middleLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,
@@ -433,9 +433,9 @@ public static class DemoDataSeeder
                 CompanyId = vngCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Golang Backend Engineer (Distributed Systems)",
-                Description = "Phát triển hệ thống xử lý thanh toán và tin nhắn thời gian thực độ trễ thấp, chịu tải cao hàng trăm ngàn transactions/giây.\n\nTrách nhiệm:\n- Xây dựng microservices hiệu năng cao với Golang và gRPC.\n- Thiết kế bộ nhớ đệm phân tán với Redis và tối ưu hóa lưu trữ PostgreSQL.",
-                Requirements = "- 3+ năm kinh nghiệm phát triển backend với Golang.\n- Hiểu sâu về Concurrency, Memory Management, Redis cache và kiến trúc High Availability.",
-                Benefits = "- Mức lương 30 - 50 triệu/tháng thỏa thuận theo năng lực.\n- 100% làm việc từ xa (Remote), thời gian làm việc linh hoạt.",
+                Description = "Develop low-latency payment processing and real-time messaging systems handling hundreds of thousands of transactions per second.\n\nResponsibilities:\n- Build high-performance microservices with Golang and gRPC.\n- Design distributed caching with Redis and optimize PostgreSQL storage.",
+                Requirements = "- 3+ years of backend development experience with Golang.\n- Deep understanding of Concurrency, Memory Management, Redis caching, and High Availability architectures.",
+                Benefits = "- Negotiable salary from 30 - 50 million VND/month commensurate with skills.\n- 100% Remote work with flexible hours.",
                 CategoryId = backendCategory?.Id,
                 LevelId = seniorLevel?.Id,
                 EmploymentTypeId = remote?.Id,
@@ -453,15 +453,15 @@ public static class DemoDataSeeder
                 ViewCount = 98
             };
 
-            // Job 8: UI / UX Product Designer (VNG Corporation - TP. Hồ Chí Minh)
+            // Job 8: UI / UX Product Designer (VNG Corporation - Ho Chi Minh City)
             var job8 = new Job
             {
                 CompanyId = vngCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "UI / UX Product Designer",
-                Description = "Nghiên cứu hành vi người dùng, xây dựng Design System và thiết kế giao diện cho các sản phẩm số dẫn đầu thị trường.\n\nTrách nhiệm:\n- Thiết kế wireframe, prototype và hoàn thiện UI trên Figma.\n- Phối hợp chặt chẽ với Frontend team để hiện thực hóa giao diện thiết kế.",
-                Requirements = "- 2+ năm kinh nghiệm thiết kế UI/UX cho ứng dụng Web và Mobile trên Figma.\n- Có Portfolio dự án thực tế thể hiện tư duy thiết kế lấy người dùng làm trung tâm (User-Centered Design).",
-                Benefits = "- Lương 18 - 28 triệu/tháng + thưởng năm hấp dẫn.\n- Môi trường sáng tạo, tài trợ ngân sách tham gia các khóa học chuyên sâu.",
+                Description = "Conduct user behavior research, build Design Systems, and craft interfaces for market-leading digital products.\n\nResponsibilities:\n- Design wireframes, interactive prototypes, and high-fidelity UI in Figma.\n- Collaborate closely with Frontend engineers to deliver pixel-accurate UI.",
+                Requirements = "- 2+ years of UI/UX design experience for Web and Mobile apps using Figma.\n- Real-world portfolio demonstrating strong User-Centered Design thinking.",
+                Benefits = "- Salary 18 - 28 million VND/month + attractive annual bonus.\n- Creative environment with annual learning and conference budget.",
                 CategoryId = designCategory?.Id,
                 LevelId = middleLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,
@@ -479,15 +479,15 @@ public static class DemoDataSeeder
                 ViewCount = 82
             };
 
-            // Job 9: Automation QA / QC Engineer (FPT Software - Hà Nội)
+            // Job 9: Automation QA / QC Engineer (FPT Software - Hanoi)
             var job9 = new Job
             {
                 CompanyId = fptCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Automation QA / QC Engineer (Python / Selenium)",
-                Description = "Xây dựng và phát triển framework kiểm thử tự động, tích hợp CI/CD để đảm bảo chất lượng phần mềm liên tục trong các sprint Agile.\n\nTrách nhiệm:\n- Viết test script tự động cho API và Web UI.\n- Theo dõi, phân tích và báo cáo lỗi trên hệ thống quản lý dự án.",
-                Requirements = "- 2+ năm kinh nghiệm kiểm thử tự động (Automation Testing) với Python hoặc Java.\n- Kinh nghiệm kiểm thử API, Performance Testing và hiểu biết về CI/CD pipeline.",
-                Benefits = "- Lương 15 - 25 triệu/tháng, xét tăng lương định kỳ 2 lần/năm.\n- Cơ hội thăng tiến lên QA Lead và tham gia các dự án lớn đa quốc gia.",
+                Description = "Build and evolve test automation frameworks integrated with CI/CD to ensure continuous software quality across Agile sprints.\n\nResponsibilities:\n- Write automated test scripts for APIs and Web UI.\n- Track, analyze, and report defects in project management tools.",
+                Requirements = "- 2+ years of Automation Testing experience with Python or Java.\n- Experience in API testing, Performance Testing, and CI/CD pipeline integration.",
+                Benefits = "- Salary 15 - 25 million VND/month with bi-annual salary reviews.\n- Career growth path to QA Lead on large multinational projects.",
                 CategoryId = qaCategory?.Id,
                 LevelId = middleLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,
@@ -511,9 +511,9 @@ public static class DemoDataSeeder
                 CompanyId = fptCompany.Id,
                 PostedById = recruiterUser.Id,
                 Title = "Technical Product Manager (TPM / Scrum Master)",
-                Description = "Định hình tầm nhìn sản phẩm, quản lý Product Backlog và dẫn dắt đội ngũ kỹ sư phát triển sản phẩm công nghệ chuyển đổi số thế hệ mới.\n\nTrách nhiệm:\n- Làm việc với các bên liên quan để làm rõ yêu cầu nghiệp vụ và kỹ thuật.\n- Lập kế hoạch release, quản lý tiến độ sprint và tối ưu hóa năng suất nhóm.",
-                Requirements = "- 4+ năm kinh nghiệm làm việc trong vai trò Product Owner, TPM hoặc Technical Project Manager.\n- Nền tảng kỹ thuật vững chắc, khả năng kết nối giữa yêu cầu kinh doanh và giải pháp kỹ thuật, tiếng Anh thành thạo.",
-                Benefits = "- Mức thu nhập 35 - 55 triệu/tháng tương xứng với năng lực.\n- Thưởng hiệu quả kinh doanh và gói chăm sóc sức khỏe VIP.",
+                Description = "Shape product vision, manage the Product Backlog, and lead engineering teams building next-generation digital transformation products.\n\nResponsibilities:\n- Partner with stakeholders to clarify business and technical requirements.\n- Plan releases, track sprint velocity, and optimize team delivery.",
+                Requirements = "- 4+ years of experience as a Product Owner, TPM, or Technical Project Manager.\n- Strong technical background, ability to bridge business needs and engineering solutions, and fluent English.",
+                Benefits = "- Compensation 35 - 55 million VND/month commensurate with impact.\n- Performance bonus and VIP healthcare package.",
                 CategoryId = pmCategory?.Id,
                 LevelId = managerLevel?.Id,
                 EmploymentTypeId = fullTime?.Id,

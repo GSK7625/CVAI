@@ -1,0 +1,71 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 2190 >>
+stream
+BT
+/F1 10 Tf
+45 755 Td
+14 TL
+(Nguyen Quoc F - Principal Backend & Fullstack Software Engineer) Tj
+T* (Email: nguyenquocf@example.com | Phone: 0988888888 | Hanoi, Vietnam) Tj
+T* () Tj
+T* (SUMMARY) Tj
+T* (Senior Software Engineer with 6+ years of paid work experience architecting) Tj
+T* (high-throughput backend APIs, data pipelines, and cloud-native web applications) Tj
+T* (using Python \(FastAPI\), C# \(.NET 8\), TypeScript \(React\), PostgreSQL, Docker, and AWS.) Tj
+T* () Tj
+T* (WORK EXPERIENCE) Tj
+T* (Lead Backend Engineer - VinTech Cloud Platform \(01/2023 - Present, 46 months\)) Tj
+T* (- Paid work: built and scaled Python \(FastAPI\) and .NET 8 \(ASP.NET Core\) microservices) Tj
+T* (  serving 1.5M+ daily requests at 99.95% SLA with p95 latency under 45ms.) Tj
+T* (- Paid work experience with Python: designed async background workers, ML inference) Tj
+T* (  APIs, and automated pytest suites with 90% code coverage.) Tj
+T* (- Optimized PostgreSQL and SQL Server queries, composite indexes, and Redis caching,) Tj
+T* (  cutting database CPU utilization by 48%.) Tj
+T* (- Containerized all services with Docker, orchestrated on AWS EKS \(Kubernetes\), and) Tj
+T* (  managed Git branching, code reviews, and GitHub Actions CI/CD pipelines.) Tj
+T* () Tj
+T* (Fullstack Software Engineer - FPT Digital Systems \(06/2020 - 12/2022, 31 months\)) Tj
+T* (- Paid backend and frontend work: delivered RESTful APIs in ASP.NET Core / EF Core) Tj
+T* (  and modern ReactJS / TypeScript / Tailwind CSS dashboards.) Tj
+T* (- Used Git workflows, Docker Compose, and RabbitMQ for event-driven processing.) Tj
+T* () Tj
+T* (PROJECTS) Tj
+T* (Open-Source Analytics Warehouse \(Independent Project\)) Tj
+T* (- Independent project: designed a PostgreSQL analytics schema and complex SQL queries) Tj
+T* (  \(CTEs, window functions, partitioned tables\) for 20M+ rows with FastAPI & React.) Tj
+T* () Tj
+T* (EDUCATION) Tj
+T* (B.Sc. in Computer Science \(Honors, GPA 3.85/4.0\) - HUST \(2016 - 2020\)) Tj
+T* () Tj
+T* (SKILLS) Tj
+T* (Python, FastAPI, C#, .NET 8, ASP.NET Core, Entity Framework Core, TypeScript,) Tj
+T* (ReactJS, SQL, PostgreSQL, SQL Server, Redis, Docker, Kubernetes, AWS, Git, CI/CD) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2552
+%%EOF

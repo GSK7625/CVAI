@@ -8,6 +8,8 @@ using FutureCV.Application.Features.AiMatching.DTOs;
 using FutureCV.Application.Features.Auth.DTOs;
 using FutureCV.Application.Features.Auth.Interfaces;
 using FutureCV.Application.Features.Candidate.Services;
+using FutureCV.Application.Features.Job.DTOs;
+using FutureCV.Application.Features.Job.Services;
 using FutureCV.Application.Features.JobApplication.DTOs;
 using FutureCV.Application.Features.JobApplication.Services;
 using FutureCV.Domain.Entities;
@@ -341,11 +343,12 @@ public class ProductionReadinessFixesTests
             })
             .Build();
 
+        var dbName = Guid.NewGuid().ToString();
         services.AddSingleton<IConfiguration>(config);
         services.AddLogging();
         services.AddDataProtection();
         services.AddDbContext<ApplicationDbContext>(o => o
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(dbName)
             .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning)));
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
@@ -459,5 +462,83 @@ public class ProductionReadinessFixesTests
         var refreshAfterReset2 = await auth.RefreshTokenAsync(new RefreshTokenRequest { RefreshToken = session2.Data!.RefreshToken });
         Assert.False(refreshAfterReset1.IsSuccess);
         Assert.False(refreshAfterReset2.IsSuccess);
+    }
+
+    [Fact]
+    public async Task SampleJobsSeeder_Seeds500JobsIdempotently()
+    {
+        var (provider, _) = BuildAuthTestProvider();
+        using var _ = provider;
+
+        await ReferenceDataSeeder.SeedAsync(provider);
+
+        using (var scope = provider.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var company = new Company { Name = "Seed Corp", TaxCode = "9999999999", VerifiedStatus = CompanyVerificationStatus.Verified };
+            db.Companies.Add(company);
+            await db.SaveChangesAsync();
+
+            db.Employers.Add(new Employer { UserId = Guid.NewGuid(), CompanyId = company.Id, FullName = "Seed HR" });
+            await db.SaveChangesAsync();
+        }
+
+        await SampleJobsSeeder.SeedAsync(provider, targetTotalJobs: 500);
+        await SampleJobsSeeder.SeedAsync(provider, targetTotalJobs: 500);
+
+        using (var verifyScope = provider.CreateScope())
+        {
+            var db = verifyScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            Assert.Equal(500, await db.Jobs.CountAsync());
+            Assert.True(await db.JobSkills.CountAsync() >= 1500);
+            Assert.All(await db.Jobs.Take(20).ToListAsync(), j =>
+            {
+                Assert.False(string.IsNullOrWhiteSpace(j.Title));
+                Assert.False(string.IsNullOrWhiteSpace(j.Requirements));
+                Assert.NotNull(j.CategoryId);
+                Assert.NotNull(j.LocationId);
+            });
+        }
+    }
+
+    [Fact]
+    public async Task HomeHighlights_CountsOnlyOpenApprovedJobs_AndSearchSupportsCompanyAndParentCategory()
+    {
+        using var db = CreateDbContext();
+        var parentCat = new JobCategory { Id = Guid.NewGuid(), Name = "Công nghệ thông tin / Phần mềm" };
+        var childCat = new JobCategory { Id = Guid.NewGuid(), Name = "Lập trình Backend", ParentId = parentCat.Id, Parent = parentCat };
+        var companyA = new Company { Id = Guid.NewGuid(), Name = "MoMo Fintech", TaxCode = "0305196215", Industry = "Fintech", VerifiedStatus = CompanyVerificationStatus.Verified };
+        var companyB = new Company { Id = Guid.NewGuid(), Name = "VNG Corp", TaxCode = "0309999999", Industry = "Internet", VerifiedStatus = CompanyVerificationStatus.Verified };
+        db.JobCategories.AddRange(parentCat, childCat);
+        db.Companies.AddRange(companyA, companyB);
+
+        db.Jobs.AddRange(
+            new Job { CompanyId = companyA.Id, PostedById = Guid.NewGuid(), Title = "Backend Dev", Description = "API", CategoryId = childCat.Id, ApprovalStatus = JobApprovalStatus.Approved, IsActive = true },
+            new Job { CompanyId = companyA.Id, PostedById = Guid.NewGuid(), Title = "Data Engineer", Description = "ETL", CategoryId = parentCat.Id, ApprovalStatus = JobApprovalStatus.Approved, IsActive = true },
+            // Closed & Pending jobs must NOT be counted
+            new Job { CompanyId = companyA.Id, PostedById = Guid.NewGuid(), Title = "Closed Role", Description = "Closed", CategoryId = childCat.Id, ApprovalStatus = JobApprovalStatus.Approved, IsActive = false },
+            new Job { CompanyId = companyB.Id, PostedById = Guid.NewGuid(), Title = "Pending Role", Description = "Pending", CategoryId = childCat.Id, ApprovalStatus = JobApprovalStatus.Pending, IsActive = true },
+            new Job { CompanyId = companyB.Id, PostedById = Guid.NewGuid(), Title = "Open VNG Role", Description = "Cloud", CategoryId = childCat.Id, ApprovalStatus = JobApprovalStatus.Approved, IsActive = true });
+        await db.SaveChangesAsync();
+
+        var jobService = new JobService(db);
+        var highlights = await jobService.GetHomeHighlightsAsync();
+        Assert.True(highlights.IsSuccess);
+        Assert.Equal(2, highlights.Data!.FeaturedCompanies.Count);
+        Assert.Equal("MoMo Fintech", highlights.Data.FeaturedCompanies[0].Name);
+        Assert.Equal(2, highlights.Data.FeaturedCompanies[0].OpenJobsCount);
+        Assert.Equal(1, highlights.Data.FeaturedCompanies[1].OpenJobsCount);
+
+        Assert.Single(highlights.Data.TopCategories);
+        Assert.Equal(parentCat.Id, highlights.Data.TopCategories[0].Id);
+        Assert.Equal(3, highlights.Data.TopCategories[0].OpenJobsCount);
+
+        var byCompany = await jobService.SearchJobsAsync(new JobFilterRequest(Keyword: "MoMo"));
+        Assert.True(byCompany.IsSuccess);
+        Assert.Equal(2, byCompany.Data!.TotalCount);
+
+        var byParentCategory = await jobService.SearchJobsAsync(new JobFilterRequest(CategoryId: parentCat.Id));
+        Assert.True(byParentCategory.IsSuccess);
+        Assert.Equal(3, byParentCategory.Data!.TotalCount);
     }
 }

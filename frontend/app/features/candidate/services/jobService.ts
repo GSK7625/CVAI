@@ -11,6 +11,7 @@ import type {
   ApiPaged,
   ApplyJobRequest,
   ApplyJobResponse,
+  HomeHighlightsResponse,
   JobMatchPreviewResponse,
   Job,
   JobFilters,
@@ -31,6 +32,7 @@ export interface IJobService {
   previewMatch(jobId: string, cvId?: string, signal?: AbortSignal): Promise<JobMatchPreviewResponse>;
   similar(id: string, categoryId?: string, signal?: AbortSignal): Promise<Job[]>;
   getMasterData(signal?: AbortSignal): Promise<JobMasterData>;
+  getHomeHighlights(signal?: AbortSignal): Promise<HomeHighlightsResponse>;
 }
 
 /**
@@ -285,5 +287,8 @@ export function jobService(): IJobService {
         },
         () => ({ ...DEMO_MASTER_DATA, isDemoFallback: true }),
       ),
+
+    getHomeHighlights: (signal) =>
+      fetcher<HomeHighlightsResponse>("/api/jobs/home-highlights", { method: "GET", signal }),
   };
 }

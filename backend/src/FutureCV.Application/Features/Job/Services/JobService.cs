@@ -264,28 +264,37 @@ public class JobService : IJobService
     // Public / Candidate Search & Details
     // -------------------------------------------------------------------------
 
+    private IQueryable<Job> OpenPublicJobsQuery(DateTime now) =>
+        _context.Jobs
+            .AsNoTracking()
+            .Where(j => !j.IsDeleted &&
+                        !j.IsBanned &&
+                        j.IsActive &&
+                        j.ApprovalStatus == JobApprovalStatus.Approved &&
+                        (!j.Deadline.HasValue || j.Deadline.Value >= now));
+
     public async Task<ServiceResult<PagedResult<JobListResponse>>> SearchJobsAsync(
         JobFilterRequest filter, CancellationToken cancellationToken = default)
     {
-        var now = DateTime.UtcNow;
+        var query = OpenPublicJobsQuery(DateTime.UtcNow);
 
-        var query = _context.Jobs
-            .AsNoTracking()
-            .Where(j => !j.IsDeleted && !j.IsBanned && j.IsActive && j.ApprovalStatus == JobApprovalStatus.Approved);
-
-        // Exclude expired jobs
-        query = query.Where(j => !j.Deadline.HasValue || j.Deadline.Value >= now);
-
-        // 1. Keyword search (Title or Description)
+        // 1. Keyword search (Title, Description, or Company Name)
         if (!string.IsNullOrWhiteSpace(filter.Keyword))
         {
             var kw = filter.Keyword.Trim().ToLower();
-            query = query.Where(j => j.Title.ToLower().Contains(kw) || j.Description.ToLower().Contains(kw));
+            query = query.Where(j =>
+                j.Title.ToLower().Contains(kw) ||
+                j.Description.ToLower().Contains(kw) ||
+                j.Company.Name.ToLower().Contains(kw));
         }
 
-        // 2. Taxonomy filters
+        // 2. Taxonomy filters (matches selected category or its sub-categories)
         if (filter.CategoryId.HasValue)
-            query = query.Where(j => j.CategoryId == filter.CategoryId.Value);
+        {
+            query = query.Where(j =>
+                j.CategoryId == filter.CategoryId.Value ||
+                (j.Category != null && j.Category.ParentId == filter.CategoryId.Value));
+        }
 
         if (filter.LevelId.HasValue)
             query = query.Where(j => j.LevelId == filter.LevelId.Value);
@@ -406,6 +415,75 @@ public class JobService : IJobService
         await _context.SaveChangesAsync(cancellationToken);
 
         return ServiceResult.Success(true);
+    }
+
+    public async Task<ServiceResult<HomeHighlightsResponse>> GetHomeHighlightsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var openJobs = OpenPublicJobsQuery(DateTime.UtcNow);
+
+        var companyCounts = await openJobs
+            .Where(j => !j.Company.IsDeleted)
+            .GroupBy(j => j.CompanyId)
+            .Select(g => new { CompanyId = g.Key, Count = g.Count() })
+            .OrderByDescending(x => x.Count)
+            .Take(12)
+            .ToListAsync(cancellationToken);
+
+        var companyIds = companyCounts.Select(x => x.CompanyId).ToList();
+        var companiesById = await _context.Companies
+            .AsNoTracking()
+            .Where(c => companyIds.Contains(c.Id) && !c.IsDeleted)
+            .ToDictionaryAsync(c => c.Id, cancellationToken);
+
+        var featuredCompanies = companyCounts
+            .Where(x => companiesById.ContainsKey(x.CompanyId))
+            .Select(x =>
+            {
+                var company = companiesById[x.CompanyId];
+                return new FeaturedCompanyHighlight(
+                    company.Id,
+                    company.Name,
+                    company.LogoUrl,
+                    company.Industry,
+                    x.Count);
+            })
+            .OrderByDescending(c => c.OpenJobsCount)
+            .ThenBy(c => c.Name)
+            .Take(4)
+            .ToList();
+
+        var categoryCounts = await openJobs
+            .Where(j => j.CategoryId != null)
+            .GroupBy(j => j.CategoryId!.Value)
+            .Select(g => new { CategoryId = g.Key, Count = g.Count() })
+            .ToListAsync(cancellationToken);
+
+        var allCategories = await _context.JobCategories
+            .AsNoTracking()
+            .ToDictionaryAsync(c => c.Id, cancellationToken);
+
+        var topCategories = categoryCounts
+            .Where(x => allCategories.ContainsKey(x.CategoryId))
+            .Select(x =>
+            {
+                var cat = allCategories[x.CategoryId];
+                var root = cat.ParentId.HasValue && allCategories.TryGetValue(cat.ParentId.Value, out var parent)
+                    ? parent
+                    : cat;
+                return new { RootId = root.Id, RootName = root.Name, x.Count };
+            })
+            .GroupBy(x => new { x.RootId, x.RootName })
+            .Select(g => new TopCategoryHighlight(
+                g.Key.RootId,
+                g.Key.RootName,
+                g.Sum(x => x.Count)))
+            .OrderByDescending(c => c.OpenJobsCount)
+            .ThenBy(c => c.Name)
+            .Take(8)
+            .ToList();
+
+        return ServiceResult.Success(new HomeHighlightsResponse(featuredCompanies, topCategories));
     }
 
     // -------------------------------------------------------------------------

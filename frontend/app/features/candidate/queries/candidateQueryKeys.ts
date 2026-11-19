@@ -4,6 +4,7 @@ export const candidateQueryKeys = {
     list: (filters: unknown) => ["candidate", "jobs", "list", filters] as const,
     detail: (id: string) => ["candidate", "jobs", "detail", id] as const,
     masterData: ["candidate", "jobs", "master-data"] as const,
+    homeHighlights: ["candidate", "jobs", "home-highlights"] as const,
   },
   savedJobs: {
     all: ["candidate", "saved-jobs"] as const,

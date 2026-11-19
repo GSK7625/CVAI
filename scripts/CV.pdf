@@ -1,0 +1,59 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1170 >>
+stream
+BT
+/F1 11 Tf
+50 760 Td
+15 TL
+(Nguyen Van A - Backend Developer) Tj
+T* (Email: nguyenvana@example.com | Phone: 0901234567 | Hanoi, Vietnam) Tj
+T* () Tj
+T* (SUMMARY) Tj
+T* (Backend Developer with 3 years of paid work experience building RESTful APIs and data services.) Tj
+T* () Tj
+T* (WORK EXPERIENCE) Tj
+T* (Backend Developer - FPT Software \\(01/2023 - Present, 36 months\\)) Tj
+T* (- Paid backend developer experience: 36 months building Python and FastAPI microservices.) Tj
+T* (- Paid work: used Python to implement HTTP endpoints, authentication, and background workers.) Tj
+T* (- Used Git for code reviews, branching, and CI/CD workflows.) Tj
+T* () Tj
+T* (PROJECTS) Tj
+T* (Sales Reporting Analytics \\(Independent Project\\)) Tj
+T* (- Independent project: used SQL \\(PostgreSQL\\) to query a reporting database and optimize indexes.) Tj
+T* (- Built automated test suites and API documentation.) Tj
+T* () Tj
+T* (EDUCATION) Tj
+T* (B.Sc. in Computer Science - Hanoi University of Science and Technology \\(2018 - 2022\\)) Tj
+T* () Tj
+T* (SKILLS) Tj
+T* (Python, SQL, PostgreSQL, Git, REST API) Tj
+T* (Listed skill: Docker \\(containerized local development\\).) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1533
+%%EOF

@@ -1,5 +1,6 @@
-import { memo, useMemo, useRef, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
 import {
   IconBriefcase,
@@ -11,29 +12,29 @@ import {
   IconUsers,
   IconHeartbeat,
   IconPalette,
-  IconPhone,
-  IconMail,
-  IconHeadset,
   IconChevronLeft,
   IconChevronRight,
 } from "@tabler/icons-react";
 import { JobCard } from "~/components/shared/JobCard";
 import { useJobList } from "~/features/candidate/hooks/useJobList";
 import { useJobMasterData } from "~/features/candidate/hooks/useJobMasterData";
+import { candidateQueryKeys } from "~/features/candidate/queries/candidateQueryKeys";
+import { jobService } from "~/features/candidate/services/jobService";
 import { JobSearchBar } from "~/features/candidate/components/job-list/JobSearchBar";
 import { formatNumber } from "~/utils";
 import type { Job } from "~/features/candidate/types";
 
-const industries = [
-  { icon: IconCode, label: "IT / Phần mềm", count: 1245 },
-  { icon: IconSpeakerphone, label: "Marketing / PR", count: 856 },
-  { icon: IconCalculator, label: "Tài chính / Kế toán", count: 642 },
-  { icon: IconBriefcase, label: "Kinh doanh / Bán hàng", count: 1890 },
-  { icon: IconUsers, label: "Nhân sự (HR)", count: 420 },
-  { icon: IconTool, label: "Kỹ thuật", count: 512 },
-  { icon: IconHeartbeat, label: "Y tế / Sức khỏe", count: 325 },
-  { icon: IconPalette, label: "Thiết kế / Nghệ thuật", count: 280 },
-];
+function pickCategoryIcon(name: string) {
+  const lower = name.toLowerCase();
+  if (lower.includes("công nghệ") || lower.includes("phần mềm") || lower.includes("lập trình") || lower.includes("it")) return IconCode;
+  if (lower.includes("marketing") || lower.includes("truyền thông") || lower.includes("quảng cáo")) return IconSpeakerphone;
+  if (lower.includes("kế toán") || lower.includes("tài chính") || lower.includes("kiểm toán")) return IconCalculator;
+  if (lower.includes("nhân sự") || lower.includes("hr")) return IconUsers;
+  if (lower.includes("thiết kế") || lower.includes("sáng tạo")) return IconPalette;
+  if (lower.includes("y tế") || lower.includes("sức khỏe")) return IconHeartbeat;
+  if (lower.includes("kỹ thuật")) return IconTool;
+  return IconBriefcase;
+}
 
 const popularCategories = [
   { icon: IconBriefcase, label: "Kinh doanh / Bán hàng" },
@@ -42,13 +43,6 @@ const popularCategories = [
   { icon: IconCalculator, label: "Kế toán / Kiểm toán" },
   { icon: IconTool, label: "Kỹ thuật" },
   { icon: IconUsers, label: "Nhân sự (HR)" },
-];
-
-const featuredCompanies = [
-  { name: "Techcom Solutions VN", industry: "Công nghệ thông tin / Phần mềm", jobs: 15 },
-  { name: "Global Commerce", industry: "Thương mại điện tử / Bán lẻ", jobs: 8 },
-  { name: "Vietnam Healthcare", industry: "Y tế / Chăm sóc sức khỏe", jobs: 24 },
-  { name: "EduTech VN", industry: "Giáo dục / Đào tạo", jobs: 12 },
 ];
 
 const fadeUp = {
@@ -92,7 +86,6 @@ export default function HomePage() {
   const { data: masterData, isLoading: loadingMasterData } = useJobMasterData();
   const [activeChip, setActiveChip] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const hotlineRef = useRef<HTMLDivElement>(null);
 
   const resolveCategoryHref = (label: string) => {
     if (masterData?.categories && masterData.categories.length > 0) {
@@ -145,6 +138,15 @@ export default function HomePage() {
     page,
     pageSize: 8,
   });
+
+  const { data: highlights, isLoading: loadingHighlights } = useQuery({
+    queryKey: candidateQueryKeys.jobs.homeHighlights,
+    queryFn: ({ signal }) => jobService().getHomeHighlights(signal),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const featuredCompanies = highlights?.featuredCompanies ?? [];
+  const topCategories = highlights?.topCategories ?? [];
 
   return (
     <div>
@@ -347,31 +349,54 @@ export default function HomePage() {
             <h2 className="mb-8 text-center text-headline text-navy">Công ty nổi bật</h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredCompanies.map((company, i) => (
-              <motion.article
-                key={company.name}
-                variants={fadeUp}
-                custom={i + 1}
-                initial="hidden"
-                whileInView="visible"
-                viewport={sharedViewport}
-                className="group flex h-[210px] flex-col justify-between rounded-xl border border-border-subtle bg-surface p-4 text-center shadow-sm transition-all hover:border-gold/60 hover:shadow-md"
-              >
-                <div className="flex flex-col items-center">
-                  <div className="mb-2.5 flex h-14 w-14 items-center justify-center rounded-xl border border-border-subtle bg-surface-low">
-                    <IconDeviceDesktop size={26} stroke={1.4} className="text-ink-muted" />
-                  </div>
-                  <h3 className="mb-1 line-clamp-1 text-label font-bold text-navy">{company.name}</h3>
-                  <p className="line-clamp-1 text-label-sm text-ink-muted">{company.industry}</p>
-                </div>
-                <Link
-                  to={`/jobs?q=${encodeURIComponent(company.name)}`}
-                  className="w-full rounded-lg bg-navy-secondary/10 px-3 py-2 text-label-sm font-semibold text-navy transition-colors hover:bg-navy-secondary/20"
+            {loadingHighlights ? (
+              Array.from({ length: 4 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="h-[210px] animate-pulse rounded-xl border border-border-subtle bg-surface p-4"
+                />
+              ))
+            ) : featuredCompanies.length === 0 ? (
+              <p className="col-span-full text-center text-body-sm text-ink-muted">
+                Chưa có doanh nghiệp nào đang mở tuyển dụng.
+              </p>
+            ) : (
+              featuredCompanies.map((company, i) => (
+                <motion.article
+                  key={company.id}
+                  variants={fadeUp}
+                  custom={i + 1}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={sharedViewport}
+                  className="group flex h-[210px] flex-col justify-between rounded-xl border border-border-subtle bg-surface p-4 text-center shadow-sm transition-all hover:border-gold/60 hover:shadow-md"
                 >
-                  {company.jobs} Việc làm đang tuyển
-                </Link>
-              </motion.article>
-            ))}
+                  <div className="flex flex-col items-center">
+                    <div className="mb-2.5 flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-border-subtle bg-surface-low p-1.5">
+                      {company.logoUrl ? (
+                        <img
+                          src={company.logoUrl}
+                          alt={company.name}
+                          className="h-full w-full object-contain"
+                        />
+                      ) : (
+                        <IconDeviceDesktop size={26} stroke={1.4} className="text-ink-muted" />
+                      )}
+                    </div>
+                    <h3 className="mb-1 line-clamp-1 text-label font-bold text-navy">{company.name}</h3>
+                    <p className="line-clamp-1 text-label-sm text-ink-muted">
+                      {company.industry || "Doanh nghiệp tuyển dụng"}
+                    </p>
+                  </div>
+                  <Link
+                    to={`/jobs?q=${encodeURIComponent(company.name)}`}
+                    className="w-full rounded-lg bg-navy-secondary/10 px-3 py-2 text-label-sm font-semibold text-navy transition-colors hover:bg-navy-secondary/20"
+                  >
+                    {formatNumber(company.openJobsCount)} Việc làm đang tuyển
+                  </Link>
+                </motion.article>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -389,74 +414,49 @@ export default function HomePage() {
             <h2 className="mb-8 text-center text-headline text-navy">Top ngành nghề nổi bật</h2>
           </motion.div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4">
-            {industries.map((ind, i) => (
-              <motion.div
-                key={ind.label}
-                variants={fadeUp}
-                custom={i + 1}
-                initial="hidden"
-                whileInView="visible"
-                viewport={sharedViewport}
-              >
-                <Link
-                  to={resolveCategoryHref(ind.label)}
-                  className="group flex h-[116px] flex-col items-center justify-center rounded-xl border border-border-subtle bg-surface p-3 text-center shadow-sm transition-all hover:border-gold/60 hover:shadow-md"
-                >
-                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-navy-secondary/5 transition-colors group-hover:bg-gold/10">
-                    <ind.icon
-                      size={22}
-                      stroke={1.6}
-                      className="text-navy transition-colors group-hover:text-gold"
-                    />
-                  </div>
-                  <h3 className="line-clamp-1 text-label font-bold text-navy">{ind.label}</h3>
-                  <p className="mt-0.5 text-[11px] text-ink-muted">
-                    {formatNumber(ind.count)} việc làm
-                  </p>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Hotline / Support Banner ──────────────────────── */}
-      <section
-        ref={hotlineRef}
-        className="w-full border-t border-border-subtle bg-surface py-12"
-      >
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-          <div className="flex flex-col items-start justify-between gap-6 rounded-2xl border border-border-subtle bg-background p-6 sm:p-8 md:flex-row md:items-center shadow-sm">
-            <div className="flex items-center gap-4 sm:gap-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gold/15 text-gold sm:h-16 sm:w-16">
-                <IconHeadset size={32} stroke={2} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-navy sm:text-3xl">
-                  Tìm việc khó đã có <span className="text-gold">FutureCV</span>
-                </h3>
-                <p className="mt-1.5 text-body text-ink-variant sm:text-body-lg">
-                  Liên hệ hotline hoặc gửi email để được đội ngũ chuyên viên hỗ trợ nhanh nhất.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
-              <a
-                href="tel:1900068889"
-                className="flex flex-1 items-center justify-center gap-2.5 rounded-xl bg-navy px-6 py-3.5 text-body font-bold text-white shadow-sm transition hover:bg-navy-secondary active:scale-[0.98] sm:flex-initial sm:text-body-lg"
-              >
-                <IconPhone size={22} stroke={2.2} />
-                <span>1900 068 889 (Nhánh 2)</span>
-              </a>
-              <a
-                href="mailto:hotro@futurecv.vn"
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border-strong bg-surface px-5 py-3.5 text-body font-semibold text-navy transition hover:bg-surface-low active:scale-[0.98] sm:flex-initial sm:text-body-lg"
-              >
-                <IconMail size={20} stroke={2} />
-                <span>hotro@futurecv.vn</span>
-              </a>
-            </div>
+            {loadingHighlights ? (
+              Array.from({ length: 8 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="h-[116px] animate-pulse rounded-xl border border-border-subtle bg-surface-low p-3"
+                />
+              ))
+            ) : topCategories.length === 0 ? (
+              <p className="col-span-full text-center text-body-sm text-ink-muted">
+                Chưa có ngành nghề nào có tin tuyển dụng đang mở.
+              </p>
+            ) : (
+              topCategories.map((cat, i) => {
+                const CategoryIcon = pickCategoryIcon(cat.name);
+                return (
+                  <motion.div
+                    key={cat.id}
+                    variants={fadeUp}
+                    custom={i + 1}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={sharedViewport}
+                  >
+                    <Link
+                      to={`/jobs?categoryId=${encodeURIComponent(cat.id)}`}
+                      className="group flex h-[116px] flex-col items-center justify-center rounded-xl border border-border-subtle bg-surface p-3 text-center shadow-sm transition-all hover:border-gold/60 hover:shadow-md"
+                    >
+                      <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-navy-secondary/5 transition-colors group-hover:bg-gold/10">
+                        <CategoryIcon
+                          size={22}
+                          stroke={1.6}
+                          className="text-navy transition-colors group-hover:text-gold"
+                        />
+                      </div>
+                      <h3 className="line-clamp-1 text-label font-bold text-navy">{cat.name}</h3>
+                      <p className="mt-0.5 text-[11px] text-ink-muted">
+                        {formatNumber(cat.openJobsCount)} việc làm
+                      </p>
+                    </Link>
+                  </motion.div>
+                );
+              })
+            )}
           </div>
         </div>
       </section>

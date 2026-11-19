@@ -413,8 +413,8 @@ public class CandidateService : ICandidateService
                 $"Failed to save CV record: {ex.Message}", ServiceErrorType.Infrastructure);
         }
 
-        // Evidence mode extracts original PDF text on the first match preview.
-        if (_aiCvClient != null && _evidenceClient?.Enabled != true)
+        // Run CV quality parsing via backend-ai (best-effort) even when Evidence AI is enabled.
+        if (_aiCvClient != null)
         {
             try
             {
