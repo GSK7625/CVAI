@@ -1,0 +1,529 @@
+{
+  "source": "synthetic_authored",
+  "split": "pdf_diagnostic",
+  "language": "en",
+  "samples": [
+    {
+      "sample_id": "jake-pilot-01",
+      "pdf": "resume-01.pdf",
+      "pdf_sha256": "00451276487130edccec6f6f2d88087cb844bf0ea97af68bdf170550927724ab",
+      "cv_text": "Alex Reed\nBackend Developer  |  alex.reed@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nBackend Developer\nJan 2024 - Jun 2025\nNorthline Transit\n- At Northline Transit I wrote Python jobs to reconcile missed fare payments.\n- Compared settlement totals with operator reports before each release.\nProjects\nFare Ledger\n- I built an independent Java project to flag missing station codes.\nTechnical Skills\nAdditional tools: Redis.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Use Python during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Use Java during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Apply Java in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Apply Redis in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r5",
+          "text": "Use Docker during paid employment.",
+          "weight": 3
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "At Northline Transit I wrote Python jobs to reconcile missed fare payments.",
+            "span": {
+              "start": 192,
+              "end": 267,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "I built an independent Java project to flag missing station codes.",
+            "span": {
+              "start": 363,
+              "end": 429,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "I built an independent Java project to flag missing station codes.",
+            "span": {
+              "start": 363,
+              "end": 429,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "partial",
+            "evidence": "Additional tools: Redis.",
+            "span": {
+              "start": 447,
+              "end": 471,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake-pilot-02",
+      "pdf": "resume-02.pdf",
+      "pdf_sha256": "c7dd4187e1e86d5c75ce0e67a9ea0f8f45bf00384864f7ac79a64c803ec8b391",
+      "cv_text": "Sam Park\nBackend Developer  |  sam.park@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nBackend Developer\nJan 2024 - Jun 2025\nBeacon Archive\n- I used Java at Beacon Archive to restore interrupted document imports.\n- Added retry tests for corrupt records and reviewed import failures with support.\nProjects\nShelf Index\n- For my own Python project I indexed scanned catalogues by accession number.\nTechnical Skills\nAdditional tools: Docker.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Use Java during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Use Python during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Apply Python in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Apply Docker in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r5",
+          "text": "Use Redis during paid employment.",
+          "weight": 3
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "I used Java at Beacon Archive to restore interrupted document imports.",
+            "span": {
+              "start": 187,
+              "end": 257,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "For my own Python project I indexed scanned catalogues by accession number.",
+            "span": {
+              "start": 364,
+              "end": 439,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "For my own Python project I indexed scanned catalogues by accession number.",
+            "span": {
+              "start": 364,
+              "end": 439,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "partial",
+            "evidence": "Additional tools: Docker.",
+            "span": {
+              "start": 457,
+              "end": 482,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake-pilot-03",
+      "pdf": "resume-03.pdf",
+      "pdf_sha256": "7a19700647d3cc0e8c5f16c2d41633e54d919780d3a245af7deb14184348e054",
+      "cv_text": "Robin Vale\nFrontend Developer  |  robin.vale@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nFrontend Developer\nJan 2024 - Jun 2025\nOrchard Studio\n- I maintained the JavaScript checkout form at Orchard Studio and fixed duplicate submissions.\n- Tested keyboard navigation with the design team before release.\nProjects\nOpen Calendar\n- I prototyped a React appointment calendar in an independent project.\nTechnical Skills\nAdditional tools: CSS.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Use JavaScript during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Use React during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Apply React in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Apply CSS in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r5",
+          "text": "Use React Native during paid employment.",
+          "weight": 3
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "I maintained the JavaScript checkout form at Orchard Studio and fixed duplicate submissions.",
+            "span": {
+              "start": 193,
+              "end": 285,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "I prototyped a React appointment calendar in an independent project.",
+            "span": {
+              "start": 377,
+              "end": 445,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "I prototyped a React appointment calendar in an independent project.",
+            "span": {
+              "start": 377,
+              "end": 445,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "partial",
+            "evidence": "Additional tools: CSS.",
+            "span": {
+              "start": 463,
+              "end": 485,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake-pilot-04",
+      "pdf": "resume-04.pdf",
+      "pdf_sha256": "e55e442a5b78420bd4675819dbcdb3f68a0d1967e9e792b0b3314c0b9692e7a9",
+      "cv_text": "Casey Lin\nMobile Developer  |  casey.lin@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nMobile Developer\nJan 2024 - Jun 2025\nLakehouse Maps\n- I shipped React Native map controls as a mobile developer at Lakehouse Maps.\n- Added offline-state tests for routes with missing coordinates.\nProjects\nRoute Cards\n- My independent TypeScript project turns walking routes into printable itineraries.\nTechnical Skills\nAdditional tools: React.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Use React Native during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Use TypeScript during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Apply TypeScript in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Apply React in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r5",
+          "text": "Use Java during paid employment.",
+          "weight": 3
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "I shipped React Native map controls as a mobile developer at Lakehouse Maps.",
+            "span": {
+              "start": 187,
+              "end": 263,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "My independent TypeScript project turns walking routes into printable itineraries.",
+            "span": {
+              "start": 352,
+              "end": 434,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "My independent TypeScript project turns walking routes into printable itineraries.",
+            "span": {
+              "start": 352,
+              "end": 434,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "partial",
+            "evidence": "Additional tools: React.",
+            "span": {
+              "start": 452,
+              "end": 476,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake-pilot-05",
+      "pdf": "resume-05.pdf",
+      "pdf_sha256": "e795746e16f1eb7f055b2fe1ab14c1a9330874438e3e3dde5bc4ed8dc6a311d9",
+      "cv_text": "Avery Dale\nData Analyst  |  avery.dale@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nData Analyst\nJan 2024 - Jun 2025\nDelta Orchard\n- I wrote SQL checks at Delta Orchard to find duplicate shipment records.\n- Summarized late deliveries for operations staff each Friday.\nProjects\nHarvest Notes\n- I used Python in a personal project to compare harvest dates across regions.\nTechnical Skills\nAdditional tools: Tableau.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Use SQL during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Use Python during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Apply Python in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Apply Tableau in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r5",
+          "text": "Use Spark during paid employment.",
+          "weight": 3
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "I wrote SQL checks at Delta Orchard to find duplicate shipment records.",
+            "span": {
+              "start": 180,
+              "end": 251,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "I used Python in a personal project to compare harvest dates across regions.",
+            "span": {
+              "start": 340,
+              "end": 416,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "I used Python in a personal project to compare harvest dates across regions.",
+            "span": {
+              "start": 340,
+              "end": 416,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "partial",
+            "evidence": "Additional tools: Tableau.",
+            "span": {
+              "start": 434,
+              "end": 460,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "jake-pilot-06",
+      "pdf": "resume-06.pdf",
+      "pdf_sha256": "de931af6e49724107283cc06c7d4341c6aedcc6682ba2b72dcbf765383ac5720",
+      "cv_text": "Morgan Brook\nPlatform Engineer  |  morgan.brook@example.org\nEducation\nWestfield Institute of Technology\nB.S. in Computer Science\nExperience\nPlatform Engineer\nJan 2024 - Jun 2025\nTern Systems\n- At Tern Systems I packaged the nightly billing worker with Docker.\n- Documented the rollback procedure after testing it with the on-call engineer.\nProjects\nStaging Lab\n- I used Terraform in a personal project to recreate a small staging network.\nTechnical Skills\nAdditional tools: AWS.",
+      "requirements": [
+        {
+          "id": "r1",
+          "text": "Use Docker during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r2",
+          "text": "Use Terraform during paid employment.",
+          "weight": 3
+        },
+        {
+          "id": "r3",
+          "text": "Apply Terraform in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r4",
+          "text": "Apply AWS in an independent project.",
+          "weight": 2
+        },
+        {
+          "id": "r5",
+          "text": "Use Kubernetes during paid employment.",
+          "weight": 3
+        }
+      ],
+      "target": {
+        "assessments": [
+          {
+            "id": "r1",
+            "status": "met",
+            "evidence": "At Tern Systems I packaged the nightly billing worker with Docker.",
+            "span": {
+              "start": 193,
+              "end": 259,
+              "page": 1,
+              "section": "Experience"
+            }
+          },
+          {
+            "id": "r2",
+            "status": "partial",
+            "evidence": "I used Terraform in a personal project to recreate a small staging network.",
+            "span": {
+              "start": 363,
+              "end": 438,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r3",
+            "status": "met",
+            "evidence": "I used Terraform in a personal project to recreate a small staging network.",
+            "span": {
+              "start": 363,
+              "end": 438,
+              "page": 1,
+              "section": "Projects"
+            }
+          },
+          {
+            "id": "r4",
+            "status": "partial",
+            "evidence": "Additional tools: AWS.",
+            "span": {
+              "start": 456,
+              "end": 478,
+              "page": 1,
+              "section": "Technical Skills"
+            }
+          },
+          {
+            "id": "r5",
+            "status": "not_evidenced",
+            "evidence": null,
+            "span": null
+          }
+        ]
+      }
+    }
+  ]
+}
