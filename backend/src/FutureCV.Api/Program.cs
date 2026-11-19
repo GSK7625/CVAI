@@ -1,7 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using FutureCV.Api.Middlewares;
 using FutureCV.Application;
 using FutureCV.Infrastructure;
+using FutureCV.Infrastructure.Identity;
 using FutureCV.Infrastructure.Persistence.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -58,6 +61,30 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
         ClockSkew = TimeSpan.Zero
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = async context =>
+        {
+            var userId = context.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? context.Principal?.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            var stamp = context.Principal?.FindFirst("stamp")?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                context.Fail("Missing user identifier.");
+                return;
+            }
+
+            var userManager = context.HttpContext.RequestServices
+                .GetRequiredService<UserManager<AppUser>>();
+            var user = await userManager.FindByIdAsync(userId);
+            if (user is null || user.IsDeleted ||
+                (!string.IsNullOrEmpty(user.SecurityStamp) &&
+                 !string.Equals(user.SecurityStamp, stamp, StringComparison.Ordinal)))
+            {
+                context.Fail("Session has been invalidated.");
+            }
+        }
+    };
 });
 
 // Swagger / OpenAPI with Bearer support
@@ -90,14 +117,50 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// CORS (allow React Web & React Native during development with credentials/cookies)
+// CORS — restrict to configured frontend origins in non-development environments
+var configuredOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>()?
+    .Where(o => !string.IsNullOrWhiteSpace(o))
+    .Select(o => o.Trim().TrimEnd('/'))
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray() ?? [];
+
+var frontendOrigin = builder.Configuration["FrontendUrl"]?.Trim().TrimEnd('/');
+var allowedOrigins = !string.IsNullOrWhiteSpace(frontendOrigin) &&
+    !configuredOrigins.Contains(frontendOrigin, StringComparer.OrdinalIgnoreCase)
+    ? [.. configuredOrigins, frontendOrigin]
+    : configuredOrigins;
+
+if (!builder.Environment.IsDevelopment() && allowedOrigins.Length == 0)
+{
+    throw new InvalidOperationException(
+        "Cors:AllowedOrigins or FrontendUrl must be configured in non-development environments.");
+}
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-        policy.SetIsOriginAllowed(_ => true)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials());
+    options.AddPolicy("FrontendCors", policy =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.SetIsOriginAllowed(origin =>
+                    allowedOrigins.Contains(origin.TrimEnd('/'), StringComparer.OrdinalIgnoreCase) ||
+                    (Uri.TryCreate(origin, UriKind.Absolute, out var uri) &&
+                     (uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) ||
+                      uri.Host.Equals("127.0.0.1", StringComparison.OrdinalIgnoreCase))))
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        }
+        else
+        {
+            policy.WithOrigins(allowedOrigins)
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        }
+    });
 });
 
 // ── Pipeline ──────────────────────────────────────────────────
@@ -105,8 +168,8 @@ var app = builder.Build();
 
 app.UseExceptionHandler();
 
-// Seed database on startup (Roles, SuperAdmin, Master Reference Data)
-await DatabaseSeeder.SeedAsync(app.Services);
+// Seed database on startup (Roles, SuperAdmin, Master Reference Data; DemoData in Development only)
+await DatabaseSeeder.SeedAsync(app.Services, app.Environment.IsDevelopment());
 
 if (app.Environment.IsDevelopment())
 {
@@ -115,7 +178,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("FrontendCors");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<BannedUserMiddleware>();

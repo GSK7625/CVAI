@@ -31,6 +31,7 @@ public class AuthService : IAuthService
     private readonly IValidator<RefreshTokenRequest> _refreshTokenValidator;
     private readonly IValidator<ForgotPasswordRequest> _forgotPasswordValidator;
     private readonly IValidator<ResetPasswordRequest> _resetPasswordValidator;
+    private readonly IValidator<ChangePasswordRequest> _changePasswordValidator;
     private readonly IValidator<GoogleLoginRequest> _googleLoginValidator;
     private readonly IValidator<GoogleRegisterEmployerRequest> _googleRegisterEmployerValidator;
     private readonly ITokenCookieService _tokenCookieService;
@@ -50,6 +51,7 @@ public class AuthService : IAuthService
         IValidator<RefreshTokenRequest> refreshTokenValidator,
         IValidator<ForgotPasswordRequest> forgotPasswordValidator,
         IValidator<ResetPasswordRequest> resetPasswordValidator,
+        IValidator<ChangePasswordRequest> changePasswordValidator,
         IValidator<GoogleLoginRequest> googleLoginValidator,
         IValidator<GoogleRegisterEmployerRequest> googleRegisterEmployerValidator)
     {
@@ -67,6 +69,7 @@ public class AuthService : IAuthService
         _refreshTokenValidator = refreshTokenValidator;
         _forgotPasswordValidator = forgotPasswordValidator;
         _resetPasswordValidator = resetPasswordValidator;
+        _changePasswordValidator = changePasswordValidator;
         _googleLoginValidator = googleLoginValidator;
         _googleRegisterEmployerValidator = googleRegisterEmployerValidator;
     }
@@ -610,11 +613,65 @@ public class AuthService : IAuthService
         _ = await _userManager.SetLockoutEndDateAsync(user, null);
         _ = await _userManager.ResetAccessFailedCountAsync(user);
 
-        // Rotate SecurityStamp — invalidates ALL existing JWT + refresh tokens for this user
+        // Rotate SecurityStamp and revoke all active refresh tokens across devices
         _ = await _userManager.UpdateSecurityStampAsync(user);
+        await RevokeAllRefreshTokensAsync(user.Id, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        _tokenCookieService.DeleteRefreshToken();
 
         return ServiceResult.Success(
             new MessageResponse("Password reset successful. You can now log in with your new password."));
+    }
+
+    public async Task<ServiceResult<AuthResponse>> ChangePasswordAsync(
+        Guid userId,
+        ChangePasswordRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var validationResult = await _changePasswordValidator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            var errors = string.Join(" ", validationResult.Errors.Select(e => e.ErrorMessage));
+            return ServiceResult.Failure<AuthResponse>(errors);
+        }
+
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null || user.IsDeleted)
+        {
+            return ServiceResult.Unauthorized<AuthResponse>("Account not found or has been disabled.");
+        }
+
+        var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+        if (!result.Succeeded)
+        {
+            if (result.Errors.Any(e => e.Code == "PasswordMismatch"))
+            {
+                return ServiceResult.Failure<AuthResponse>("Current password is incorrect.");
+            }
+
+            var errors = string.Join(" ", result.Errors.Select(e => e.Description));
+            return ServiceResult.Failure<AuthResponse>(errors);
+        }
+
+        // Revoke all existing sessions before issuing a fresh token pair for the current session
+        await RevokeAllRefreshTokensAsync(user.Id, cancellationToken);
+        var authResponse = await GenerateAuthTokensAsync(user, role: null, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return ServiceResult.Success(authResponse);
+    }
+
+    private async Task RevokeAllRefreshTokensAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var activeTokens = await _context.RefreshTokens
+            .Where(t => t.UserId == userId && t.RevokedAt == null)
+            .ToListAsync(cancellationToken);
+
+        var now = DateTimeOffset.UtcNow;
+        foreach (var token in activeTokens)
+        {
+            token.RevokedAt = now;
+        }
     }
 
     public async Task<ServiceResult<MessageResponse>> DisableUserAsync(

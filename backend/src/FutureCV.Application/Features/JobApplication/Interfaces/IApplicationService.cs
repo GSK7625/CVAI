@@ -43,6 +43,9 @@ public interface IApplicationService
     Task<ServiceResult<RecruiterApplicationDetailResponse>> GetApplicationDetailAsync(
         Guid userId, Guid applicationId, CancellationToken cancellationToken = default);
 
+    Task<ServiceResult<string>> GetApplicationCvPreviewUrlAsync(
+        Guid userId, Guid applicationId, CancellationToken cancellationToken = default);
+
     Task<ServiceResult<bool>> EvaluateApplicationAsync(
         Guid userId, Guid applicationId, EvaluateApplicationRequest request, CancellationToken cancellationToken = default);
 

@@ -43,6 +43,19 @@ public class EmployerApplicationsController : ApiControllerBase
         return ToHttpResult(result);
     }
 
+    [HttpGet("applications/{id:guid}/cv-preview-url")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetApplicationCvPreviewUrl(
+        Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _applicationService.GetApplicationCvPreviewUrlAsync(GetCurrentUserId(), id, cancellationToken);
+        return ToHttpResult(result);
+    }
+
     // -------------------------------------------------------------------------
     // Candidate Internal Evaluation (P4-UC05)
     // -------------------------------------------------------------------------

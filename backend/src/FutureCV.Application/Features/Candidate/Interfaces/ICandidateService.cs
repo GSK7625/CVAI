@@ -48,6 +48,9 @@ public interface ICandidateService
     Task<ServiceResult<CvResponse>> UploadCvAsync(
         Guid userId, FileUploadRequest file, string? title, CancellationToken cancellationToken = default);
 
+    Task<ServiceResult<CvResponse>> UploadCvAsync(
+        Guid userId, FileUploadRequest file, string? title, string? rawText, string? source, CancellationToken cancellationToken = default);
+
     Task<ServiceResult<IReadOnlyList<CvResponse>>> GetCvsAsync(
         Guid userId, CancellationToken cancellationToken = default);
 

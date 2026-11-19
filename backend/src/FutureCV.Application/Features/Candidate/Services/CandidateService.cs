@@ -327,8 +327,12 @@ public class CandidateService : ICandidateService
     // CV PDF Management (P2-UC03, P2-UC07)
     // -------------------------------------------------------------------------
 
-    public async Task<ServiceResult<CvResponse>> UploadCvAsync(
+    public Task<ServiceResult<CvResponse>> UploadCvAsync(
         Guid userId, FileUploadRequest file, string? title, CancellationToken cancellationToken = default)
+        => UploadCvAsync(userId, file, title, rawText: null, source: null, cancellationToken);
+
+    public async Task<ServiceResult<CvResponse>> UploadCvAsync(
+        Guid userId, FileUploadRequest file, string? title, string? rawText, string? source, CancellationToken cancellationToken = default)
     {
         var candidate = await FindByUserIdAsync(userId, cancellationToken);
         if (candidate is null)
@@ -362,6 +366,12 @@ public class CandidateService : ICandidateService
         var hasPrimary = await _context.CandidateCvs
             .AnyAsync(cv => cv.CandidateId == candidate.Id && cv.IsPrimary && !cv.IsDeleted, cancellationToken);
 
+        var normalizedSource = string.Equals(source?.Trim(), "Builder", StringComparison.OrdinalIgnoreCase)
+            ? "Builder"
+            : "Upload";
+
+        var normalizedRawText = NormalizeOptionalRawText(rawText);
+
         var cv = new CandidateCv
         {
             CandidateId = candidate.Id,
@@ -370,14 +380,29 @@ public class CandidateService : ICandidateService
             PublicId = publicId,
             FileType = "PDF",
             FileSizeBytes = file.SizeInBytes,
-            Source = "Upload",
-            ParseStatus = "Pending",
+            Source = normalizedSource,
+            ParseStatus = normalizedRawText is not null ? "TextExtracted" : "Pending",
+            ParsedAt = normalizedRawText is not null ? DateTime.UtcNow : null,
             IsPrimary = !hasPrimary,
         };
 
         try
         {
             _context.CandidateCvs.Add(cv);
+
+            if (normalizedRawText is not null)
+            {
+                _context.CvParsers.Add(new CvParser
+                {
+                    CvId = cv.Id,
+                    RawText = normalizedRawText,
+                    ModelVersion = "builder-text-v1",
+                    ParsedAt = DateTime.UtcNow,
+                    IsVerifiedByUser = true,
+                    VerifiedAt = DateTime.UtcNow,
+                });
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
@@ -402,16 +427,27 @@ public class CandidateService : ICandidateService
                     var structuredData = FastApiCvMapper.ToStructuredCvDataDto(analysis.StructuredCv);
                     var structuredJson = JsonSerializer.Serialize(structuredData);
 
-                    var parser = new CvParser
+                    var existingParser = await _context.CvParsers
+                        .FirstOrDefaultAsync(p => p.CvId == cv.Id, cancellationToken);
+                    if (existingParser is null)
                     {
-                        CvId = cv.Id,
-                        RawText = analysis.RawText ?? structuredJson,
-                        ParsedDataJson = structuredJson,
-                        ModelVersion = "AI-v1",
-                        ParsedAt = DateTime.UtcNow,
-                        IsVerifiedByUser = false
-                    };
-                    _context.CvParsers.Add(parser);
+                        _context.CvParsers.Add(new CvParser
+                        {
+                            CvId = cv.Id,
+                            RawText = analysis.RawText ?? structuredJson,
+                            ParsedDataJson = structuredJson,
+                            ModelVersion = "AI-v1",
+                            ParsedAt = DateTime.UtcNow,
+                            IsVerifiedByUser = false
+                        });
+                    }
+                    else
+                    {
+                        existingParser.RawText = normalizedRawText ?? analysis.RawText ?? structuredJson;
+                        existingParser.ParsedDataJson = structuredJson;
+                        existingParser.ModelVersion = "AI-v1";
+                        existingParser.ParsedAt = DateTime.UtcNow;
+                    }
 
                     var evaluation = new CvEvaluation
                     {
@@ -1414,6 +1450,14 @@ public class CandidateService : ICandidateService
 
     private static StructuredCvDataDto FallbackEmptyStructuredData() =>
         new(string.Empty, null, null, null, [], [], [], []);
+
+    private static string? NormalizeOptionalRawText(string? rawText)
+    {
+        if (string.IsNullOrWhiteSpace(rawText)) return null;
+        var trimmed = rawText.Trim();
+        if (trimmed.StartsWith('{') || trimmed.StartsWith('[')) return null;
+        return trimmed.Length > 30000 ? trimmed[..30000] : trimmed;
+    }
 
     private static List<string> DeserializeList(string? json)
     {

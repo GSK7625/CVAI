@@ -149,6 +149,14 @@ export const hrService = {
     });
   },
 
+  getApplicationCvPreviewUrl(id: string) {
+    return fetcher<string>(`/api/employer/applications/${id}/cv-preview-url`, {
+      method: "GET",
+      auth: true,
+      cache: "no-store",
+    });
+  },
+
   updateApplicationStatus(id: string, input: UpdateApplicationStatusRequest) {
     return fetcher<boolean>(`/api/employer/applications/${id}/status`, {
       method: "PATCH",

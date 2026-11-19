@@ -23,6 +23,14 @@ test("translates exact auth error messages", () => {
     translateErrorMessage("Email is required."),
     "Vui lòng nhập địa chỉ email.",
   );
+  assert.equal(
+    translateErrorMessage("Current password is incorrect."),
+    "Mật khẩu hiện tại không chính xác.",
+  );
+  assert.equal(
+    translateErrorMessage("New password must be different from current password."),
+    "Mật khẩu mới phải khác mật khẩu hiện tại.",
+  );
 });
 
 test("translates ASP.NET Identity password requirements", () => {

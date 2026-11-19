@@ -13,8 +13,9 @@ namespace FutureCV.Infrastructure.Persistence.Seeders;
 public static class RoleSeeder
 {
     private static readonly string[] Roles = { "Candidate", "Employer", "Admin" };
+    private const string PasswordPlaceholder = "YOUR_SUPERADMIN_PASSWORD";
 
-    public static async Task SeedAsync(IServiceProvider serviceProvider)
+    public static async Task SeedAsync(IServiceProvider serviceProvider, bool isDevelopment = false)
     {
         using var scope = serviceProvider.CreateScope();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
@@ -35,9 +36,29 @@ public static class RoleSeeder
             }
         }
 
-        // 2. Seed Super Admin (Credentials loaded from configuration/env, with dev fallback)
-        var adminEmail = configuration?["SuperAdmin:Email"] ?? "admin@futurecv.com";
-        var adminPassword = configuration?["SuperAdmin:Password"] ?? "Admin@123456";
+        // 2. Seed Super Admin (strictly from configuration in non-development environments)
+        var configuredEmail = configuration?["SuperAdmin:Email"]?.Trim();
+        var configuredPassword = configuration?["SuperAdmin:Password"];
+        var hasValidCredentials =
+            !string.IsNullOrWhiteSpace(configuredEmail) &&
+            !string.IsNullOrWhiteSpace(configuredPassword) &&
+            !string.Equals(configuredPassword, PasswordPlaceholder, StringComparison.Ordinal);
+
+        if (!hasValidCredentials && !isDevelopment)
+        {
+            var existingAdmins = await userManager.GetUsersInRoleAsync("Admin");
+            if (existingAdmins.Count > 0)
+            {
+                logger?.LogInformation("Existing Admin account detected; skipping SuperAdmin bootstrap.");
+                return;
+            }
+
+            throw new InvalidOperationException(
+                "SuperAdmin:Email and SuperAdmin:Password must be configured in non-development environments.");
+        }
+
+        var adminEmail = !string.IsNullOrWhiteSpace(configuredEmail) ? configuredEmail : "admin@futurecv.com";
+        var adminPassword = hasValidCredentials ? configuredPassword! : "Admin@123456";
 
         var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
         if (existingAdmin == null)

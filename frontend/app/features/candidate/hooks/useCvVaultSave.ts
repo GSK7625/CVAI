@@ -9,6 +9,8 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { useUploadCandidateCv } from "./useCandidateCvs";
 import { generateCvPdf, sanitizePdfFilename } from "../utils/cvPdfExport";
+import { buildBuilderCvPlainText } from "../utils/cvBuilderText";
+import { useCvDraftStore } from "../stores/useCvDraftStore";
 import { useAuthStore } from "~/stores/useAuthStore";
 import { useUIStore } from "~/stores/useUIStore";
 
@@ -65,14 +67,26 @@ export function useCvVaultSave(fullName?: string) {
       return;
     }
 
-    // 3. Tầng 2 (Server): Upload file PDF lên Backend
+    // 3. Tầng 2 (Server): Upload file PDF kèm văn bản gốc từ Builder lên Backend
     // useUploadCandidateCv đã có sẵn onError và toast chuẩn -> Không bắn toast trùng lặp tại đây
     try {
       setState("uploading");
       const today = new Date().toLocaleDateString("vi-VN").replace(/\//g, "-");
       const title = `CV từ Builder - ${today}`;
+      const draft = useCvDraftStore.getState();
+      const rawText = buildBuilderCvPlainText({
+        personalInfo: draft.personalInfo,
+        experiences: draft.experiences,
+        educations: draft.educations,
+        skills: draft.skills,
+      });
 
-      await uploadMutation.mutateAsync({ file: pdfFile, title });
+      await uploadMutation.mutateAsync({
+        file: pdfFile,
+        title,
+        rawText: rawText || undefined,
+        source: "Builder",
+      });
       setState("done");
 
       showToast("Đã lưu CV thành công vào Kho hồ sơ!", "success");

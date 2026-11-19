@@ -25,6 +25,7 @@ public class ApplicationService : IApplicationService
     private readonly AiMatchingFeatureOptions _aiOptions;
     private readonly ILogger<ApplicationService> _logger;
     private readonly IEvidenceReviewClient? _evidenceClient;
+    private readonly IFileStorage? _fileStorage;
 
     public ApplicationService(
         IApplicationDbContext context,
@@ -32,9 +33,11 @@ public class ApplicationService : IApplicationService
         IAiMatchingClient aiMatchingClient,
         IOptions<AiMatchingFeatureOptions>? aiOptions = null,
         ILogger<ApplicationService>? logger = null,
-        IEvidenceReviewClient? evidenceClient = null)
+        IEvidenceReviewClient? evidenceClient = null,
+        IFileStorage? fileStorage = null)
     {
         _evidenceClient = evidenceClient;
+        _fileStorage = fileStorage;
         _context = context;
         _identityService = identityService;
         _aiMatchingClient = aiMatchingClient;
@@ -86,44 +89,90 @@ public class ApplicationService : IApplicationService
         if (employerProfile is not null && employerProfile.CompanyId == job.CompanyId)
             return ServiceResult.Failure<ApplyJobResponse>("You cannot apply to a job posted by your own company.");
 
-        // 4. Check for duplicate active application (P3-UC05 E2)
-        var alreadyApplied = await _context.Applications
-            .AnyAsync(a => a.CandidateId == candidate.Id && a.JobId == jobId && !a.IsDeleted && a.Status != ApplicationStatus.Withdrawn, cancellationToken);
+        // 4. Check for existing application (P3-UC05 E2)
+        // Unique index on (CandidateId, JobId) allows only one row per pair, so a withdrawn
+        // (or soft-deleted) application is reactivated while preserving full status history.
+        var existingApplication = await _context.Applications
+            .FirstOrDefaultAsync(a => a.CandidateId == candidate.Id && a.JobId == jobId, cancellationToken);
 
-        if (alreadyApplied)
+        if (existingApplication is not null &&
+            !existingApplication.IsDeleted &&
+            existingApplication.Status != ApplicationStatus.Withdrawn)
+        {
             return ServiceResult.Conflict<ApplyJobResponse>("You have already applied for this position.");
+        }
 
         // 5. Calculate Rule-based Match Score (Pure LINQ - No AI dependency)
         var (matchScore, explanation, matchedSkills, missingSkills) = CalculateMatchScore(candidate, job);
+        var now = DateTime.UtcNow;
 
-        // 6. Create JobApplication record
-        var application = new JobApplication
+        JobApplication application;
+        if (existingApplication is not null)
         {
-            CandidateId = candidate.Id,
-            JobId = jobId,
-            CvId = request.CvId,
-            CoverLetter = request.CoverLetter,
-            Status = ApplicationStatus.Applied,
-            AppliedAt = DateTime.UtcNow,
-            MatchScore = matchScore,
-            MatchExplanation = explanation,
-            MatchedSkillsJson = JsonSerializer.Serialize(matchedSkills),
-            MissingSkillsJson = JsonSerializer.Serialize(missingSkills),
-            IsDeleted = false
-        };
+            var previousStatus = existingApplication.IsDeleted
+                ? null
+                : existingApplication.Status.ToString();
 
-        // 7. Add initial status history record (P3-UC05 Step 7)
-        application.StatusHistories.Add(new ApplicationStatusHistory
+            existingApplication.CvId = request.CvId;
+            existingApplication.CoverLetter = request.CoverLetter;
+            existingApplication.Status = ApplicationStatus.Applied;
+            existingApplication.AppliedAt = now;
+            existingApplication.MatchScore = matchScore;
+            existingApplication.MatchExplanation = explanation;
+            existingApplication.MatchedSkillsJson = JsonSerializer.Serialize(matchedSkills);
+            existingApplication.MissingSkillsJson = JsonSerializer.Serialize(missingSkills);
+            existingApplication.Rating = null;
+            existingApplication.EvaluationLabel = null;
+            existingApplication.PrivateNotes = null;
+            existingApplication.IsDeleted = false;
+
+            // Explicitly add via DbSet so EF Core inserts a new history row
+            _context.ApplicationStatusHistories.Add(new ApplicationStatusHistory
+            {
+                ApplicationId = existingApplication.Id,
+                FromStatus = previousStatus,
+                ToStatus = ApplicationStatus.Applied.ToString(),
+                ChangedById = userId,
+                Reason = previousStatus == ApplicationStatus.Withdrawn.ToString()
+                    ? "Candidate re-applied after withdrawing"
+                    : "Initial application submission",
+                ChangedAt = now
+            });
+
+            application = existingApplication;
+        }
+        else
         {
-            Application = application,
-            FromStatus = null,
-            ToStatus = ApplicationStatus.Applied.ToString(),
-            ChangedById = userId,
-            Reason = "Initial application submission",
-            ChangedAt = DateTime.UtcNow
-        });
+            // 6. Create JobApplication record
+            application = new JobApplication
+            {
+                CandidateId = candidate.Id,
+                JobId = jobId,
+                CvId = request.CvId,
+                CoverLetter = request.CoverLetter,
+                Status = ApplicationStatus.Applied,
+                AppliedAt = now,
+                MatchScore = matchScore,
+                MatchExplanation = explanation,
+                MatchedSkillsJson = JsonSerializer.Serialize(matchedSkills),
+                MissingSkillsJson = JsonSerializer.Serialize(missingSkills),
+                IsDeleted = false
+            };
 
-        _context.Applications.Add(application);
+            // 7. Add initial status history record (P3-UC05 Step 7)
+            application.StatusHistories.Add(new ApplicationStatusHistory
+            {
+                Application = application,
+                FromStatus = null,
+                ToStatus = ApplicationStatus.Applied.ToString(),
+                ChangedById = userId,
+                Reason = "Initial application submission",
+                ChangedAt = now
+            });
+
+            _context.Applications.Add(application);
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
 
         return ServiceResult.Success(new ApplyJobResponse(
@@ -903,6 +952,38 @@ public class ApplicationService : IApplicationService
         );
 
         return ServiceResult.Success(response);
+    }
+
+    public async Task<ServiceResult<string>> GetApplicationCvPreviewUrlAsync(
+        Guid userId, Guid applicationId, CancellationToken cancellationToken = default)
+    {
+        var (application, error) = await FindApplicationWithRecruiterOwnershipAsync(userId, applicationId, cancellationToken);
+        if (error is not null)
+        {
+            return ServiceResult.Failure<string>(
+                error.ErrorMessage ?? "Access denied.",
+                error.ErrorType);
+        }
+
+        var cv = application!.Cv;
+        if (!string.IsNullOrWhiteSpace(cv.PublicId) && _fileStorage is not null)
+        {
+            try
+            {
+                return ServiceResult.Success(_fileStorage.GetDocumentPreviewUrl(cv.PublicId));
+            }
+            catch (ArgumentException) when (!string.IsNullOrWhiteSpace(cv.FileUrl))
+            {
+                return ServiceResult.Success(cv.FileUrl);
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(cv.FileUrl))
+        {
+            return ServiceResult.Success(cv.FileUrl);
+        }
+
+        return ServiceResult.Failure<string>("CV chưa có tệp PDF để xem trước.");
     }
 
     public async Task<ServiceResult<bool>> EvaluateApplicationAsync(

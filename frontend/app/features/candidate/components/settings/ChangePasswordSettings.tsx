@@ -8,6 +8,7 @@ import {
 } from "@tabler/icons-react";
 import { useAuthStore } from "~/stores/useAuthStore";
 import { useUIStore } from "~/stores/useUIStore";
+import { authService } from "~/features/auth/services/authService";
 import { Button } from "~/components/ui/Button";
 import { Input, Field } from "~/components/ui/Input";
 
@@ -37,8 +38,12 @@ export function ChangePasswordSettings() {
     }
     if (!newPassword) {
       errs.newPassword = "Vui lòng nhập mật khẩu mới";
-    } else if (newPassword.length < 8) {
-      errs.newPassword = "Mật khẩu mới phải có ít nhất 8 ký tự";
+    } else if (newPassword.length < 8 || newPassword.length > 25) {
+      errs.newPassword = "Mật khẩu mới phải có độ dài từ 8 đến 25 ký tự";
+    } else if (!/[A-Z]/.test(newPassword) || !/[a-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      errs.newPassword = "Mật khẩu mới phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 chữ số";
+    } else if (newPassword === currentPassword) {
+      errs.newPassword = "Mật khẩu mới phải khác mật khẩu hiện tại";
     }
     if (!confirmPassword) {
       errs.confirmPassword = "Vui lòng xác nhận mật khẩu mới";
@@ -49,18 +54,35 @@ export function ChangePasswordSettings() {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate() || isSubmitting) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await authService().changePassword({
+        currentPassword,
+        newPassword,
+        confirmNewPassword: confirmPassword,
+      });
+      useAuthStore.getState().updateTokens({
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      });
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      setErrors({});
       showToast("Đổi mật khẩu thành công", "success");
-    }, 500);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Đổi mật khẩu thất bại. Vui lòng thử lại.";
+      if (message.toLowerCase().includes("mật khẩu hiện tại")) {
+        setErrors((prev) => ({ ...prev, currentPassword: message }));
+      }
+      showToast(message, "error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

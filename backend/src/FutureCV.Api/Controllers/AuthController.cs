@@ -131,6 +131,25 @@ public class AuthController : ApiControllerBase
     }
 
     /// <summary>
+    /// Change password for the currently authenticated user.
+    /// Verifies the current password, updates SecurityStamp, revokes all prior refresh tokens,
+    /// and returns a fresh token pair for the current session.
+    /// </summary>
+    [HttpPost("change-password")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken cancellationToken)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == Guid.Empty) return Unauthorized();
+
+        var result = await _authService.ChangePasswordAsync(userId, request, cancellationToken);
+        return ToHttpResult(result);
+    }
+
+    /// <summary>
     /// Admin endpoint to disable a user account and revoke all their active sessions (BR-07).
     /// </summary>
     [HttpPost("users/{userId:guid}/disable")]

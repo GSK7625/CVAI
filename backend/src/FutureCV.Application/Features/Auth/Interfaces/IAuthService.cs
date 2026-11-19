@@ -19,6 +19,7 @@ public interface IAuthService
     Task<ServiceResult<MessageResponse>> LogoutAllAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<ServiceResult<MessageResponse>> ForgotPasswordAsync(ForgotPasswordRequest request, CancellationToken cancellationToken = default);
     Task<ServiceResult<MessageResponse>> ResetPasswordAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default);
+    Task<ServiceResult<AuthResponse>> ChangePasswordAsync(Guid userId, ChangePasswordRequest request, CancellationToken cancellationToken = default);
     Task<ServiceResult<MessageResponse>> DisableUserAsync(Guid targetUserId, Guid currentAdminId, CancellationToken cancellationToken = default);
     Task<ServiceResult<MessageResponse>> EnableUserAsync(Guid userId, CancellationToken cancellationToken = default);
 }

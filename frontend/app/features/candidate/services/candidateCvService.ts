@@ -43,9 +43,19 @@ export const candidateCvService = {
    * POST /api/candidate/cvs — Tải lên CV mới (PDF ≤ 5MB).
    * Lưu ý: field tên "cv" (không phải "file"), title qua query param.
    */
-  async upload(file: File, title?: string): Promise<CvResponse> {
+  async upload(
+    file: File,
+    title?: string,
+    options?: { rawText?: string; source?: "Builder" | "Upload" },
+  ): Promise<CvResponse> {
     const formData = new FormData();
     formData.append("cv", file); // field đúng tên backend yêu cầu
+    if (options?.rawText?.trim()) {
+      formData.append("rawText", options.rawText.trim());
+    }
+    if (options?.source) {
+      formData.append("source", options.source);
+    }
 
     const url = title?.trim()
       ? `/api/candidate/cvs?title=${encodeURIComponent(title.trim())}`

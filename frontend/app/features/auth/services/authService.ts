@@ -1,5 +1,5 @@
 import { fetcher } from "~/lib/fetcher";
-import type { AuthResponseDto, ForgotPasswordDto, LoginDto, MessageDto, RegisterCandidateDto, RegisterEmployerDto, ResetPasswordDto } from "../types";
+import type { AuthResponseDto, ChangePasswordDto, ForgotPasswordDto, LoginDto, MessageDto, RegisterCandidateDto, RegisterEmployerDto, ResetPasswordDto } from "../types";
 
 export function authService() {
   return {
@@ -17,6 +17,9 @@ export function authService() {
 
     resetPassword: (dto: ResetPasswordDto) =>
       fetcher<MessageDto>("/api/auth/reset-password", { method: "POST", body: dto }),
+
+    changePassword: (dto: ChangePasswordDto) =>
+      fetcher<AuthResponseDto>("/api/auth/change-password", { method: "POST", body: dto, auth: true }),
 
     logout: (refreshToken: string | null) =>
       fetcher<MessageDto>("/api/auth/logout", { method: "POST", body: { refreshToken }, auth: true }),

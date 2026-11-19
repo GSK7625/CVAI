@@ -36,6 +36,11 @@ const EXACT_ERROR_MAP: Record<string, string> = {
   "new password must contain at least one lowercase letter.": "Mật khẩu mới phải chứa ít nhất một chữ cái viết thường (a-z).",
   "new password must contain at least one numeric digit.": "Mật khẩu mới phải chứa ít nhất một chữ số (0-9).",
   "passwords do not match.": "Mật khẩu xác nhận không khớp.",
+  "current password is required.": "Vui lòng nhập mật khẩu hiện tại.",
+  "current password is incorrect.": "Mật khẩu hiện tại không chính xác.",
+  "incorrect password.": "Mật khẩu hiện tại không chính xác.",
+  "new password must be different from current password.": "Mật khẩu mới phải khác mật khẩu hiện tại.",
+  "account not found or has been disabled.": "Tài khoản không tồn tại hoặc đã bị vô hiệu hóa.",
 
   // --- CV & Profile ---
   "cv file size must not exceed 5 mb.": "Dung lượng tệp CV không được vượt quá 5MB.",

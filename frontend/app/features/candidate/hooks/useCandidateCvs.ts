@@ -43,8 +43,17 @@ export function useUploadCandidateCv() {
   const showToast = useUIStore((s) => s.showToast);
 
   return useMutation({
-    mutationFn: ({ file, title }: { file: File; title?: string }) =>
-      candidateCvService.upload(file, title),
+    mutationFn: ({
+      file,
+      title,
+      rawText,
+      source,
+    }: {
+      file: File;
+      title?: string;
+      rawText?: string;
+      source?: "Builder" | "Upload";
+    }) => candidateCvService.upload(file, title, { rawText, source }),
     onSuccess: (newCv) => {
       showToast(`Đã tải lên CV "${newCv.title || "mới"}" thành công`, "success");
       queryClient.invalidateQueries({ queryKey: candidateQueryKeys.cvs.all });

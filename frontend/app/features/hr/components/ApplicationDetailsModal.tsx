@@ -12,6 +12,7 @@ import {
   useRecruiterApplication,
   useUpdateApplicationStatus,
 } from "../hooks/useRecruiterApplications";
+import { hrService } from "../services/hrService";
 import type { UpdatableApplicationStatus } from "../types";
 import { ApplicationStatusBadge, applicationStatusLabels, updatableApplicationStatuses } from "./ApplicationStatusBadge";
 
@@ -22,6 +23,7 @@ export function ApplicationDetailsModal({ applicationId, onClose }: { applicatio
   const [status, setStatus] = useState<UpdatableApplicationStatus>("Screening");
   const [reason, setReason] = useState("");
   const [reasonError, setReasonError] = useState<string>();
+  const [openingCv, setOpeningCv] = useState(false);
 
   useEffect(() => {
     const application = applicationQuery.data;
@@ -48,7 +50,31 @@ export function ApplicationDetailsModal({ applicationId, onClose }: { applicatio
   };
 
   const application = applicationQuery.data;
-  const cvUrl = toSafeDocumentUrl(application?.cvFileUrl);
+  const fallbackCvUrl = toSafeDocumentUrl(application?.cvFileUrl);
+  const canOpenCv = Boolean(application?.cvId && (fallbackCvUrl || application?.cvTitle));
+
+  async function openApplicationCv() {
+    if (!application) return;
+    // Open during the click gesture so awaiting the signed preview URL avoids popup blocking.
+    const tab = window.open("", "_blank");
+    if (!tab) {
+      showToast("Hãy cho phép mở tab mới để xem CV ứng viên.", "error");
+      return;
+    }
+    tab.opener = null;
+    setOpeningCv(true);
+    try {
+      const signedUrl = await hrService.getApplicationCvPreviewUrl(application.id);
+      const safeUrl = toSafeDocumentUrl(signedUrl);
+      if (!safeUrl) throw new Error("Đường dẫn CV không hợp lệ.");
+      if (!tab.closed) tab.location.replace(safeUrl);
+    } catch (error) {
+      tab.close();
+      showToast(error instanceof Error ? error.message : "Không mở được CV ứng viên. Vui lòng thử lại.", "error");
+    } finally {
+      setOpeningCv(false);
+    }
+  }
   return (
     <Modal open={Boolean(applicationId)} onClose={onClose} title="Chi tiết ứng viên" className="max-w-xl">
       <QueryBoundary isLoading={applicationQuery.isLoading} error={applicationQuery.error} onRetry={() => applicationQuery.refetch()} skeleton={<div className="space-y-3"><Skeleton className="h-16" /><Skeleton className="h-28" /><Skeleton className="h-28" /></div>}>
@@ -93,16 +119,16 @@ export function ApplicationDetailsModal({ applicationId, onClose }: { applicatio
                     <p className="text-[11px] text-ink-muted">Tài liệu hồ sơ</p>
                   </div>
                 </div>
-                {cvUrl ? (
-                  <a
-                    href={cvUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-default border border-border-strong bg-white px-2.5 py-1 text-xs font-semibold text-navy shadow-xs hover:border-gold hover:text-gold transition-colors"
+                {canOpenCv ? (
+                  <button
+                    type="button"
+                    disabled={openingCv}
+                    onClick={() => { void openApplicationCv(); }}
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-default border border-border-strong bg-white px-2.5 py-1 text-xs font-semibold text-navy shadow-xs hover:border-gold hover:text-gold transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <span>Mở CV</span>
+                    <span>{openingCv ? "Đang mở…" : "Mở CV"}</span>
                     <IconExternalLink size={14} aria-hidden="true" />
-                  </a>
+                  </button>
                 ) : (
                   <span className="text-xs text-ink-muted italic">Không tìm thấy file CV</span>
                 )}

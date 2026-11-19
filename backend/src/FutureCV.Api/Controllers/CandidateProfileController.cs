@@ -77,7 +77,11 @@ public class CandidateProfileController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CvResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadCv(
-        IFormFile cv, [FromQuery] string? title, CancellationToken cancellationToken)
+        IFormFile cv,
+        [FromQuery] string? title,
+        [FromForm] string? rawText = null,
+        [FromForm] string? source = null,
+        CancellationToken cancellationToken = default)
     {
         var validationError = ValidateCvFile(cv);
         if (validationError is not null) return validationError;
@@ -85,7 +89,8 @@ public class CandidateProfileController : ApiControllerBase
         await using var stream = cv.OpenReadStream();
         var fileUpload = new FileUploadRequest(stream, cv.FileName, cv.ContentType, cv.Length);
 
-        var result = await _candidateService.UploadCvAsync(GetCurrentUserId(), fileUpload, title, cancellationToken);
+        var result = await _candidateService.UploadCvAsync(
+            GetCurrentUserId(), fileUpload, title, rawText, source, cancellationToken);
         return ToHttpResult(result, created: true);
     }
 

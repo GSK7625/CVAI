@@ -49,6 +49,12 @@ export interface ResetPasswordDto {
   confirmNewPassword: string;
 }
 
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 export interface MessageDto {
   message: string;
 }

@@ -9,7 +9,7 @@ namespace FutureCV.Infrastructure.Persistence.Seeders;
 /// </summary>
 public static class DatabaseSeeder
 {
-    public static async Task SeedAsync(IServiceProvider serviceProvider)
+    public static async Task SeedAsync(IServiceProvider serviceProvider, bool isDevelopment = false)
     {
         using var scope = serviceProvider.CreateScope();
         var logger = scope.ServiceProvider.GetService<ILoggerFactory>()?.CreateLogger(nameof(DatabaseSeeder));
@@ -19,13 +19,16 @@ public static class DatabaseSeeder
             logger?.LogInformation("Starting database seeding pipeline...");
 
             // 1. Seed Roles & SuperAdmin user
-            await RoleSeeder.SeedAsync(serviceProvider);
+            await RoleSeeder.SeedAsync(serviceProvider, isDevelopment);
 
             // 2. Seed Master Reference Data (Categories, Levels, EmploymentTypes, Locations, Skills)
             await ReferenceDataSeeder.SeedAsync(serviceProvider);
 
-            // 3. Seed Realistic Demo Presentation Data (Companies, Recruiter, Candidates, Jobs, CV, Application, MatchResult)
-            await DemoDataSeeder.SeedAsync(serviceProvider);
+            // 3. Seed Realistic Demo Presentation Data only in Development
+            if (isDevelopment)
+            {
+                await DemoDataSeeder.SeedAsync(serviceProvider);
+            }
 
             logger?.LogInformation("Database seeding pipeline completed successfully.");
         }
