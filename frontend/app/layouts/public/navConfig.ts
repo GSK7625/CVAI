@@ -5,7 +5,6 @@
  */
 
 export interface NavItem {
-
   label: string;
   href: string;
   iconName?: string;
@@ -16,10 +15,7 @@ export const JOB_MENU_ACTIONS: NavItem[] = [
   { label: "Tìm việc làm", href: "/jobs", iconName: "search" },
   { label: "Việc làm đã lưu", href: "/candidate/saved-jobs", iconName: "bookmark" },
   { label: "Việc làm đã ứng tuyển", href: "/candidate/applications", iconName: "file-text" },
-
 ];
-
-
 
 export const JOB_POSITION_LINKS: { label: string; href: string }[] = [
   { label: "Việc làm Nhân viên kinh doanh", href: "/jobs?q=Nhân%20viên%20kinh%20doanh" },
@@ -58,13 +54,24 @@ export const CV_TOOL_LINKS: NavItem[] = [
   { label: "Tải CV lên", href: "/cv/upload", iconName: "cloud-upload" },
 ];
 
-export const FOOTER_SECTIONS = [
+export interface FooterItem {
+  label: string;
+  href?: string;
+}
+
+export interface FooterSection {
+  title: string;
+  links?: { label: string; href: string }[];
+  items?: (string | FooterItem)[];
+}
+
+export const FOOTER_SECTIONS: FooterSection[] = [
   {
     title: "Dành cho ứng viên",
     links: [
-      { label: "Tìm việc làm mới nhất", href: "/" },
+      { label: "Tìm việc làm mới nhất", href: "/jobs" },
       { label: "Tạo CV chuyên nghiệp", href: "/cv/templates" },
-      { label: "Phân tích CV bằng AI", href: "/" },
+      { label: "Phân tích CV bằng AI", href: "/cv/upload" },
     ],
   },
   {
@@ -78,9 +85,9 @@ export const FOOTER_SECTIONS = [
   {
     title: "Liên hệ hỗ trợ",
     items: [
-      "Hotline: 024 6680 5588",
-      "Email: hotro@futurecv.vn",
-      "Địa chỉ: Hà Nội & TP. Hồ Chí Minh",
+      { label: "Hotline: 1900 068 889 (Nhánh 2)", href: "tel:1900068889" },
+      { label: "Email: hotro@futurecv.vn", href: "mailto:hotro@futurecv.vn" },
+      { label: "Địa chỉ: Hà Nội & TP. Hồ Chí Minh" },
     ],
   },
 ];

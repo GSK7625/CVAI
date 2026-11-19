@@ -1,6 +1,6 @@
 /**
  * @file PublicFooter.tsx
- * @description Chân trang (Footer) hiển thị thông tin giới thiệu, các nhóm liên kết ứng viên/nhà tuyển dụng và bản quyền.
+ * @description Chân trang (Footer) hiển thị thông tin giới thiệu, các nhóm liên kết ứng viên/nhà tuyển dụng và liên hệ.
  * @architecture Tuân thủ SRP (Chỉ quản lý UI chân trang) & OCP (Nạp dữ liệu từ FOOTER_SECTIONS trong navConfig).
  */
 
@@ -11,18 +11,18 @@ import { FOOTER_SECTIONS } from "./navConfig";
 
 export const PublicFooter = memo(function PublicFooter() {
   return (
-    <footer className="mt-auto border-t border-border-subtle bg-navy text-white">
-      <div className="container-page mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <footer className="mt-auto border-t border-white/10 bg-navy text-white">
+      <div className="container-page mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
           <div className="flex flex-col gap-4">
             <Link to="/" className="flex items-center">
               <img
                 src="/Logo.png"
                 alt="FutureCV"
-                className="h-8 w-auto object-contain brightness-0 invert"
+                className="h-9 w-auto object-contain brightness-0 invert"
               />
             </Link>
-            <p className="text-body-sm text-white/70">
+            <p className="text-body leading-relaxed text-white/80">
               Nền tảng tuyển dụng và tạo CV ứng dụng AI hàng đầu tại Việt Nam. Kết nối nhân tài với
               hàng nghìn doanh nghiệp uy tín.
             </p>
@@ -30,26 +30,38 @@ export const PublicFooter = memo(function PublicFooter() {
 
           {FOOTER_SECTIONS.map((sec) => (
             <div key={sec.title}>
-              <h4 className="mb-4 text-label font-bold uppercase tracking-wider text-gold">
+              <h4 className="mb-4 text-body font-bold uppercase tracking-wider text-gold">
                 {sec.title}
               </h4>
-              <ul className="flex flex-col gap-2.5 text-body-sm text-white/70">
+              <ul className="flex flex-col gap-3 text-body text-white/80">
                 {sec.links?.map((link) => (
                   <li key={link.label}>
-                    <Link to={link.href} className="hover:text-white">
+                    <Link to={link.href} className="transition-colors hover:text-white">
                       {link.label}
                     </Link>
                   </li>
                 ))}
-                {sec.items?.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
+                {sec.items?.map((item) => {
+                  const label = typeof item === "string" ? item : item.label;
+                  const href = typeof item === "string" ? undefined : item.href;
+                  return (
+                    <li key={label}>
+                      {href ? (
+                        <a href={href} className="transition-colors hover:text-white">
+                          {label}
+                        </a>
+                      ) : (
+                        <span>{label}</span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
         </div>
 
-        <div className="mt-12 border-t border-white/10 pt-6 text-center text-label-sm text-white/50">
+        <div className="mt-12 border-t border-white/10 pt-6 text-center text-label text-white/60">
           © {new Date().getFullYear()} FutureCV. Tất cả các quyền được bảo lưu.
         </div>
       </div>

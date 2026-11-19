@@ -13,10 +13,9 @@ import {
   IconPalette,
   IconPhone,
   IconMail,
-  IconSparkles,
+  IconHeadset,
   IconChevronLeft,
   IconChevronRight,
-  IconX,
 } from "@tabler/icons-react";
 import { JobCard } from "~/components/shared/JobCard";
 import { useJobList } from "~/features/candidate/hooks/useJobList";
@@ -93,7 +92,6 @@ export default function HomePage() {
   const { data: masterData, isLoading: loadingMasterData } = useJobMasterData();
   const [activeChip, setActiveChip] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [showHint, setShowHint] = useState(true);
   const hotlineRef = useRef<HTMLDivElement>(null);
 
   const resolveCategoryHref = (label: string) => {
@@ -225,9 +223,6 @@ export default function HomePage() {
               <h2 className="text-headline-md font-bold text-navy">
                 Việc làm hấp dẫn
               </h2>
-              <span className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-label-sm font-semibold text-gold">
-                <IconSparkles size={14} /> Đề xuất bởi FutureAI
-              </span>
             </div>
 
             <div className="flex items-center gap-4">
@@ -287,24 +282,6 @@ export default function HomePage() {
               );
             })}
           </div>
-
-          {/* Hint bar */}
-          {showHint && (
-            <div className="mb-6 flex items-center justify-between rounded-lg border border-blue-100 bg-blue-50/70 px-4 py-2.5 text-label-sm text-navy">
-              <div className="flex items-center gap-2">
-                <span className="text-base">💡</span>
-                <span>Gợi ý: Di chuột vào tiêu đề việc làm để xem thêm thông tin chi tiết</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowHint(false)}
-                className="p-1 text-ink-muted transition-colors hover:text-navy"
-                aria-label="Đóng gợi ý"
-              >
-                <IconX size={14} />
-              </button>
-            </div>
-          )}
 
           {/* Main Content: 2 columns grid + Banner */}
           <div className="flex flex-col items-stretch gap-5 lg:flex-row">
@@ -443,61 +420,42 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Hotline ────────────────────────────────────────── */}
+      {/* ── Hotline / Support Banner ──────────────────────── */}
       <section
         ref={hotlineRef}
-        className="relative w-full overflow-hidden bg-gradient-to-r from-navy to-slate-800 py-16 text-white"
+        className="w-full border-t border-border-subtle bg-surface py-12"
       >
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-10"
-          style={{
-            background:
-              "radial-gradient(circle at center, white, transparent 70%)",
-          }}
-        />
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 relative z-10">
-          <h2 className="mb-8 text-headline font-bold">Hotline Tư Vấn</h2>
-          <div className="flex flex-col overflow-hidden rounded-xl bg-surface md:flex-row">
-            <div className="w-full bg-white p-8 md:w-3/5 md:p-12">
-              <h3 className="mb-8 text-3xl font-bold text-navy">
-                Tìm việc khó đã có <span className="text-gold">FutureCV</span>
-              </h3>
-              <div className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <div className="flex items-center rounded-full bg-navy p-1 pr-6">
-                  <span className="px-4 font-semibold text-white">1900 068 889 | Nhánh 2</span>
-                  <a
-                    href="tel:1900068889"
-                    className="ml-2 flex items-center gap-2 rounded-full bg-white px-6 py-2 font-bold text-navy transition-colors hover:bg-surface-low"
-                  >
-                    <IconPhone size={16} stroke={2} /> GỌI NGAY
-                  </a>
-                </div>
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+          <div className="flex flex-col items-start justify-between gap-6 rounded-2xl border border-border-subtle bg-background p-6 sm:p-8 md:flex-row md:items-center shadow-sm">
+            <div className="flex items-center gap-4 sm:gap-5">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gold/15 text-gold sm:h-16 sm:w-16">
+                <IconHeadset size={32} stroke={2} />
               </div>
-              <div className="flex flex-wrap items-center gap-2 text-body text-ink-variant">
-                <span>Email hỗ trợ Ứng viên:</span>
-                <a
-                  href="mailto:hotro@futurecv.vn"
-                  className="flex items-center gap-1 font-bold text-navy underline decoration-gold hover:text-gold"
-                >
-                  <IconMail size={16} stroke={1.8} /> hotro@futurecv.vn
-                </a>
+              <div>
+                <h3 className="text-2xl font-bold text-navy sm:text-3xl">
+                  Tìm việc khó đã có <span className="text-gold">FutureCV</span>
+                </h3>
+                <p className="mt-1.5 text-body text-ink-variant sm:text-body-lg">
+                  Liên hệ hotline hoặc gửi email để được đội ngũ chuyên viên hỗ trợ nhanh nhất.
+                </p>
               </div>
             </div>
-            <div className="relative flex min-h-[240px] w-full items-end justify-center bg-[#f0f4f8] md:w-2/5">
-              <div className="absolute right-10 top-1/4 z-30 flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-label-sm shadow-lg">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden />
-                Xin chào
-              </div>
-              <div className="absolute bottom-1/4 left-10 z-30 flex items-center gap-2 rounded-full bg-gold px-4 py-2 text-label-sm shadow-lg">
-                FutureCV có thể giúp bạn điều gì?
-              </div>
-              <IconSparkles
-                size={96}
-                stroke={1}
-                className="absolute bottom-6 text-navy/10"
-                aria-hidden
-              />
+
+            <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
+              <a
+                href="tel:1900068889"
+                className="flex flex-1 items-center justify-center gap-2.5 rounded-xl bg-navy px-6 py-3.5 text-body font-bold text-white shadow-sm transition hover:bg-navy-secondary active:scale-[0.98] sm:flex-initial sm:text-body-lg"
+              >
+                <IconPhone size={22} stroke={2.2} />
+                <span>1900 068 889 (Nhánh 2)</span>
+              </a>
+              <a
+                href="mailto:hotro@futurecv.vn"
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border-strong bg-surface px-5 py-3.5 text-body font-semibold text-navy transition hover:bg-surface-low active:scale-[0.98] sm:flex-initial sm:text-body-lg"
+              >
+                <IconMail size={20} stroke={2} />
+                <span>hotro@futurecv.vn</span>
+              </a>
             </div>
           </div>
         </div>
