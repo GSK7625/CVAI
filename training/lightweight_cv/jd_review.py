@@ -182,17 +182,29 @@ def review_with_diagnostics(reviewer, sample):
     pending = sum(a["status"] == "needs_review" for a in assessments)
     ready = bool(assessments) and not pending and not profile["unresolved"] and not limited
     score = None
+    partial_score = None
+    scored = [a for a in assessments if a["status"] in VALUES]
     if ready:
         total = sum(a["weight"] for a in assessments)
         for a in assessments:
             a["contribution_points"] = round(100 * a["weight"] * VALUES[a["status"]] / total, 4)
         score = round(100 * sum(a["weight"] * VALUES[a["status"]] for a in assessments) / total, 4)
+    elif scored:
+        # Advisory only: score null stays intact for an incomplete rubric.
+        total = sum(a["weight"] for a in scored)
+        partial_score = round(100 * sum(a["weight"] * VALUES[a["status"]] for a in scored) / total, 4)
+    gaps = []
+    if profile["unresolved"]:
+        gaps.append(f"{len(profile['unresolved'])} điều kiện JD chưa tách rõ")
+    if pending:
+        gaps.append(f"{pending} tiêu chí cần đối chiếu bằng chứng")
     summary = (f"Đã đọc {len(assessments)} tiêu chí JD. " +
                ("Điểm phản ánh kỹ năng và kinh nghiệm đã nhận diện; xem câu JD gốc để đối chiếu đầy đủ công việc." if ready else
-                f"Còn {len(profile['unresolved'])} điều kiện JD chưa tách rõ; chưa tính điểm tổng." if profile["unresolved"] else
-                f"Còn {pending} tiêu chí cần đối chiếu bằng chứng hoặc điều kiện bổ sung; chưa tính điểm tổng."))
+                (f"Điểm tạm tính trên {len(scored)} tiêu chí đã chấm; " if partial_score is not None else "") +
+                ("còn " + " và ".join(gaps) + "; chưa phải điểm tổng." if gaps else "chưa tính điểm tổng.")))
     return {**{key: model[key] for key in ("schema", "model_profile", "elapsed_seconds", "notice") if key in model},
             "sample_id": sample.get("sample_id", "new-cv"), "status": "ready" if ready else "needs_review", "score": score,
+            "partial_score": partial_score,
             "summary": summary, "score_scope": profile["policy"]["score_scope"],
             "scoring_policy_version": profile["policy"]["version"], "review_policy_version": "jd-evidence-v2.1", "jd_profile": profile,
             "assessments": assessments, "review_required": [{"id": a["id"], "reasons": a["evidence_signals"]["review_reasons"]}

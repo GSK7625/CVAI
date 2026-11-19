@@ -20,6 +20,7 @@ Parser v1 xử lý headings/list EN/VI đơn giản và các kỹ năng trong SK
 Không đổi OR thành AND, không đổi số năm kỹ năng thành số năm toàn vai trò,
 không bỏ bằng cấp/chứng chỉ/điều kiện chưa hiểu rồi vẫn chấm một phần JD.
 Các trường hợp đó trả `needs_review` cùng `unresolved` và không có điểm tổng.
+`partial_score` chỉ là điểm tham khảo trên các tiêu chí đã chấm; `score` vẫn null.
 Đây là bước kiểm tra ngoại lệ, không bắt nhà tuyển dụng tự tính weight.
 
 ## Khi ứng tuyển

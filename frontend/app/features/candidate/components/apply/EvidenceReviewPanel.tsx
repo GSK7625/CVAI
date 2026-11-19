@@ -25,6 +25,8 @@ export function EvidenceReviewPanel({ review, busy, stale, onRetry }: {
   const issues = review.jd_profile?.unresolved.filter(issue =>
     issue.code !== "no_requirements" || review.jd_profile?.unresolved.length === 1) ?? [];
   const ready = !busy && !stale && review.status === "ready" && review.score !== null;
+  const partialScore = !busy && !stale && review.status === "needs_review" &&
+    typeof review.partial_score === "number" ? review.partial_score : null;
   return <section className="rounded-2xl border border-navy/10 bg-white p-6 space-y-5" aria-busy={busy}>
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div><h3 className="font-bold text-navy">Đối chiếu CV với yêu cầu tuyển dụng</h3>
@@ -37,6 +39,8 @@ export function EvidenceReviewPanel({ review, busy, stale, onRetry }: {
     <div role="status" aria-live="polite" className="rounded-xl bg-navy/5 p-4">
       <p className="text-lg font-bold text-navy">{busy ? "Đang đối chiếu hồ sơ…" : stale ? "Bạn đã đổi CV. Hãy phân tích lại." : ready
         ? `${review.score?.toLocaleString("vi-VN", { maximumFractionDigits: 2 })}/100 điểm theo yêu cầu`
+        : partialScore !== null
+        ? `${partialScore.toLocaleString("vi-VN", { maximumFractionDigits: 2 })}/100 điểm tạm tính`
         : review.status === "unavailable" ? "Chưa thể đánh giá" : "Chưa có điểm tổng"}</p>
       {!busy && !stale && <p className="mt-2 text-sm text-ink-variant">{review.summary}</p>}
     </div>

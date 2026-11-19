@@ -82,6 +82,12 @@ class JDReviewTests(unittest.TestCase):
                 result, _ = self.review("Python required.\n" + clause)
                 self.assertIsNone(result["score"])
 
+    def test_partial_score_is_advisory_and_excludes_unscored_criteria(self):
+        result, _ = self.review("Python required.\nRust required.", {"Python": "partial"})
+        self.assertIsNone(result["score"])
+        self.assertEqual(result["partial_score"], 50)  # Rust is excluded, not counted as 0.
+        self.assertIsNone(self.review("Python required.")[0]["partial_score"])
+
     def test_minimum_role_duration_uses_compatible_model_rubric(self):
         result, reviewer = self.review("At least 2 years of paid experience as a backend developer.")
         self.assertEqual(result["score"], 100)

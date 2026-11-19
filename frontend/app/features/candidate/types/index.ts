@@ -307,6 +307,7 @@ export interface EvidenceReview {
   skill_mentions?: Array<{ skill: string; contexts: Array<{ text: string }> }>;
   status: "ready" | "needs_review" | "unavailable";
   score: number | null;
+  partial_score?: number | null;
   summary: string;
   assessments: Array<{
     id: string;
