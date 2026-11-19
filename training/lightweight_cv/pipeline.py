@@ -17,6 +17,7 @@ MODEL_ID = "intfloat/multilingual-e5-small"
 LABELS = ("met", "partial", "not_evidenced")
 VALUES = {"met": 1.0, "partial": 0.5, "not_evidenced": 0.0}
 FEATURE_VERSION = "e5-top3-classifier-v1"
+CONTEXT_VERSION = "e5-top3-context-mlp-v2"
 TOP_K = 3
 CHUNK_TOKENS = 192
 MAX_CV_CHARS = 30_000
@@ -143,22 +144,23 @@ class E5Encoder:
         self.model.requires_grad_(False)
         self.device, self.batch_size = device, batch_size
 
+    def embed_batch(self, texts):
+        """Normalized E5 embeddings, retaining gradients when training the retriever."""
+        import torch
+        batch = self.tokenizer(texts, padding=True, truncation=False, return_tensors="pt")
+        if batch["input_ids"].shape[1] > 512:
+            raise ValueError("Đầu vào E5 vượt 512 tokens; không tự cắt mất nội dung")
+        batch = {key: value.to(self.device) for key, value in batch.items()}
+        hidden = self.model(**batch).last_hidden_state
+        mask = batch["attention_mask"].unsqueeze(-1)
+        return torch.nn.functional.normalize((hidden * mask).sum(1) / mask.sum(1), dim=1)
+
     def encode(self, texts):
         import torch
-
         vectors = []
         with torch.inference_mode():
             for start in range(0, len(texts), self.batch_size):
-                batch = self.tokenizer(texts[start:start + self.batch_size], padding=True,
-                                       truncation=False, return_tensors="pt")
-                if batch["input_ids"].shape[1] > 512:
-                    raise ValueError("Đầu vào E5 vượt 512 tokens; không tự cắt mất nội dung")
-                batch = {key: value.to(self.device) for key, value in batch.items()}
-                hidden = self.model(**batch).last_hidden_state
-                mask = batch["attention_mask"].unsqueeze(-1)
-                pooled = (hidden * mask).sum(1) / mask.sum(1)
-                normalized = torch.nn.functional.normalize(pooled, p=2, dim=1)
-                vectors.append(normalized.cpu().numpy().astype(np.float32))
+                vectors.append(self.embed_batch(texts[start:start + self.batch_size]).cpu().numpy().astype(np.float32))
         return np.concatenate(vectors)
 
 
@@ -314,7 +316,7 @@ class Reviewer:
     def __init__(self, artifact_dir, device="cpu", batch_size=8, threads=2):
         directory = Path(artifact_dir)
         self.manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
-        if self.manifest["feature_version"] not in (FEATURE_VERSION, "e5-evidence-mlp-r1") or self.manifest["mode"] != "full":
+        if self.manifest["feature_version"] not in (FEATURE_VERSION, "e5-evidence-mlp-r1", CONTEXT_VERSION) or self.manifest["mode"] != "full":
             raise ValueError("Chỉ dùng artifact full đúng phiên bản pipeline")
         classifier_path = directory / "classifier.npz"
         if file_hash(classifier_path) != self.manifest["classifier_sha256"]:
@@ -323,7 +325,7 @@ class Reviewer:
             if Path(name).name != name or file_hash(directory / "encoder" / name) != digest:
                 raise ValueError("Encoder không khớp manifest")
         self.head = ClassifierHead(directory / "classifier.npz")
-        if self.manifest["feature_version"] == "e5-evidence-mlp-r1":
+        if self.manifest["feature_version"] in ("e5-evidence-mlp-r1", CONTEXT_VERSION):
             # A new feature parser cannot silently change an exported model.
             for name, digest in self.manifest["feature_code_hashes"].items():
                 if Path(name).name != name or file_hash(Path(__file__).with_name(name)) != digest:
@@ -332,6 +334,9 @@ class Reviewer:
                                  device=device, batch_size=batch_size, threads=threads)
 
     def predict_labels(self, samples, features, records):
+        if self.manifest["feature_version"] == CONTEXT_VERSION:
+            from retrieved_context import model_inputs
+            return self.head.predict(model_inputs(samples, features, records))
         if self.manifest["feature_version"] == "e5-evidence-mlp-r1":
             from evidence_features import combine_features, structured_features
             structured, analyses = structured_features(samples)
