@@ -12,16 +12,20 @@ def digest(path):
 
 def main():
     p = argparse.ArgumentParser()
+    p.add_argument("--model", choices=("evidence-r1", "retrieval-mlp-r2"), default="evidence-r1")
     p.add_argument("--zip", type=Path)
-    p.add_argument("--destination", type=Path, default=ROOT.parents[1]/"models/evidence-r1")
+    p.add_argument("--destination", type=Path)
     a = p.parse_args()
-    if a.destination.exists(): raise FileExistsError("Choose a new destination; existing model preserved")
-    release = json.loads((ROOT/"evidence_release.json").read_text())
-    with tempfile.TemporaryDirectory(prefix="cvai-evidence-") as directory:
+    destination = a.destination or ROOT.parents[1]/"models"/a.model
+    if destination.exists(): raise FileExistsError("Choose a new destination; existing model preserved")
+    metadata = "retrieval_release.json" if a.model == "retrieval-mlp-r2" else "evidence_release.json"
+    release = json.loads((ROOT/metadata).read_text())
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".cvai-install-", dir=destination.parent) as directory:
         temp = Path(directory).resolve()
-        assert temp.parent == Path(tempfile.gettempdir()).resolve()
         archive = a.zip or temp/"model.zip"
         if not a.zip:
+            print("Downloading:", release["url"], flush=True)
             with urllib.request.urlopen(release["url"], timeout=120) as response, archive.open("wb") as out:
                 shutil.copyfileobj(response, out)
         if digest(archive) != release["sha256"]: raise ValueError("Archive checksum mismatch")
@@ -33,10 +37,10 @@ def main():
             for name in names: z.extract(name, temp)
         artifact = temp/"artifact"
         manifest = json.loads((artifact/"manifest.json").read_text())
-        assert digest(artifact/"classifier.npz") == manifest["classifier_sha256"]
+        if digest(artifact/"classifier.npz") != manifest["classifier_sha256"]: raise ValueError("Classifier mismatch")
         for name, expected in manifest["encoder_file_hashes"].items():
             if Path(name).name != name or digest(artifact/"encoder"/name) != expected: raise ValueError("Encoder mismatch")
-        shutil.copytree(artifact, a.destination)
-    print("Installed:", a.destination.resolve())
+        artifact.rename(destination)
+    print("Installed:", destination.resolve())
 
 if __name__ == "__main__": main()
