@@ -1,8 +1,7 @@
 ## Evidence AI đã nối vào ứng tuyển
 
 Xem [hướng dẫn chạy backend + frontend + model CPU](INTEGRATION.md).
-Bản thử nghiệm evidence-r1 có [báo cáo](evaluation/evidence-r1/README.md) và
-[trọng số Release](https://github.com/GSK7625/CVAI/releases/tag/cvai-evidence-r1).
+Model mặc định để test local là R2. Sau khi cài dependencies và cấu hình backend, chạy `./scripts/start-local.ps1 model` để tự tải trọng số đã train trong lần đầu. [Tải model R2 cho CPU](https://github.com/GSK7625/CVAI/releases/tag/cvai-retrieval-r2) · [Kết quả thử nghiệm](training/README.md)
 Bật EvidenceAi:Enabled sau khi cài artifact và cấu hình khóa dịch vụ nội bộ.
 
 # CVAI
