@@ -17,16 +17,16 @@ Tại thư mục gốc repo, tạo Python venv và cài dependencies:
 ```powershell
 python -m venv .venv
 .venv/Scripts/Activate.ps1
-pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 python -m pip install -r training/lightweight_cv/requirements.txt
-python training/lightweight_cv/fetch_evidence_model.py
-$env:CVAI_ARTIFACT_DIR = (Resolve-Path models/evidence-r1).Path
+python training/lightweight_cv/fetch_evidence_model.py --model retrieval-mlp-r2
+$env:CVAI_ARTIFACT_DIR = (Resolve-Path models/retrieval-mlp-r2).Path
 $env:INTERNAL_API_KEY = "<chuoi-ngau-nhien-it-nhat-32-ky-tu>"
 python -m uvicorn server:app --app-dir training/lightweight_cv --host 127.0.0.1 --port 8001 --workers 1
 ```
 
 Linux: source .venv/bin/activate và export các biến tương ứng.
-Có ZIP đã tải: thêm --zip /path/cvai-evidence-r1-cpu.zip vào lệnh fetch.
+Lệnh fetch dùng một lần để cài encoder, tokenizer và MLP đã train từ [GitHub Release R2](https://github.com/GSK7625/CVAI/releases/tag/cvai-retrieval-r2). ZIP khoảng 292 MB. Trên máy khác có thể tải asset từ trang Release rồi thêm `--zip <đường-dẫn-tới-file-ZIP>` vào lệnh fetch. Script kiểm tra SHA-256 trước khi cài. Các lần chạy sau dùng lại thư mục model.
 Encoder chạy offline sau khi tải. Không cần API OpenAI/Gemini cho evidence review.
 
 ## Bật ở ASP.NET Core
@@ -69,8 +69,7 @@ Frontend dùng URL/backend và session hiện có: `cd frontend`, `npm ci`, `npm
 - Model bận, timeout, thiếu cấu hình: unavailable và nút thử lại; ứng tuyển vẫn hoạt động.
 - Không lưu CV mới vào training, không ghi log nội dung CV hoặc khóa API.
 - Không cần migration DB. Không tự áp dụng score vào quyết định tuyển dụng.
-- Encoder E5 truy xuất ngữ cảnh; MLP được chọn dùng 61 đặc trưng tường minh.
-  Xem evaluation/evidence-r1/README.md: dữ liệu tổng hợp, 36/48 CV holdout có điểm tự động.
+- Bản R2 dùng E5 đã fine-tune để truy xuất top 3. MLP dự đoán nhãn từ embedding và ngữ cảnh của các đoạn này. [Kết quả thử nghiệm R2](training/README.md).
 
 ## Kiểm chứng
 
@@ -82,7 +81,7 @@ VPS đã được triển khai. Bộ kiểm tra .NET trên máy phát triển d�
 roll-forward vì máy chưa có ASP.NET runtime 8.
 
 Mã nguồn giữ nguyên V1 và không đưa pair-classifier v2 vào lần phát hành này.
-Trọng số lớn ở Release cvai-evidence-r1; NPZ nhỏ và manifest ở Git.
+Trọng số R2 nằm trong Release `cvai-retrieval-r2`. Bản cũ vẫn ở Release `cvai-evidence-r1`.
 
 ## Sửa lỗi nhầm CV khi phân tích lại
 
@@ -97,7 +96,7 @@ Lưu EvidenceAi.Enabled=true, BaseUrl=http://127.0.0.1:8001 và ApiKey ngẫu nh
 Ba terminal tại thư mục repo:
 
 ```powershell
-# Terminal model: kích hoạt venv đã cài dependencies trước
+# Terminal model: kích hoạt venv đã cài dependencies trước. Lần đầu tự tải R2 nếu thiếu.
 ./scripts/start-local.ps1 model
 # Terminal backend
 ./scripts/start-local.ps1 backend
